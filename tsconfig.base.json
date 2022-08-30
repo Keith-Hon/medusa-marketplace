@@ -14,11 +14,7 @@
         "skipLibCheck": true,
         "skipDefaultLibCheck": true,
         "baseUrl": ".",
-        "paths": {
-            "@medusa-marketplace/@medusajs/medusa": ["packages/@medusajs/medusa/src/index.ts"],
-            "@medusa-marketplace/@medusajs/medusa-cli": ["packages/@medusajs/medusa-cli/src/index.ts"],
-            "@medusa-marketplace/@medusajs/medusa-js": ["packages/@medusajs/medusa-js/src/index.ts"]
-        }
+        "paths": {}
     },
     "exclude": ["node_modules", "tmp"]
 }

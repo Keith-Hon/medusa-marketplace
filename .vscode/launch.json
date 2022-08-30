@@ -1,0 +1,1 @@
+{ "outFiles": ["${workspaceRoot}/node_modules/**/*.js"] }

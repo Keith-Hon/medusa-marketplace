@@ -2520,7 +2520,7 @@
 
 "@medusajs/medusa-cli@1.3.1":
   version "1.3.1"
-  resolved "https://registry.npmjs.org/@medusajs/medusa-cli/-/medusa-cli-1.3.1.tgz"
+  resolved "https://registry.yarnpkg.com/@medusajs/medusa-cli/-/medusa-cli-1.3.1.tgz#84c1bd2fa34800615c6415cb2d1d54ddfe168b0c"
   integrity sha512-iuWP6/xIIRcxwuUsTreuxpMCejl09CuLJmA6PtpfTDC02/ZY+d60A+633tEBJIVZ9OywuzH8Ux2hPzMCm6zwxw==
   dependencies:
     "@babel/polyfill" "^7.8.7"
@@ -2592,7 +2592,7 @@
 
 "@medusajs/medusa-js@1.2.6", "@medusajs/medusa-js@^1.2.4":
   version "1.2.6"
-  resolved "https://registry.npmjs.org/@medusajs/medusa-js/-/medusa-js-1.2.6.tgz"
+  resolved "https://registry.yarnpkg.com/@medusajs/medusa-js/-/medusa-js-1.2.6.tgz#77b0994750d7a83f8083e01d3c08cba32ff8a6d0"
   integrity sha512-ydEWuKKtt8LgwPkak7mCiqmPRHNumZ47s48T9qhA8lwC6/UxmEF5+lUrfHJStxWoEpMRG7iIaDZCBIEsfaf2yg==
   dependencies:
     "@medusajs/medusa" "^1.3.6"
@@ -2601,9 +2601,9 @@
     qs "^6.10.3"
     retry-axios "^2.6.0"
 
-"@medusajs/medusa@^1.3.6":
+"@medusajs/medusa@1.3.7", "@medusajs/medusa@^1.3.6":
   version "1.3.7"
-  resolved "https://registry.npmjs.org/@medusajs/medusa/-/medusa-1.3.7.tgz"
+  resolved "https://registry.yarnpkg.com/@medusajs/medusa/-/medusa-1.3.7.tgz#06f260bf9304623853fc473ff95394bb21c6b8c8"
   integrity sha512-h7SZhtAcwzl6zTlM+fyAziTLWhRfdUhAlJV1Bv3fL78qC82pqWx2vZ+b0qMPfeNTATU3Zpsq15bKBXuZyLwf5w==
   dependencies:
     "@hapi/joi" "^16.1.8"
@@ -16529,7 +16529,7 @@ medusa-telemetry@0.0.13:
 
 medusa-telemetry@^0.0.11:
   version "0.0.11"
-  resolved "https://registry.npmjs.org/medusa-telemetry/-/medusa-telemetry-0.0.11.tgz"
+  resolved "https://registry.yarnpkg.com/medusa-telemetry/-/medusa-telemetry-0.0.11.tgz#1d80b0e3d73b456fae243027c65cd6c212584971"
   integrity sha512-YZYGeG5SOOuP3lYM4g1yMoHUem1GK5ZfqRTeydDmZUGoA7zJvprqXQER6lcc+/FLv0kKr74K7MmtzBBlBRJl3g==
   dependencies:
     axios "^0.21.1"

@@ -2,9 +2,6 @@
     "$schema": "./node_modules/nx/schemas/workspace-schema.json",
     "version": 2,
     "projects": {
-        "@medusajs-medusa": "packages/@medusajs/medusa",
-        "@medusajs-medusa-cli": "packages/@medusajs/medusa-cli",
-        "@medusajs-medusa-js": "packages/@medusajs/medusa-js",
         "admin": "apps/admin",
         "backend": "apps/backend",
         "storefront": "apps/storefront"
