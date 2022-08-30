@@ -28,6 +28,8 @@ Steps to run the project
 
 `cp .env.template .env`
 
+fill in database connection string
+
 `yarn install`
 
 `yarn seed`
