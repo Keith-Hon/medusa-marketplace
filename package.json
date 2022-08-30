@@ -1,0 +1,16 @@
+{
+  "name": "medusa-marketplace",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {},
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "@nrwl/cli": "14.5.10",
+    "@nrwl/js": "14.5.10",
+    "@nrwl/workspace": "14.5.10",
+    "nx": "14.5.10",
+    "prettier": "^2.6.2",
+    "typescript": "~4.7.2"
+  }
+}
