@@ -44,6 +44,16 @@ Steps to run the project
 
 ----
 
+If the above commands run successfully,
+
+Backend will be running at port 9000
+
+Admin dashboard will be running at port 4200
+
+Storefront will be running at port 3000
+
+----
+
 # Reference
 
 Tutorial
