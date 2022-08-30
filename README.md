@@ -1,4 +1,4 @@
-# MedusaMarketplace
+# Medusa Marketplace
 
 Project status
 
