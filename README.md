@@ -22,23 +22,15 @@ Steps to run the project
 
 `yarn install`
 
-2. Install dependencies for backend app
+2. Fill in database connection string for backend app
 
 `cd apps/backend`
 
 `cp .env.template .env`
 
-fill in database connection string
-
-`yarn install`
-
-`yarn seed`
-
 3. Start backend
 
-`cd apps/backend`
-
-`yarn start`
+`nx serve backend`
 
 4. Start admin
 
@@ -48,7 +40,7 @@ fill in database connection string
 
 5. Start storefront
 
-`yarn serve storefront`
+`nx serve storefront`
 
 ----
 
