@@ -73,6 +73,7 @@
         "react-dom": "18.1.0",
         "react-helmet": "^6.0.0",
         "react-hook-form": "^6.7.2",
+        "react-hook-form-v7": "^7.30.0",
         "react-hot-toast": "^2.2.0",
         "react-hotkeys-hook": "^2.4.0",
         "react-instantsearch-hooks-web": "6.32.1",

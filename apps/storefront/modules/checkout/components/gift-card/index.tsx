@@ -4,7 +4,7 @@ import Input from "@modules/common/components/input";
 import Trash from "@modules/common/icons/trash";
 import { useCart } from "medusa-react";
 import React, { useMemo } from "react";
-import { useForm } from "react-hook-form";
+import { useForm } from "react-hook-form-v7";
 
 type GiftCardFormValues = {
     gift_card_code: string;

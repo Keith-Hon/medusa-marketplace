@@ -7,7 +7,7 @@ import Spinner from "@modules/common/icons/spinner";
 import clsx from "clsx";
 import { formatAmount, useCart, useCartShippingOptions } from "medusa-react";
 import React, { useEffect, useMemo } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form-v7";
 import StepContainer from "../step-container";
 
 type ShippingOption = {

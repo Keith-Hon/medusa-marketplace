@@ -6,7 +6,7 @@ import ChevronDown from "@modules/common/icons/chevron-down";
 import clsx from "clsx";
 import { isEqual, omit } from "lodash";
 import { Fragment, useMemo, useState } from "react";
-import { useWatch } from "react-hook-form";
+import { useWatch } from "react-hook-form-v7";
 
 type AddressSelectProps = {
     addresses: Address[];

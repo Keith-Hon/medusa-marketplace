@@ -2,7 +2,7 @@ import { ErrorMessage } from "@hookform/error-message";
 import ChevronDown from "@modules/common/icons/chevron-down";
 import clsx from "clsx";
 import { forwardRef, SelectHTMLAttributes, useEffect, useImperativeHandle, useRef, useState } from "react";
-import { get } from "react-hook-form";
+import { get } from "react-hook-form-v7";
 
 export type NativeSelectProps = {
     placeholder?: string;

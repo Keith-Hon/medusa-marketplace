@@ -4,7 +4,7 @@ import Button from "@modules/common/components/button";
 import Input from "@modules/common/components/input";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { FieldValues, useForm } from "react-hook-form";
+import { FieldValues, useForm } from "react-hook-form-v7";
 
 interface SignInCredentials extends FieldValues {
     email: string;

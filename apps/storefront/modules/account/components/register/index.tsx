@@ -5,7 +5,7 @@ import Input from "@modules/common/components/input";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { FieldValues, useForm } from "react-hook-form";
+import { FieldValues, useForm } from "react-hook-form-v7";
 
 interface RegisterCredentials extends FieldValues {
     first_name: string;

@@ -11,7 +11,7 @@ import Spinner from "@modules/common/icons/spinner";
 import Trash from "@modules/common/icons/trash";
 import clsx from "clsx";
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm } from "react-hook-form-v7";
 
 type FormValues = {
     first_name: string;

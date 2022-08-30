@@ -9,7 +9,7 @@ import Modal from "@modules/common/components/modal";
 import Spinner from "@modules/common/icons/spinner";
 import { useUpdateMe } from "medusa-react";
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm } from "react-hook-form-v7";
 
 type EditPasswordModalProps = {
     customer: Omit<Customer, "password_hash">;

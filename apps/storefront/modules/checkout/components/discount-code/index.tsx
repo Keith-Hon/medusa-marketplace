@@ -5,7 +5,7 @@ import Input from "@modules/common/components/input";
 import Trash from "@modules/common/icons/trash";
 import { formatAmount, useCart, useUpdateCart } from "medusa-react";
 import React, { useMemo } from "react";
-import { useForm } from "react-hook-form";
+import { useForm } from "react-hook-form-v7";
 import { useMutation } from "react-query";
 
 type DiscountFormValues = {

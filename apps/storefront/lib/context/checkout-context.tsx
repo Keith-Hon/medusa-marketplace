@@ -6,7 +6,7 @@ import { isEqual } from "lodash";
 import { formatAmount, useCart, useCartShippingOptions, useMeCustomer, useRegions, useSetPaymentSession, useUpdateCart } from "medusa-react";
 import { useRouter } from "next/router";
 import React, { createContext, useContext, useEffect, useMemo } from "react";
-import { FormProvider, useForm, useFormContext } from "react-hook-form";
+import { FormProvider, useForm, useFormContext } from "react-hook-form-v7";
 import { useStore } from "./store-context";
 
 type AddressValues = {

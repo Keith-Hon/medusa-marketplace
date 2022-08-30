@@ -3,7 +3,7 @@ import Eye from "@modules/common/icons/eye";
 import EyeOff from "@modules/common/icons/eye-off";
 import clsx from "clsx";
 import React, { useEffect, useImperativeHandle, useState } from "react";
-import { get } from "react-hook-form";
+import { get } from "react-hook-form-v7";
 
 type InputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, "placeholder"> & {
     label: string;

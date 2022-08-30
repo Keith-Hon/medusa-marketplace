@@ -1,6 +1,6 @@
 import type { ReactElement } from "react";
-import type { FieldValues, UseFormReturn } from "react-hook-form";
-import { useFormContext } from "react-hook-form";
+import type { FieldValues, UseFormReturn } from "react-hook-form-v7";
+import { useFormContext } from "react-hook-form-v7";
 
 interface ConnectFormProps<TFieldValues extends FieldValues> {
     children(children: UseFormReturn<TFieldValues>): ReactElement;

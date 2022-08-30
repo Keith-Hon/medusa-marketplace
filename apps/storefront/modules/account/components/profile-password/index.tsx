@@ -3,7 +3,7 @@ import { Customer } from "@medusajs/medusa";
 import Input from "@modules/common/components/input";
 import { useUpdateMe } from "medusa-react";
 import React, { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useForm } from "react-hook-form-v7";
 import AccountInfo from "../account-info";
 
 type MyInformationProps = {

@@ -8,7 +8,7 @@ import Modal from "@modules/common/components/modal";
 import Plus from "@modules/common/icons/plus";
 import Spinner from "@modules/common/icons/spinner";
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm } from "react-hook-form-v7";
 
 type FormValues = {
     first_name: string;

@@ -4,7 +4,7 @@ import Input from "@modules/common/components/input";
 import NativeSelect from "@modules/common/components/native-select";
 import { useRegions, useUpdateMe } from "medusa-react";
 import React, { useEffect, useMemo } from "react";
-import { useForm, useWatch } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form-v7";
 import AccountInfo from "../account-info";
 
 type MyInformationProps = {
