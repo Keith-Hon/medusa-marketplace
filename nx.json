@@ -1,46 +1,46 @@
 {
-  "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "npmScope": "medusa-marketplace",
-  "affected": {
-    "defaultBase": "master"
-  },
-  "implicitDependencies": {
-    "package.json": {
-      "dependencies": "*",
-      "devDependencies": "*"
+    "$schema": "./node_modules/nx/schemas/nx-schema.json",
+    "npmScope": "medusa-marketplace",
+    "affected": {
+        "defaultBase": "master"
     },
-    ".eslintrc.json": "*"
-  },
-  "tasksRunnerOptions": {
-    "default": {
-      "runner": "nx/tasks-runners/default",
-      "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"]
-      }
-    }
-  },
-  "targetDefaults": {
-    "build": {
-      "dependsOn": ["^build"]
-    }
-  },
-  "workspaceLayout": {
-    "appsDir": "apps",
-    "libsDir": "packages"
-  },
-  "cli": {
-    "defaultCollection": "@nrwl/gatsby"
-  },
-  "generators": {
-    "@nrwl/react": {
-      "application": {
-        "babel": true
-      }
+    "implicitDependencies": {
+        "package.json": {
+            "dependencies": "*",
+            "devDependencies": "*"
+        },
+        ".eslintrc.json": "*"
     },
-    "@nrwl/gatsby": {
-      "application": {
-        "style": "css"
-      }
+    "tasksRunnerOptions": {
+        "default": {
+            "runner": "nx/tasks-runners/default",
+            "options": {
+                "cacheableOperations": ["build", "lint", "test", "e2e"]
+            }
+        }
+    },
+    "targetDefaults": {
+        "build": {
+            "dependsOn": ["^build"]
+        }
+    },
+    "workspaceLayout": {
+        "appsDir": "apps",
+        "libsDir": "packages"
+    },
+    "cli": {
+        "defaultCollection": "@nrwl/gatsby"
+    },
+    "generators": {
+        "@nrwl/react": {
+            "application": {
+                "babel": true
+            }
+        },
+        "@nrwl/gatsby": {
+            "application": {
+                "style": "css"
+            }
+        }
     }
-  }
 }
