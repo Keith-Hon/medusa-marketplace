@@ -14,7 +14,7 @@ const nextConfig = {
     },
     experimental: {
         outputStandalone: true,
-        outputFileTracingRoot: path.join(__dirname, "../../..")
+        outputFileTracingRoot: path.join(__dirname, "../..")
     },
     features: store.features,
     images: {
