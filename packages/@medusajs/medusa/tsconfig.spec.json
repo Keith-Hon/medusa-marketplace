@@ -1,9 +1,10 @@
 {
-    "extends": "./tsconfig.json",
-    "compilerOptions": {
-        "outDir": "../../../dist/out-tsc",
-        "module": "commonjs",
-        "types": ["jest", "node"]
-    },
-    "include": ["jest.config.ts", "**/*.test.ts", "**/*.spec.ts", "**/*.test.tsx", "**/*.spec.tsx", "**/*.test.js", "**/*.spec.js", "**/*.test.jsx", "**/*.spec.jsx", "**/*.d.ts"]
+  "extends": "./tsconfig.json",
+  "include": [
+    "./src/**/*",
+    "index.d.ts",
+    "./src/**/__tests__",
+    "./src/**/__mocks__"
+  ],
+  "exclude": ["node_modules"]
 }
