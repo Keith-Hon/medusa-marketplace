@@ -1,5 +1,12 @@
 # MedusaMarketplace
 
+Project status
+
+- [x] Assigned store_id to Order, Product to make them store specific
+- [ ] Create and process payment for an order with multiple merchants
+
+----
+
 1. Install workspace dependencies
 `yarn install`
 
