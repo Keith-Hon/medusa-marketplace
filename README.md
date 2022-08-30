@@ -49,3 +49,20 @@ fill in database connection string
 5. Start storefront
 
 `yarn serve storefront`
+
+----
+
+# Reference
+
+Tutorial
+
+Part 1: https://medusajs.com/blog/medusa-extender
+
+Part 2: https://medusajs.com/blog/medusa-open-source-marketplace-part-2-make-orders-vendor-specific
+
+Part 3: https://medusajs.com/blog/online-marketplace-tutorial-part-3-implement-user-management-and-permissions
+
+https://medusajs.com/
+
+
+
