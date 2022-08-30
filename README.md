@@ -19,8 +19,11 @@ Steps to run the project
 
 `cd apps/backend`
 
+`cp .env.template .env`
+
 `yarn install`
 
+`yarn seed`
 
 3. Start backend
 
