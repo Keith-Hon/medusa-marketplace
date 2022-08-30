@@ -1,4 +1,5 @@
 {
+    "extends": "../../tsconfig.base.json",
     "include": ["src", "medusa-config.js"],
     "exclude": ["dist", "node_modules", "**/*.spec.ts"],
     "compilerOptions": {

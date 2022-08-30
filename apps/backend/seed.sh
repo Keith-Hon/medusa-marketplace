@@ -1,0 +1,1 @@
+medusa seed -f ./data/seed.json

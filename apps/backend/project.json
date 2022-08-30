@@ -3,7 +3,36 @@
     "sourceRoot": "apps/backend/src",
     "projectType": "application",
     "targets": {
-    
+        "serve": {
+            "executor": "@nrwl/node:node",
+            "options": {
+                "buildTarget": "backend:build"
+            }
+        },
+        "build": {
+            "executor": "@nrwl/node:webpack",
+            "outputs": ["{options.outputPath}"],
+            "options": {
+                "outputPath": "apps/backend/dist",
+                "main": "apps/backend/src/main.ts",
+                "tsConfig": "apps/backend/tsconfig.json",
+                "assets": ["apps/backend/src/assets"],
+                "generatePackageJson": true
+            },
+            "configurations": {
+                "production": {
+                    "optimization": true,
+                    "extractLicenses": true,
+                    "inspect": false,
+                    "fileReplacements": [
+                        {
+                            "replace": "apps/backend/src/environments/environment.ts",
+                            "with": "apps/backend/src/environments/environment.prod.ts"
+                        }
+                    ]
+                }
+            }
+        }
     },
     "tags": []
 }
