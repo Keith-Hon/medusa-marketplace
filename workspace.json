@@ -4,6 +4,16 @@
     "projects": {
         "admin": "apps/admin",
         "backend": "apps/backend",
-        "storefront": "apps/storefront"
+        "storefront": "apps/storefront",
+        "@medusajs/medusa": "submodules/medusa/packages/medusa",
+        "@medusajs/medusa-cli": "submodules/medusa/packages/medusa-cli",
+        "@medusajs/medusa-js": "submodules/medusa/packages/medusa-js",
+        "medusa-extender": "submodules/medusa/packages/medusa-extender",
+        "medusa-fulfillment-manual": "submodules/medusa/packages/medusa-fulfillment-manual",
+        "medusa-interfaces": "submodules/medusa/packages/medusa-interfaces",
+        "medusa-payment-manual": "submodules/medusa/packages/medusa-payment-manual",
+        "medusa-payment-stripe": "submodules/medusa/packages/medusa-payment-stripe",
+        "medusa-react": "submodules/medusa/packages/medusa-react",
+        "babel-preset-medusa-package": "submodules/medusa/packages/babel-preset-medusa-package"
     }
 }
