@@ -1,0 +1,3 @@
+[submodule "submodules/medusa"]
+	path = submodules/medusa
+	url = https://github.com/medusajs/medusa.git
