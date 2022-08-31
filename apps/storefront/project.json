@@ -14,7 +14,7 @@
             },
             "configurations": {
                 "development": {
-                    "outputPath": "tmp/apps/storefront"
+                    "outputPath": "apps/storefront/dist"
                 },
                 "production": {
                     "outputPath": "apps/storefront/dist"
