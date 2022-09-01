@@ -16,19 +16,19 @@
         "baseUrl": ".",
         "paths": {
             "@medusajs/medusa": ["submodules/medusa/packages/medusa"],
-            "@medusajs/medusa/*": ["submodules/medusa/packages/medusa/*"],
             "@medusajs/medusa-cli": ["submodules/medusa/packages/medusa-cli"],
             "@medusajs/medusa-cli/*": ["submodules/medusa/packages/medusa-cli/*"],
             "@medusajs/medusa-js": ["submodules/medusa/packages/medusa-js"],
+            "@medusajs/medusa/*": ["submodules/medusa/packages/medusa/*"],
+            "medusa-core-utils": ["submodules/medusa/packages/medusa-core-utils"],
+            "medusa-extender": ["submodules/medusa-extender"],
             "medusa-fulfillment-manual": ["submodules/medusa/packages/medusa-fulfillment-manual"],
             "medusa-interfaces": ["submodules/medusa/packages/medusa-interfaces"],
             "medusa-interfaces/*": ["submodules/medusa/packages/medusa-interfaces/*"],
             "medusa-payment-manual": ["submodules/medusa/packages/medusa-payment-manual"],
             "medusa-payment-stripe": ["submodules/medusa/packages/medusa-payment-stripe"],
             "medusa-react": ["submodules/medusa/packages/medusa-react"],
-            "medusa-core-utils": ["submodules/medusa/packages/medusa-core-utils"],
-            "typeorm": ["submodules/medusa/node_modules/typeorm"],
-            "medusa-extender": ["submodules/medusa-extender"]
+            "typeorm": ["submodules/medusa/node_modules/typeorm"]
         }
     }
 }

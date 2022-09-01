@@ -4,6 +4,7 @@
     "projects": {
         "admin": "apps/admin",
         "backend": "apps/backend",
-        "storefront": "apps/storefront"
+        "storefront": "apps/storefront",
+        "test": "apps/test"
     }
 }
