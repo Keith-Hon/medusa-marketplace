@@ -41,3 +41,10 @@ Thumbs.db
 /apps/gatsby-app/node_modules
 /apps/gatsby-app/public
 /apps/gatsby-app/.cache
+
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
