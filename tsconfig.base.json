@@ -27,8 +27,8 @@
             "medusa-payment-stripe": ["submodules/medusa/packages/medusa-payment-stripe"],
             "medusa-react": ["submodules/medusa/packages/medusa-react"],
             "medusa-core-utils": ["submodules/medusa/packages/medusa-core-utils"],
-            "typeorm": ["submodules/medusa/node_modules/typeorm"]
+            "typeorm": ["submodules/medusa/node_modules/typeorm"],
+            "medusa-extender": ["submodules/medusa-extender"]
         }
-    },
-    "exclude": ["node_modules", "tmp"]
+    }
 }
