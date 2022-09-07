@@ -5,12 +5,18 @@
 image: gitpod/workspace-postgresql:2022-06-09-18-13-52
 
 tasks:
-  - init:
-      yarn set version 3.2.3 && 
-      yarn install &&
-      npm install -g nx &&
-      npm install -g @medusajs/medusa-cli &&
+  - init: |
+      export ROOTDIR=$(pwd)
+      yarn set version 3.2.3
+      yarn install
+      npm install -g nx
+      npm install -g @medusajs/medusa-cli
       sh apps/backend/seed.sh
+      cd $ROOTDIR
+      nx serve admin &
+      nx serve storefront &
+
+
 
 
 
