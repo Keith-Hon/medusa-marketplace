@@ -2,11 +2,11 @@
 # Please adjust to your needs (see https://www.gitpod.io/docs/config-gitpod-file)
 # and commit this file to your remote git repository to share the goodness with others.
 
-image: gitpod/workspace-postgresql
+image: gitpod/workspace-postgresql:2022-06-09-18-13-52
 
 tasks:
   - init:
-      yarn set version 3.2.3 && 
+      yarn set version 1.22.19 && 
       yarn install &&
       npm install -g nx
 
