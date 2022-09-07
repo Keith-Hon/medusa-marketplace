@@ -5,9 +5,9 @@
 image: gitpod/workspace-postgresql
 
 tasks:
-  - init: 
-      yarn set version 3.2.3
-      yarn install
+  - init:
+      yarn set version 3.2.3 && 
+      yarn install &&
       npm install -g nx
 
 
