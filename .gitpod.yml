@@ -7,6 +7,9 @@ image: gitpod/workspace-postgresql:2022-06-09-18-13-52
 tasks:
   - init: |
       export ROOTDIR=$(pwd)
+      export NEXT_PUBLIC_MEDUSA_BACKEND_URL=$(gp url 9000)
+      export ADMIN_CORS=$(gp url 4200)
+      export STORE_CORS=$(gp url 3000)
       yarn set version 3.2.3
       yarn install
       npm install -g nx
