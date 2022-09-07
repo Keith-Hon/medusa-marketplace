@@ -59,7 +59,7 @@ module.exports = {
         database_type: "postgres",
         store_cors: STORE_CORS,
         admin_cors: ADMIN_CORS,
-        database_extra: { ssl: { rejectUnauthorized: false } },
+        database_extra: { ssl: false },
         cli_migration_dirs: ["dist/**/*.migration.js"]
     },
     plugins
