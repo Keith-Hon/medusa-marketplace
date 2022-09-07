@@ -6,7 +6,7 @@ image: gitpod/workspace-postgresql:2022-06-09-18-13-52
 
 tasks:
   - init:
-      yarn set version 1.22.19 && 
+      yarn set version 3.2.3 && 
       yarn install &&
       npm install -g nx &&
       npm install -g @medusajs/medusa-cli &&
