@@ -16,6 +16,7 @@ tasks:
       npm install -g @medusajs/medusa-cli
       sh apps/backend/seed.sh
       cd $ROOTDIR
+      nx serve backend &
       nx serve admin &
       nx serve storefront &
 
