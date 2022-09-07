@@ -8,7 +8,9 @@ tasks:
   - init:
       yarn set version 1.22.19 && 
       yarn install &&
-      npm install -g nx
+      npm install -g nx &&
+      npm install -g @medusajs/medusa-cli &&
+      sh apps/backend/seed.sh
 
 
 
