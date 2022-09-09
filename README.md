@@ -1,7 +1,5 @@
 # Medusa Marketplace
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/Keith-Hon/medusa-marketplace)
-
 Project status
 
 - [x] Assigned store_id to Order, Product to make them store specific
