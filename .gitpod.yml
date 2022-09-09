@@ -7,17 +7,17 @@ image: gitpod/workspace-postgresql:2022-06-09-18-13-52
 tasks:
   - init: |
       export ROOTDIR=$(pwd)
+      yarn set version 3.2.3
+      yarn install
       export MEDUSA_BACKEND_LOCAL_URL="localhost:9000"
       export MEDUSA_BACKEND_GITPOD_URL=$(gp url 9000)
       export MEDUSA_ADMIN_LOCAL_URL="localhost:4200"    
       export MEDUSA_ADMIN_GITPOD_URL=$(gp url 4200)
-      export MEDUSA_STOREFRONT_LOCAL_URL="localhost:3000"    
-      export MEDUSA_STOREFRONT_GITPOD_URL=$(gp url 3000)              
+      export MEDUSA_STOREFRONT_LOCAL_URL="localhost:3000"
+      export MEDUSA_STOREFRONT_GITPOD_URL=$(gp url 3000)
       export NEXT_PUBLIC_MEDUSA_BACKEND_URL=$MEDUSA_BACKEND_LOCAL_URL,$MEDUSA_BACKEND_GITPOD_URL
       export ADMIN_CORS=$MEDUSA_ADMIN_LOCAL_URL,$MEDUSA_ADMIN_GITPOD_URL
-      export STORE_CORS=$MEDUSA_STOREFRONT_LOCAL_URL,$MEDUSA_STOREFRONT_GITPOD_URL
-      yarn set version 3.2.3
-      yarn install
+      export STORE_CORS=$MEDUSA_STOREFRONT_LOCAL_URL,$MEDUSA_STOREFRONT_GITPOD_URL      
       npm install -g nx
       npm install -g @medusajs/medusa-cli
       sh apps/backend/seed.sh
