@@ -22,7 +22,7 @@ Instructions:
 ----
 Introduction
 
-1. The gitpod image runs a postges database locally
+1. The gitpod image runs a postges database locally. Do "NOT" inside browser as urls are configured using localhost
 
 2. 3 users are created with name "user 1/ user 2/ user 3) and each owns a store named "store 1/ store 2/ store 3), which assigned some products with start with.
 
