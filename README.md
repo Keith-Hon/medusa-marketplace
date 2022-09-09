@@ -49,6 +49,12 @@ Storefront will be running at port 3000
 
 Postgres database is accessible via localhost:5432
 
+username	 gitpod
+
+password	 gitpod
+
+database	 postgres
+
 ----
 
 # Reference
