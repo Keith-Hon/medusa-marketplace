@@ -11,40 +11,15 @@ Project status
 
 ----
 
-1. Install workspace dependencies
-`yarn install`
+Instructions:
 
-Steps to run the project
+1. Run the workspace in gitpod container
 
-1. Install workspace dependencies
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/Keith-Hon/medusa-marketplace)
 
-`yarn install`
+2. Open it in VS Code locally
 
-2. Install dependencies for admin app
-
-`cd apps/admin`
-
-`yarn install`
-
-2. Fill in database connection string for backend app
-
-`cd apps/backend`
-
-`cp .env.template .env`
-
-3. Start backend
-
-`nx serve backend`
-
-4. Start admin
-
-`cd apps/admin`
-
-`yarn start`
-
-5. Start storefront
-
-`nx serve storefront`
+3. No step 3 :)
 
 ----
 
