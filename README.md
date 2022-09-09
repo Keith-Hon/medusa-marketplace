@@ -20,6 +20,27 @@ Instructions:
 3. No step 3 :)
 
 ----
+Introduction
+
+1. The gitpod image runs a postges database locally
+
+2. 3 users are created with name "user 1/ user 2/ user 3) and each owns a store named "store 1/ store 2/ store 3), which assigned some products with start with.
+
+3. You should see different products by logging in with different user account.
+
+# 1
+username: user1@example.com
+password: supersecret
+
+# 2
+username: user2@example.com
+password: supersecret
+
+# 3
+username: user3@example.com
+password: supersecret
+
+----
 
 If the above commands run successfully,
 
