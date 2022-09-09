@@ -5,6 +5,7 @@
 Project status
 
 - [x] Assigned store_id to Order, Product to make them store specific
+- [ ] Seeded with multiple vendors and their respective products
 - [ ] Create and process payment for an order with multiple merchants
 
 ----
