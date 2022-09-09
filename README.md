@@ -3,7 +3,7 @@
 Project status
 
 - [x] Assigned store_id to Order, Product to make them store specific
-- [ ] Seeded with multiple vendors and their respective products
+- [ ] Seeded with multiple vendors and their respective products (This step requires changing medusa original source codes)
 - [ ] Allow each merchant to register with their stripe/ paypal account
 - [ ] Create and process payment for an order with multiple merchants
 
