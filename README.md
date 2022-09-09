@@ -28,15 +28,12 @@ Introduction
 
 3. You should see different products by logging in with different user account.
 
-# 1
 username: user1@example.com
 password: supersecret
 
-# 2
 username: user2@example.com
 password: supersecret
 
-# 3
 username: user3@example.com
 password: supersecret
 
