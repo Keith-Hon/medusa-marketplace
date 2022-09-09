@@ -47,6 +47,8 @@ Admin dashboard will be running at port 4200
 
 Storefront will be running at port 3000
 
+Postgres database is accessible via localhost:5432
+
 ----
 
 # Reference
