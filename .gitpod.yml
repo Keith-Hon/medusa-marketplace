@@ -9,11 +9,11 @@ tasks:
       export ROOTDIR=$(pwd)
       yarn set version 3.2.3
       yarn install
-      export MEDUSA_BACKEND_LOCAL_URL="localhost:9000"
+      export MEDUSA_BACKEND_LOCAL_URL="http://localhost:9000"
       export MEDUSA_BACKEND_GITPOD_URL=$(gp url 9000)
-      export MEDUSA_ADMIN_LOCAL_URL="localhost:4200"
+      export MEDUSA_ADMIN_LOCAL_URL="http://localhost:4200"
       export MEDUSA_ADMIN_GITPOD_URL=$(gp url 4200)
-      export MEDUSA_STOREFRONT_LOCAL_URL="localhost:3000"
+      export MEDUSA_STOREFRONT_LOCAL_URL="http://localhost:3000"
       export MEDUSA_STOREFRONT_GITPOD_URL=$(gp url 3000)
       export NEXT_PUBLIC_MEDUSA_BACKEND_URL=$MEDUSA_BACKEND_LOCAL_URL
       export ADMIN_CORS=$MEDUSA_ADMIN_LOCAL_URL,$MEDUSA_ADMIN_GITPOD_URL
