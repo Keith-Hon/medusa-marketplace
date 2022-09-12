@@ -15,13 +15,10 @@
         "skipDefaultLibCheck": true,
         "baseUrl": ".",
         "paths": {
-            "@medusajs/medusa": ["submodules/medusa/packages/medusa"],
             "@medusajs/medusa-cli": ["submodules/medusa/packages/medusa-cli"],
             "@medusajs/medusa-cli/*": ["submodules/medusa/packages/medusa-cli/*"],
             "@medusajs/medusa-js": ["submodules/medusa/packages/medusa-js"],
-            "@medusajs/medusa/*": ["submodules/medusa/packages/medusa/*"],
             "medusa-core-utils": ["submodules/medusa/packages/medusa-core-utils"],
-            "medusa-extender": ["submodules/medusa-extender"],
             "medusa-fulfillment-manual": ["submodules/medusa/packages/medusa-fulfillment-manual"],
             "medusa-interfaces": ["submodules/medusa/packages/medusa-interfaces"],
             "medusa-interfaces/*": ["submodules/medusa/packages/medusa-interfaces/*"],
