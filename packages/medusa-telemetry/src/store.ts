@@ -1,21 +1,23 @@
 import path from "path";
 import Configstore from "configstore";
-
-import InMemConfig from "./util/in-memory-config";
+import { InMemoryConfigStore } from "./util/in-memory-config";
 import OutboxStore from "./util/outbox-store";
 import isTruthy from "./util/is-truthy";
 
 class Store {
+    config_: Configstore | InMemoryConfigStore;
+    outbox_: OutboxStore;
+    disabled_: boolean;
+
     constructor() {
         try {
             this.config_ = new Configstore(`medusa`, {}, { globalConfigPath: true });
         } catch (e) {
-            this.config_ = new InMemConfig();
+            this.config_ = new InMemoryConfigStore();
         }
 
         const baseDir = path.dirname(this.config_.path);
         this.outbox_ = new OutboxStore(baseDir);
-
         this.disabled_ = isTruthy(process.env.MEDUSA_DISABLE_TELEMETRY);
     }
 

@@ -3,7 +3,6 @@ import fs from "fs";
 import { join, sep } from "path";
 import isDocker from "is-docker";
 import { v4 as uuidv4 } from "uuid";
-
 import createFlush from "./util/create-flush";
 import getTermProgram from "./util/get-term-program";
 import isTruthy from "./util/is-truthy";
@@ -13,15 +12,37 @@ import Store from "./store";
 
 const MEDUSA_TELEMETRY_VERBOSE = process.env.MEDUSA_TELEMETRY_VERBOSE || false;
 
-class Telemeter {
-    constructor(options = {}) {
-        this.store_ = new Store();
+type OSInfo = {
+    node_version: string;
+    platform: NodeJS.Platform;
+    release: string;
+    cpus: string;
+    is_ci: boolean;
+    ci_name: any;
+    arch: string;
+    docker: boolean;
+    term_program: string;
+}
 
+class Telemeter {
+    store_: Store;
+    flushAt: number;
+    maxQueueSize: number;
+    flushInterval: number;
+    flushed: boolean;
+    queueSize_: number;
+    queueCount_: number;
+    machineId: string;
+    trackingEnabled: boolean;
+    osInfo: OSInfo;
+    timer: any;
+
+    constructor(options: Record<string, any> = {}) {
+        this.store_ = new Store();
         this.flushAt = Math.max(options.flushAt, 1) || 20;
         this.maxQueueSize = options.maxQueueSize || 1024 * 500;
         this.flushInterval = options.flushInterval || 10 * 1000;
         this.flushed = false;
-
         this.queueSize_ = this.store_.getQueueSize();
         this.queueCount_ = this.store_.getQueueCount();
     }
@@ -61,7 +82,7 @@ class Telemeter {
             return this.osInfo;
         }
         const cpus = os.cpus();
-        const osInfo = {
+        const osInfo: OSInfo = {
             node_version: process.version,
             platform: os.platform(),
             release: os.release(),
