@@ -1,5 +1,5 @@
-import { AdminGetBatchParams } from "@medusajs/medusa"
-import { BatchJob } from "@medusajs/medusa/dist"
+import { AdminGetBatchParams } from "medusa"
+import { BatchJob } from "medusa"
 import { useAdminBatchJobs } from "medusa-react"
 import React, { useContext, useEffect, useState } from "react"
 import { AccountContext } from "./account"

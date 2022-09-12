@@ -1,4 +1,4 @@
-import { Region, ShippingOption as Option } from "@medusajs/medusa"
+import { Region, ShippingOption as Option } from "medusa"
 import { useAdminShippingOptions } from "medusa-react"
 import React, { useState } from "react"
 import Spinner from "../../../components/atoms/spinner"

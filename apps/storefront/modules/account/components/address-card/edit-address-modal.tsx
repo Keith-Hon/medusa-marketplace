@@ -1,7 +1,7 @@
 import { medusaClient } from "@lib/config";
 import { useAccount } from "@lib/context/account-context";
 import useToggleState from "@lib/hooks/use-toggle-state";
-import { Address } from "@medusajs/medusa";
+import { Address } from "medusa";
 import CountrySelect from "@modules/checkout/components/country-select";
 import Button from "@modules/common/components/button";
 import Input from "@modules/common/components/input";

@@ -1,5 +1,5 @@
 import { useStore } from "@lib/context/store-context";
-import { LineItem, Region } from "@medusajs/medusa";
+import { LineItem, Region } from "medusa";
 import LineItemOptions from "@modules/common/components/line-item-options";
 import LineItemPrice from "@modules/common/components/line-item-price";
 import NativeSelect from "@modules/common/components/native-select";

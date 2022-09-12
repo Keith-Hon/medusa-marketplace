@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { useForm } from "react-hook-form"
-import { CustomerGroup } from "@medusajs/medusa"
+import { CustomerGroup } from "medusa"
 
 import Modal from "../../../components/molecules/modal"
 import Input from "../../../components/molecules/input"

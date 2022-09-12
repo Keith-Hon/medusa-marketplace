@@ -3,7 +3,7 @@ import {
   Order,
   ProductVariant,
   ReturnReason,
-} from "@medusajs/medusa"
+} from "medusa"
 import {
   useAdminCreateSwap,
   useAdminOrder,
@@ -73,13 +73,11 @@ const SwapMenu: React.FC<SwapMenuProps> = ({ order, onDismiss }) => {
     return []
   }, [order])
 
-  const {
-    shipping_options: shippingOptions,
-    isLoading: shippingLoading,
-  } = useAdminShippingOptions({
-    is_return: true,
-    region_id: order.region_id,
-  })
+  const { shipping_options: shippingOptions, isLoading: shippingLoading } =
+    useAdminShippingOptions({
+      is_return: true,
+      region_id: order.region_id,
+    })
 
   const returnTotal = useMemo(() => {
     const items = Object.keys(toReturn).map((t) =>
@@ -103,8 +101,9 @@ const SwapMenu: React.FC<SwapMenuProps> = ({ order, onDismiss }) => {
 
   const additionalTotal = useMemo(() => {
     return itemsToAdd.reduce((acc, next) => {
-      let amount = next.prices.find((ma) => ma.region_id === order.region_id)
-        ?.amount
+      let amount = next.prices.find(
+        (ma) => ma.region_id === order.region_id
+      )?.amount
 
       if (!amount) {
         amount = next.prices.find(

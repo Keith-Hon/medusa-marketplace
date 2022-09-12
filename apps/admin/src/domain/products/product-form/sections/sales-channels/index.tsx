@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { Product, SalesChannel } from "@medusajs/medusa"
+import { Product, SalesChannel } from "medusa"
 import { useAdminSalesChannels, useAdminStore } from "medusa-react"
 import Badge from "../../../../../components/fundamentals/badge"
 import Button from "../../../../../components/fundamentals/button"
@@ -31,11 +31,8 @@ const SalesChannels: React.FC<SalesChannelsProps> = ({
     close: closeScModal,
   } = useToggleState()
 
-  const {
-    salesChannels,
-    setSalesChannels,
-    additionalDirtyState,
-  } = useProductForm()
+  const { salesChannels, setSalesChannels, additionalDirtyState } =
+    useProductForm()
 
   const { count, isLoading: isLoadingSalesChannels } = useAdminSalesChannels()
   const { store, isLoading: isLoadingStore } = useAdminStore()

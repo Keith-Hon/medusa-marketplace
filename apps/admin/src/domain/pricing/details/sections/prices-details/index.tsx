@@ -1,4 +1,4 @@
-import { Product } from "@medusajs/medusa"
+import { Product } from "medusa"
 import * as React from "react"
 import Fade from "../../../../../components/atoms/fade-wrapper"
 import EditIcon from "../../../../../components/fundamentals/icons/edit-icon"

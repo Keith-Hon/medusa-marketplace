@@ -1,5 +1,5 @@
 import transformProductPreview from "@lib/util/transform-product-preview";
-import { Product, Region } from "@medusajs/medusa";
+import { Product, Region } from "medusa";
 import { useMemo } from "react";
 import { InfiniteProductPage, ProductPreviewType } from "types/global";
 

@@ -1,4 +1,4 @@
-import { PaymentSession } from "@medusajs/medusa";
+import { PaymentSession } from "medusa";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe, StripeElementsOptions } from "@stripe/stripe-js";
 import React from "react";

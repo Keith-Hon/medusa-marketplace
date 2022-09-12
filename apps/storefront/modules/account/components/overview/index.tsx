@@ -1,4 +1,4 @@
-import { Customer, Order } from "@medusajs/medusa";
+import { Customer, Order } from "medusa";
 import ChevronDown from "@modules/common/icons/chevron-down";
 import MapPin from "@modules/common/icons/map-pin";
 import Package from "@modules/common/icons/package";

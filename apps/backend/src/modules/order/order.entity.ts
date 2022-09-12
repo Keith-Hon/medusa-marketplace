@@ -1,7 +1,7 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne, OneToMany } from "typeorm";
 
 import { Entity as MedusaEntity } from "medusa-extender";
-import { Order as MedusaOrder } from "@medusajs/medusa";
+import { Order as MedusaOrder } from "medusa";
 import { Store } from "../store/entities/store.entity";
 
 @MedusaEntity({ override: MedusaOrder })

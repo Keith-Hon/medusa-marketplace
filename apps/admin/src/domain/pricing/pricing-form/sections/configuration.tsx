@@ -1,4 +1,4 @@
-import { PriceList } from "@medusajs/medusa"
+import { PriceList } from "medusa"
 import clsx from "clsx"
 import { useAdminCustomerGroups } from "medusa-react"
 import React, { useState } from "react"
@@ -35,11 +35,8 @@ const checkForEnabledConfigs = (
 
 const Configuration: React.FC<ConfigurationProps> = () => {
   const { customer_groups, isLoading } = useAdminCustomerGroups()
-  const {
-    control,
-    handleConfigurationSwitch,
-    configFields,
-  } = usePriceListForm()
+  const { control, handleConfigurationSwitch, configFields } =
+    usePriceListForm()
   const [openItems, setOpenItems] = useState<string[]>(
     checkForEnabledConfigs(configFields)
   )

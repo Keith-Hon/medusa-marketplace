@@ -1,4 +1,4 @@
-import { Discount } from "@medusajs/medusa"
+import { Discount } from "medusa"
 import { useAdminRegions } from "medusa-react"
 import React, { useEffect, useMemo, useState } from "react"
 import { Controller, useWatch } from "react-hook-form"
@@ -36,7 +36,7 @@ const General: React.FC<GeneralProps> = ({ discount }) => {
       if (Array.isArray(regions) && regions.length) {
         id = regions[0].value
       } else {
-        id = ((regions as unknown) as { label: string; value: string }).value // if you change from fixed to percentage, unselect and select a region, and then change back to fixed it is possible to make useForm set regions to an object instead of an array
+        id = (regions as unknown as { label: string; value: string }).value // if you change from fixed to percentage, unselect and select a region, and then change back to fixed it is possible to make useForm set regions to an object instead of an array
       }
 
       const reg = opts?.find((r) => r.id === id)

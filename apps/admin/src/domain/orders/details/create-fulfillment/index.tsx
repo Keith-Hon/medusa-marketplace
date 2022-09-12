@@ -5,7 +5,7 @@ import {
   ClaimOrder,
   Order,
   Swap,
-} from "@medusajs/medusa"
+} from "medusa"
 import {
   useAdminCreateFulfillment,
   useAdminFulfillClaim,

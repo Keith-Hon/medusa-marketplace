@@ -1,4 +1,4 @@
-import { LineItem, Region } from "@medusajs/medusa";
+import { LineItem, Region } from "medusa";
 import Item from "@modules/cart/components/item";
 import SkeletonLineItem from "@modules/skeletons/components/skeleton-line-item";
 

@@ -1,4 +1,4 @@
-import { Payment, PaymentStatus } from "@medusajs/medusa";
+import { Payment, PaymentStatus } from "medusa";
 
 type PaymentDetailsProps = {
     payments: Payment[];

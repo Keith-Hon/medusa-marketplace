@@ -1,4 +1,4 @@
-import { Order } from "@medusajs/medusa";
+import { Order } from "medusa";
 import Help from "@modules/order/components/help";
 import Items from "@modules/order/components/items";
 import OrderDetails from "@modules/order/components/order-details";

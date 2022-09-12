@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Product } from "@medusajs/medusa"
+import { Product } from "medusa"
 import { Column, HeaderGroup, Row } from "react-table"
 import Table from "../../molecules/table"
 import ImagePlaceholderIcon from "../../fundamentals/icons/image-placeholder-icon"

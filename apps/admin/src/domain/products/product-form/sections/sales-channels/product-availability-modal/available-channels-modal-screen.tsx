@@ -1,4 +1,4 @@
-import { SalesChannel } from "@medusajs/medusa"
+import { SalesChannel } from "medusa"
 import React, { useState } from "react"
 import { usePagination, useRowSelect, useTable } from "react-table"
 import SalesChannelAvailabilityTable, {
@@ -13,10 +13,9 @@ type AvailableChannelsModalScreenProps = {
 
 const LIMIT = 15
 
-const AvailableChannelsModalScreen: React.FC<AvailableChannelsModalScreenProps> = ({
-  availableChannels,
-  setAvailableChannels: setAvailableChannels,
-}) => {
+const AvailableChannelsModalScreen: React.FC<
+  AvailableChannelsModalScreenProps
+> = ({ availableChannels, setAvailableChannels: setAvailableChannels }) => {
   const numPages = Math.ceil(availableChannels?.length / LIMIT)
 
   const [offset, setOffset] = useState(0)

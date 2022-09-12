@@ -2,7 +2,7 @@ import clsx from "clsx"
 import { navigate } from "gatsby"
 import React, { useEffect, useRef, useState } from "react"
 
-import { SalesChannel } from "@medusajs/medusa"
+import { SalesChannel } from "medusa"
 import {
   useAdminDeleteSalesChannel,
   useAdminProducts,
@@ -316,12 +316,10 @@ type SalesChannelDetailsProps = {
 function SalesChannelDetails(props: SalesChannelDetailsProps) {
   const { resetDetails, salesChannel } = props
 
-  const [showUpdateModal, openUpdateModal, closeUpdateModal] = useToggleState(
-    false
-  )
-  const [showAddProducts, showProductsAdd, hideProductsAdd] = useToggleState(
-    false
-  )
+  const [showUpdateModal, openUpdateModal, closeUpdateModal] =
+    useToggleState(false)
+  const [showAddProducts, showProductsAdd, hideProductsAdd] =
+    useToggleState(false)
 
   return (
     <div className="col-span-2 rounded-rounded border bg-grey-0 border-grey-20 px-8 py-6 h-[968px]">
@@ -364,10 +362,8 @@ function Details(props: DetailsProps) {
   const [filterText, setFilterText] = useState<string>()
   const [showCreateModal, setShowCreateModal] = useState(false)
 
-  const [
-    activeSalesChannel,
-    setActiveSalesChannel,
-  ] = useState<SalesChannel | null>()
+  const [activeSalesChannel, setActiveSalesChannel] =
+    useState<SalesChannel | null>()
 
   const { store } = useAdminStore()
   const { sales_channels } = useAdminSalesChannels()

@@ -1,4 +1,4 @@
-import { Order } from "@medusajs/medusa";
+import { Order } from "medusa";
 
 type OrderDetailsProps = {
     order: Order;

@@ -1,4 +1,4 @@
-import { LineItem, Order } from "@medusajs/medusa"
+import { LineItem, Order } from "medusa"
 import clsx from "clsx"
 import React, { useContext } from "react"
 import RMAReturnReasonSubModal from "../../../domain/orders/details/rma-sub-modals/return-reasons"
@@ -169,10 +169,10 @@ const RMASelectProductTable: React.FC<RMASelectProductTableProps> = ({
                           <span>{item.variant.title}</span>
                         )}
                         {item?.variant?.sku && (
-                            <CopyToClipboard
-                              value={item.variant.sku}
-                              iconSize={14}
-                            />
+                          <CopyToClipboard
+                            value={item.variant.sku}
+                            iconSize={14}
+                          />
                         )}
                       </div>
                     </div>

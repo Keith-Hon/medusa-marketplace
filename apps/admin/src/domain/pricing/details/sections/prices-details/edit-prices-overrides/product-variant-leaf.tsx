@@ -1,4 +1,4 @@
-import { MoneyAmount, ProductVariant } from "@medusajs/medusa"
+import { MoneyAmount, ProductVariant } from "medusa"
 import * as React from "react"
 import Button from "../../../../../../components/fundamentals/button"
 import ChevronRightIcon from "../../../../../../components/fundamentals/icons/chevron-right-icon"

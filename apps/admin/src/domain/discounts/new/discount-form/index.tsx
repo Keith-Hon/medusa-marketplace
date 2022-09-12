@@ -1,4 +1,4 @@
-import { Discount } from "@medusajs/medusa"
+import { Discount } from "medusa"
 import { navigate } from "gatsby"
 import * as React from "react"
 import Button from "../../../../components/fundamentals/button"

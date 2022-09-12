@@ -1,4 +1,4 @@
-import { MoneyAmount } from "@medusajs/medusa";
+import { MoneyAmount } from "medusa";
 import { formatAmount } from "medusa-react";
 import { Region, Variant } from "types/medusa";
 

@@ -13,7 +13,7 @@ import React, {
   useState,
 } from "react"
 import { usePagination, useRowSelect, useTable } from "react-table"
-import { Product, SalesChannel } from "@medusajs/medusa"
+import { Product, SalesChannel } from "medusa"
 
 import Placeholder from "./placeholder"
 import Button from "../../../components/fundamentals/button"
@@ -367,9 +367,8 @@ function SalesChannelProductsTable(props: SalesChannelProductsTableProps) {
   const params = useQueryFilters(defaultQueryProps)
   const filters = useProductFilters()
 
-  const {
-    mutate: deleteProductsFromSalesChannel,
-  } = useAdminDeleteProductsFromSalesChannel(salesChannelId)
+  const { mutate: deleteProductsFromSalesChannel } =
+    useAdminDeleteProductsFromSalesChannel(salesChannelId)
 
   const { products, count, isLoading } = useAdminProducts({
     ...params.queryObject,

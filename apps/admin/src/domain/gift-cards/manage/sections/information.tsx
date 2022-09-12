@@ -1,4 +1,4 @@
-import { Product } from "@medusajs/medusa"
+import { Product } from "medusa"
 import {
   useAdminDeleteProduct,
   useAdminProductTypes,

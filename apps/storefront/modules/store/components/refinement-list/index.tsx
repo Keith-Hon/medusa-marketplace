@@ -1,4 +1,4 @@
-import { StoreGetProductsParams } from "@medusajs/medusa";
+import { StoreGetProductsParams } from "medusa";
 import { useCollections } from "medusa-react";
 import { ChangeEvent } from "react";
 

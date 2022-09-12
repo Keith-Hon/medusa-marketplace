@@ -1,4 +1,4 @@
-import { Address } from "@medusajs/medusa"
+import { Address } from "medusa"
 import { navigate } from "gatsby"
 import {
   useAdminDeleteDraftOrder,
@@ -42,9 +42,8 @@ const DraftOrderDetails = ({ id }) => {
     show: false,
   }
 
-  const [deletePromptData, setDeletePromptData] = useState<DeletePromptData>(
-    initDeleteState
-  )
+  const [deletePromptData, setDeletePromptData] =
+    useState<DeletePromptData>(initDeleteState)
   const [addressModal, setAddressModal] = useState<null | {
     address: Address
     type: "billing" | "shipping"

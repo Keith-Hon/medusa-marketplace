@@ -1,4 +1,4 @@
-import { PriceList } from "@medusajs/medusa"
+import { PriceList } from "medusa"
 import { isArray } from "lodash"
 import React, { useMemo } from "react"
 import { Column } from "react-table"

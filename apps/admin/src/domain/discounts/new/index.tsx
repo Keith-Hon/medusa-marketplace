@@ -1,4 +1,4 @@
-import { Discount } from "@medusajs/medusa"
+import { Discount } from "medusa"
 import { RouteComponentProps } from "@reach/router"
 import React from "react"
 import DiscountForm from "./discount-form"

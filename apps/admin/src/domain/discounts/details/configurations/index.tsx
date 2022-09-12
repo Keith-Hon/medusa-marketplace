@@ -1,4 +1,4 @@
-import { Discount } from "@medusajs/medusa"
+import { Discount } from "medusa"
 import React, { useState } from "react"
 import EditIcon from "../../../../components/fundamentals/icons/edit-icon"
 import NumberedItem from "../../../../components/molecules/numbered-item"

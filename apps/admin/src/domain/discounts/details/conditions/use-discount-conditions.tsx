@@ -1,4 +1,4 @@
-import { Discount } from "@medusajs/medusa"
+import { Discount } from "medusa"
 import { useAdminDiscount, useAdminDiscountRemoveCondition } from "medusa-react"
 import React from "react"
 import TrashIcon from "../../../../components/fundamentals/icons/trash-icon"

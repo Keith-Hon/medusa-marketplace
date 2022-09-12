@@ -1,5 +1,5 @@
 import { onlyUnique } from "@lib/util/only-unique";
-import { ProductOption } from "@medusajs/medusa";
+import { ProductOption } from "medusa";
 import clsx from "clsx";
 import React from "react";
 

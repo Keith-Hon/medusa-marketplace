@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react"
 import { difference } from "lodash"
 import { navigate } from "gatsby"
-import { CustomerGroup } from "@medusajs/medusa"
+import { CustomerGroup } from "medusa"
 import {
   useAdminAddCustomersToCustomerGroup,
   useAdminCustomerGroup,
@@ -56,19 +56,18 @@ function CustomerGroupCustomersList(props: CustomerGroupCustomersListProps) {
   // toggle to show/hide "edit customers" modal
   const [showCustomersModal, setShowCustomersModal] = useState(false)
 
-  const { q, queryObject, paginate, setQuery } = useQueryFilters(
-    defaultQueryProps
-  )
+  const { q, queryObject, paginate, setQuery } =
+    useQueryFilters(defaultQueryProps)
 
-  const { customers = [], isLoading, count } = useAdminCustomerGroupCustomers(
-    groupId,
-    queryObject
-  )
+  const {
+    customers = [],
+    isLoading,
+    count,
+  } = useAdminCustomerGroupCustomers(groupId, queryObject)
 
   const { mutate: addCustomers } = useAdminAddCustomersToCustomerGroup(groupId)
-  const { mutate: removeCustomers } = useAdminRemoveCustomersFromCustomerGroup(
-    groupId
-  )
+  const { mutate: removeCustomers } =
+    useAdminRemoveCustomersFromCustomerGroup(groupId)
 
   // list of currently selected customers of a group
   const [selectedCustomerIds, setSelectedCustomerIds] = useState(

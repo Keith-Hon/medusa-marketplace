@@ -6,7 +6,7 @@ import ArrowLeftIcon from "../../fundamentals/icons/arrow-left-icon"
 import ArrowRightIcon from "../../fundamentals/icons/arrow-right-icon"
 import InviteModal from "../invite-modal"
 import { useAdminUsers } from "medusa-react"
-import { User } from "@medusajs/medusa"
+import { User } from "medusa"
 
 type PaginationArrowsProps = {
   currentPage: number

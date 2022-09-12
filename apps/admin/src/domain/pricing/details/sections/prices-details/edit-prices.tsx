@@ -1,4 +1,4 @@
-import { Product } from "@medusajs/medusa"
+import { Product } from "medusa"
 import { debounce } from "lodash"
 import { useAdminPriceListProducts } from "medusa-react"
 import * as React from "react"

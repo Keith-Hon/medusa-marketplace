@@ -1,4 +1,4 @@
-import { Product } from "@medusajs/medusa";
+import { Product } from "medusa";
 import { NextPage } from "next";
 import { AppProps } from "next/app";
 import { ReactElement, ReactNode } from "react";

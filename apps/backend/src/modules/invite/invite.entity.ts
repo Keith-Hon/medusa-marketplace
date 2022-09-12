@@ -1,7 +1,7 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
 
 import { Entity as MedusaEntity } from "medusa-extender";
-import { Invite as MedusaInvite } from "@medusajs/medusa";
+import { Invite as MedusaInvite } from "medusa";
 import { Store } from "../store/entities/store.entity";
 
 @MedusaEntity({ override: MedusaInvite })

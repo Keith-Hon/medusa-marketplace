@@ -1,9 +1,4 @@
-import {
-  CustomerGroup,
-  Product,
-  ProductCollection,
-  ProductTag,
-} from "@medusajs/medusa"
+import { CustomerGroup, Product, ProductCollection, ProductTag } from "medusa"
 import { debounce } from "lodash"
 import React, { useEffect } from "react"
 import {

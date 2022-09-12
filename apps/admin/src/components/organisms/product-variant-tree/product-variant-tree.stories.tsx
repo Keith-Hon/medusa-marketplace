@@ -1,4 +1,4 @@
-import { Product } from "@medusajs/medusa"
+import { Product } from "medusa"
 import { ComponentMeta, ComponentStory } from "@storybook/react"
 import React from "react"
 import ProductVariantTree from "."

@@ -1,4 +1,4 @@
-import { LineItem } from "@medusajs/medusa";
+import { LineItem } from "medusa";
 import omit from "lodash/omit";
 import { useCart, useProducts } from "medusa-react";
 import { useMemo } from "react";

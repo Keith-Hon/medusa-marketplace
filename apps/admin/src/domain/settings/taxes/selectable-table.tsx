@@ -1,6 +1,6 @@
 import React, { useMemo, useEffect } from "react"
 import clsx from "clsx"
-import { Product, ProductType, ShippingOption } from "@medusajs/medusa"
+import { Product, ProductType, ShippingOption } from "medusa"
 import CheckIcon from "../../../components/fundamentals/icons/check-icon"
 import {
   ColumnInstance,

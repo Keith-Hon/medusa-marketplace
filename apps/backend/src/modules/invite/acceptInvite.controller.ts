@@ -1,4 +1,4 @@
-import { AdminPostInvitesInviteAcceptReq } from "@medusajs/medusa"
+import { AdminPostInvitesInviteAcceptReq } from "medusa"
 import { InviteService } from './invite.service';
 import { MedusaError } from 'medusa-core-utils';
 import UserService from '../user/services/user.service';

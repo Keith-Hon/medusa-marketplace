@@ -1,6 +1,6 @@
 import { medusaClient } from "@lib/config";
 import { getPercentageDiff } from "@lib/util/get-precentage-diff";
-import { Product, ProductCollection, Region } from "@medusajs/medusa";
+import { Product, ProductCollection, Region } from "medusa";
 import { formatAmount, useCart } from "medusa-react";
 import { useQuery } from "react-query";
 import { ProductPreviewType } from "types/global";

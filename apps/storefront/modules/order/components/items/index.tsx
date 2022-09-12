@@ -1,5 +1,5 @@
 import useEnrichedLineItems from "@lib/hooks/use-enrich-line-items";
-import { LineItem, Region } from "@medusajs/medusa";
+import { LineItem, Region } from "medusa";
 import LineItemOptions from "@modules/common/components/line-item-options";
 import LineItemPrice from "@modules/common/components/line-item-price";
 import Thumbnail from "@modules/products/components/thumbnail";

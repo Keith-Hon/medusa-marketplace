@@ -1,4 +1,4 @@
-import { Product } from "@medusajs/medusa"
+import { Product } from "medusa"
 import { useAdminProducts } from "medusa-react"
 import * as React from "react"
 import Button from "../../fundamentals/button"
@@ -27,12 +27,13 @@ const AddProductsModal = ({
   /* ************* Data ************  */
 
   const params = useQueryFilters(defaultQueryProps)
-  const { products, isLoading, count = 0 } = useAdminProducts(
-    params.queryObject,
-    {
-      keepPreviousData: true,
-    }
-  )
+  const {
+    products,
+    isLoading,
+    count = 0,
+  } = useAdminProducts(params.queryObject, {
+    keepPreviousData: true,
+  })
 
   /* ************* State ************  */
 

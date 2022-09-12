@@ -1,4 +1,4 @@
-import { SalesChannel } from "@medusajs/medusa"
+import { SalesChannel } from "medusa"
 import clsx from "clsx"
 import React, { useMemo } from "react"
 import { TableInstance } from "react-table"
@@ -67,7 +67,9 @@ export const useAvailableChannelsModalTableColumns = () => {
   return [columns] as const
 }
 
-const SalesChannelAvailabilityTable: React.FC<SalesChannelAvailabilityTableProps> = ({
+const SalesChannelAvailabilityTable: React.FC<
+  SalesChannelAvailabilityTableProps
+> = ({
   salesChannels,
   limit,
   offset,
@@ -165,7 +167,9 @@ const SalesChannelAvailabilityTable: React.FC<SalesChannelAvailabilityTableProps
   )
 }
 
-export const SalesChannelTableActions: React.FC<SalesChannelTableActionsProps> = ({
+export const SalesChannelTableActions: React.FC<
+  SalesChannelTableActionsProps
+> = ({
   numberOfSelectedRows,
   availableChannelIds,
   onAddSalesChannelsToAvailableChannels,

@@ -1,4 +1,4 @@
-import { LineItem, Order } from "@medusajs/medusa"
+import { LineItem, Order } from "medusa"
 import clsx from "clsx"
 import React from "react"
 import {

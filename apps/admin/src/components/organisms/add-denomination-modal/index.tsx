@@ -1,4 +1,4 @@
-import { Product } from "@medusajs/medusa"
+import { Product } from "medusa"
 import { useAdminCreateVariant } from "medusa-react"
 import React from "react"
 import { Controller, useForm } from "react-hook-form"
@@ -40,23 +40,19 @@ const AddDenominationModal: React.FC<AddDenominationModalProps> = ({
   // passed to useValuesFieldArray so new prices are intialized with the currenct default price
   const defaultValue = watch("default_price", 10000)
 
-  const {
-    fields,
-    appendPrice,
-    deletePrice,
-    availableCurrencies,
-  } = useValuesFieldArray(
-    currencyCodes,
-    {
-      control,
-      name: "prices",
-      keyName: "indexId",
-    },
-    {
-      defaultAmount: defaultValue,
-      defaultCurrencyCode: storeCurrency,
-    }
-  )
+  const { fields, appendPrice, deletePrice, availableCurrencies } =
+    useValuesFieldArray(
+      currencyCodes,
+      {
+        control,
+        name: "prices",
+        keyName: "indexId",
+      },
+      {
+        defaultAmount: defaultValue,
+        defaultCurrencyCode: storeCurrency,
+      }
+    )
 
   const onSubmit = async (data: any) => {
     const prices = [

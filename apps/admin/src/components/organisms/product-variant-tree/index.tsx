@@ -1,4 +1,4 @@
-import { Product, ProductVariant } from "@medusajs/medusa"
+import { Product, ProductVariant } from "medusa"
 import React from "react"
 import { ActionType } from "../../molecules/actionables"
 import { CollapsibleTree } from "../../molecules/collapsible-tree"

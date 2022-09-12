@@ -1,4 +1,4 @@
-import { LineItem as RawLineItem, Order } from "@medusajs/medusa"
+import { LineItem as RawLineItem, Order } from "medusa"
 import { useAdminRequestReturn, useAdminShippingOptions } from "medusa-react"
 import React, { useContext, useEffect, useState } from "react"
 import Spinner from "../../../../components/atoms/spinner"
@@ -56,13 +56,11 @@ const ReturnMenu: React.FC<ReturnMenuProps> = ({ order, onDismiss }) => {
     }
   }, [order])
 
-  const {
-    isLoading: shippingLoading,
-    shipping_options: shippingOptions,
-  } = useAdminShippingOptions({
-    region_id: order.region_id,
-    is_return: "true",
-  })
+  const { isLoading: shippingLoading, shipping_options: shippingOptions } =
+    useAdminShippingOptions({
+      region_id: order.region_id,
+      is_return: "true",
+    })
 
   useEffect(() => {
     const items = Object.keys(toReturn)
@@ -191,7 +189,7 @@ const ReturnMenu: React.FC<ReturnMenuProps> = ({ order, onDismiss }) => {
                   shippingOptions?.map((o) => ({
                     label: o.name,
                     value: o.id,
-                    tax_rates: o.tax_rates
+                    tax_rates: o.tax_rates,
                   })) || []
                 }
               />

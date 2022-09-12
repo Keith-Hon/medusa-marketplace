@@ -1,4 +1,4 @@
-import { Discount } from "@medusajs/medusa"
+import { Discount } from "medusa"
 import { navigate } from "gatsby"
 import { useAdminDeleteDiscount, useAdminUpdateDiscount } from "medusa-react"
 import React, { useState } from "react"

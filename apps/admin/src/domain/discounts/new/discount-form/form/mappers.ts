@@ -3,7 +3,7 @@ import {
   AdminPostDiscountsReq,
   AdminUpsertCondition,
   Discount,
-} from "@medusajs/medusa"
+} from "medusa"
 import { FieldValues } from "react-hook-form"
 import { Option } from "../../../../../types/shared"
 import { AllocationType, ConditionMap, DiscountRuleType } from "../../../types"

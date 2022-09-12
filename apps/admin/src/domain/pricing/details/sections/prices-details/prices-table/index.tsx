@@ -1,4 +1,4 @@
-import { Product } from "@medusajs/medusa"
+import { Product } from "medusa"
 import {
   useAdminPriceListProducts,
   useAdminDeletePriceListProductPrices,
@@ -27,10 +27,11 @@ type PricesTableProps = {
 
 const PricesTable = ({ id, selectProduct }: PricesTableProps) => {
   const params = useQueryFilters(defaultQueryProps)
-  const { products, isLoading, count = 0 } = useAdminPriceListProducts(
-    id,
-    params.queryObject
-  )
+  const {
+    products,
+    isLoading,
+    count = 0,
+  } = useAdminPriceListProducts(id, params.queryObject)
   const columns = usePricesColumns()
 
   return (

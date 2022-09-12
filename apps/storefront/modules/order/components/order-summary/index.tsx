@@ -1,4 +1,4 @@
-import { Order } from "@medusajs/medusa";
+import { Order } from "medusa";
 import { formatAmount } from "medusa-react";
 
 type OrderSummaryProps = {

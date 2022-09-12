@@ -1,4 +1,4 @@
-import { Cart } from "@medusajs/medusa";
+import { Cart } from "medusa";
 import { CartService as MedusaCartService } from "@medusajs/medusa/dist/services";
 import { FilterableCartProps } from "@medusajs/medusa/dist/types/cart";
 import { FindConfig } from "@medusajs/medusa/dist/types/common";

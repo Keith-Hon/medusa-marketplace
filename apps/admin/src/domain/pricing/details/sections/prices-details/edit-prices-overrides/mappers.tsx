@@ -1,4 +1,4 @@
-import { AdminPostPriceListsPriceListPriceListReq } from "@medusajs/medusa"
+import { AdminPostPriceListsPriceListPriceListReq } from "medusa"
 import { PriceOverridesFormValues } from "../../../../../../components/templates/price-overrides"
 import xorObjFields from "../../../../../../utils/xorObjFields"
 

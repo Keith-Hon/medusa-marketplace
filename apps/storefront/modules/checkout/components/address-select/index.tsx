@@ -1,6 +1,6 @@
 import { Listbox, Transition } from "@headlessui/react";
 import { useCheckout } from "@lib/context/checkout-context";
-import { Address } from "@medusajs/medusa";
+import { Address } from "medusa";
 import Radio from "@modules/common/components/radio";
 import ChevronDown from "@modules/common/icons/chevron-down";
 import clsx from "clsx";

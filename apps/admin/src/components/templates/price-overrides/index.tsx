@@ -1,4 +1,4 @@
-import { MoneyAmount, ProductVariant } from "@medusajs/medusa"
+import { MoneyAmount, ProductVariant } from "medusa"
 import React from "react"
 import { Control, Controller, useForm, useWatch } from "react-hook-form"
 import Checkbox, { CheckboxProps } from "../../atoms/checkbox"

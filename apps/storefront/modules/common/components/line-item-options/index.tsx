@@ -1,4 +1,4 @@
-import { ProductVariant } from "@medusajs/medusa";
+import { ProductVariant } from "medusa";
 
 type LineItemOptionsProps = { variant: ProductVariant };
 

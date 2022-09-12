@@ -1,4 +1,4 @@
-import { ClaimOrder, LineItem, Order, Swap } from "@medusajs/medusa"
+import { ClaimOrder, LineItem, Order, Swap } from "medusa"
 
 export const isLineItemCanceled = (
   item: Omit<LineItem, "beforeInsert">,

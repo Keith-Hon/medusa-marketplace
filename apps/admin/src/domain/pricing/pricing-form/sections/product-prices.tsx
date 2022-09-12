@@ -1,4 +1,4 @@
-import { MoneyAmount, Product, ProductVariant } from "@medusajs/medusa"
+import { MoneyAmount, Product, ProductVariant } from "medusa"
 import { useAdminStore } from "medusa-react"
 import * as React from "react"
 import Button from "../../../../components/fundamentals/button"
@@ -38,10 +38,8 @@ const ProductPrices = ({
   onFileChosen,
 }: ProductPricesProps) => {
   const [showAdd, setShowAdd] = React.useState(false)
-  const [
-    selectedVariant,
-    setSelectedVariant,
-  ] = React.useState<ProductVariant | null>(null)
+  const [selectedVariant, setSelectedVariant] =
+    React.useState<ProductVariant | null>(null)
   const unselect = () => setSelectedVariant(null)
 
   const { prices, setPrices } = usePriceListForm()

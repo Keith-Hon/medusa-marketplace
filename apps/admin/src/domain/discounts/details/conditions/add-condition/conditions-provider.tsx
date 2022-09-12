@@ -1,4 +1,4 @@
-import { Discount } from "@medusajs/medusa"
+import { Discount } from "medusa"
 import { useAdminUpdateDiscount } from "medusa-react"
 import React, {
   createContext,

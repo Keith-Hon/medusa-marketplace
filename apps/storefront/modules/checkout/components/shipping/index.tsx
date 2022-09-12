@@ -1,7 +1,7 @@
 import { RadioGroup } from "@headlessui/react";
 import { ErrorMessage } from "@hookform/error-message";
 import { useCheckout } from "@lib/context/checkout-context";
-import { Cart } from "@medusajs/medusa";
+import { Cart } from "medusa";
 import Radio from "@modules/common/components/radio";
 import Spinner from "@modules/common/icons/spinner";
 import clsx from "clsx";

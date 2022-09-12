@@ -1,5 +1,5 @@
 import { useAccount } from "@lib/context/account-context";
-import { Customer, StorePostCustomersCustomerReq } from "@medusajs/medusa";
+import { Customer, StorePostCustomersCustomerReq } from "medusa";
 import Input from "@modules/common/components/input";
 import NativeSelect from "@modules/common/components/native-select";
 import { useRegions, useUpdateMe } from "medusa-react";

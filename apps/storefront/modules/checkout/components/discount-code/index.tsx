@@ -1,5 +1,5 @@
 import { medusaClient } from "@lib/config";
-import { Cart } from "@medusajs/medusa";
+import { Cart } from "medusa";
 import Button from "@modules/common/components/button";
 import Input from "@modules/common/components/input";
 import Trash from "@modules/common/icons/trash";

@@ -1,4 +1,4 @@
-import { SalesChannel } from "@medusajs/medusa"
+import { SalesChannel } from "medusa"
 import React from "react"
 import { FormProvider, useForm, useFormContext } from "react-hook-form"
 import { FeatureFlagContext } from "../../../../context/feature-flag"
@@ -74,9 +74,8 @@ export const ProductFormProvider = ({
   const [variants, setVariants] = React.useState<any[]>([])
   const [productOptions, setProductOptions] = React.useState<any[]>([])
   const [hasImagesChanged, setHasImagesChanged] = React.useState(false)
-  const [hasSalesChannelsChanged, setHasSalesChannelsChanged] = React.useState(
-    false
-  )
+  const [hasSalesChannelsChanged, setHasSalesChannelsChanged] =
+    React.useState(false)
 
   // SALES CHANNELS
   const { isFeatureEnabled } = React.useContext(FeatureFlagContext)

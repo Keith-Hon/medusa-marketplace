@@ -5,11 +5,11 @@ import * as dedent from 'dedent';
  * @param routerName
  */
 export function getRouterTemplate(routerName: string): string {
-	return dedent`
+    return dedent`
         import { MedusaAuthenticatedRequest, Router } from 'medusa-extender';
         import { UserService } from "@medusajs/medusa/dist/services";
         import { Response, NextFunction } from "express";
-        import { User } from "@medusajs/medusa/dist";
+        import { User } from "medusa";
         
         @Router({
             routes: [{

@@ -1,4 +1,4 @@
-import { Discount } from "@medusajs/medusa"
+import { Discount } from "medusa"
 import { parse } from "iso8601-duration"
 import { useAdminUpdateDiscount } from "medusa-react"
 import moment from "moment"

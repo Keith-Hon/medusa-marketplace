@@ -3,7 +3,7 @@ import {
   Order,
   ProductVariant,
   ShippingOption,
-} from "@medusajs/medusa"
+} from "medusa"
 import clsx from "clsx"
 import {
   useAdminCreateClaim,
@@ -93,19 +93,16 @@ const reasonOptions = [
 const ClaimMenu: React.FC<ClaimMenuProps> = ({ order, onDismiss }) => {
   const { mutate, isLoading } = useAdminCreateClaim(order.id)
   const { refetch } = useAdminOrder(order.id)
-  const [shippingAddress, setShippingAddress] = useState<AddressPayload>(
-    undefined
-  )
+  const [shippingAddress, setShippingAddress] =
+    useState<AddressPayload>(undefined)
   const [countries, setCountries] = useState<string[]>([])
   const [isReplace, toggleReplace] = useState(false)
   const [noNotification, setNoNotification] = useState(order.no_notification)
   const [toReturn, setToReturn] = useState<ReturnRecord>({})
 
   const [itemsToAdd, setItemsToAdd] = useState<SelectProduct[]>([])
-  const [
-    returnShippingMethod,
-    setReturnShippingMethod,
-  ] = useState<ShippingOption | null>(null)
+  const [returnShippingMethod, setReturnShippingMethod] =
+    useState<ShippingOption | null>(null)
   const [returnShippingPrice, setReturnShippingPrice] = useState<
     number | undefined
   >(undefined)

@@ -1,7 +1,7 @@
 import { Service } from "medusa-extender";
 import { CustomerService as MedusaCustomerService } from '@medusajs/medusa/dist/services';
 import { FindConfig } from "@medusajs/medusa/dist/types/common";
-import { Customer } from "@medusajs/medusa";
+import { Customer } from "medusa";
 
 type InjectedDependencies = { manager, customerRepository, eventBusService, addressRepository, }
 

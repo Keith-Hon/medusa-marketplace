@@ -1,5 +1,5 @@
 import React from "react"
-import { Customer, CustomerGroup } from "@medusajs/medusa"
+import { Customer, CustomerGroup } from "medusa"
 import { Column } from "react-table"
 
 import CustomerAvatarItem from "../../molecules/customer-avatar-item"
@@ -69,36 +69,38 @@ export const CUSTOMER_GROUPS_CUSTOMERS_TABLE_COLUMNS: Column<Customer>[] = [
   },
 ]
 
-export const CUSTOMER_GROUPS_CUSTOMERS_LIST_TABLE_COLUMNS: Column<
-  Customer
->[] = [
-  {
-    Header: () => (
-      <div className="flex items-center gap-1">
-        Name <SortingIcon size={16} />
-      </div>
-    ),
-    accessor: "customer",
-    Cell: ({ row }) => (
-      <CustomerAvatarItem customer={row.original} color={getColor(row.index)} />
-    ),
-  },
-  {
-    Header: () => (
-      <div className="flex items-center gap-1">
-        Email <SortingIcon size={16} />
-      </div>
-    ),
-    accessor: "email",
-  },
-  {
-    accessor: "groups",
-    disableSortBy: true,
-    Header: "Groups",
-    Cell: ({ cell: { value } }) => <CustomersGroupsSummary groups={value} />,
-  },
-  {
-    Header: "",
-    id: "settings-col",
-  },
-]
+export const CUSTOMER_GROUPS_CUSTOMERS_LIST_TABLE_COLUMNS: Column<Customer>[] =
+  [
+    {
+      Header: () => (
+        <div className="flex items-center gap-1">
+          Name <SortingIcon size={16} />
+        </div>
+      ),
+      accessor: "customer",
+      Cell: ({ row }) => (
+        <CustomerAvatarItem
+          customer={row.original}
+          color={getColor(row.index)}
+        />
+      ),
+    },
+    {
+      Header: () => (
+        <div className="flex items-center gap-1">
+          Email <SortingIcon size={16} />
+        </div>
+      ),
+      accessor: "email",
+    },
+    {
+      accessor: "groups",
+      disableSortBy: true,
+      Header: "Groups",
+      Cell: ({ cell: { value } }) => <CustomersGroupsSummary groups={value} />,
+    },
+    {
+      Header: "",
+      id: "settings-col",
+    },
+  ]

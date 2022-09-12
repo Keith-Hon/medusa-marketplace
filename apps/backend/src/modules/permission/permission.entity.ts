@@ -1,6 +1,6 @@
 import { BeforeInsert, Column, Entity, JoinTable, ManyToMany } from "typeorm";
 
-import { BaseEntity } from "@medusajs/medusa";
+import { BaseEntity } from "medusa";
 import { DbAwareColumn } from "@medusajs/medusa/dist/utils/db-aware-column";
 import { Entity as MedusaEntity } from "medusa-extender";
 import { Role } from "../role/role.entity";

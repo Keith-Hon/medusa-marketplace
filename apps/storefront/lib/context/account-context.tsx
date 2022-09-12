@@ -1,4 +1,4 @@
-import { Customer } from "@medusajs/medusa";
+import { Customer } from "medusa";
 import { useMeCustomer } from "medusa-react";
 import { useRouter } from "next/router";
 import React, { createContext, useCallback, useContext, useState } from "react";

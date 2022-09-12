@@ -1,4 +1,4 @@
-import { SalesChannel } from "@medusajs/medusa"
+import { SalesChannel } from "medusa"
 import React from "react"
 import Button from "../../../../../../components/fundamentals/button"
 import Modal from "../../../../../../components/molecules/modal"
@@ -20,9 +20,8 @@ const ProductAvailabilityModal: React.FC<ProductAvailabilityModalProps> = ({
 }) => {
   const context = React.useContext(LayeredModalContext)
 
-  const [availableChannels, setAvailableChannels] = React.useState<
-    SalesChannel[]
-  >(salesChannels)
+  const [availableChannels, setAvailableChannels] =
+    React.useState<SalesChannel[]>(salesChannels)
 
   const onSave = () => {
     storeSelectedSalesChannels(availableChannels)

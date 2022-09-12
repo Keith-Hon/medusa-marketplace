@@ -1,4 +1,4 @@
-import { ProductCollection } from "@medusajs/medusa"
+import { ProductCollection } from "medusa"
 import React, { useMemo } from "react"
 import { Column, HeaderGroup, Row } from "react-table"
 import SortingIcon from "../../../../../../components/fundamentals/icons/sorting-icon"

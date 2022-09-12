@@ -1,5 +1,5 @@
 import { getPercentageDiff } from "@lib/util/get-precentage-diff";
-import { Product, Region } from "@medusajs/medusa";
+import { Product, Region } from "medusa";
 import { formatAmount } from "medusa-react";
 import { ProductPreviewType } from "types/global";
 import { CalculatedVariant } from "types/medusa";

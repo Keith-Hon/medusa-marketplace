@@ -1,4 +1,4 @@
-import { CustomerGroup } from "@medusajs/medusa"
+import { CustomerGroup } from "medusa"
 import { navigate } from "gatsby"
 import { useAdminCustomerGroups } from "medusa-react"
 import React, { useContext } from "react"
@@ -236,9 +236,11 @@ function CustomerGroupsTable(props: CustomerGroupsTableProps) {
 function CustomerGroupsTableContainer() {
   const params = useQueryFilters(defaultQueryProps)
 
-  const { customer_groups, isLoading, count = 0 } = useAdminCustomerGroups(
-    params.queryObject
-  )
+  const {
+    customer_groups,
+    isLoading,
+    count = 0,
+  } = useAdminCustomerGroups(params.queryObject)
 
   useSetSearchParams(params.representationObject)
 

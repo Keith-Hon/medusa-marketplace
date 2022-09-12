@@ -1,4 +1,4 @@
-import { PaymentSession } from "@medusajs/medusa";
+import { PaymentSession } from "medusa";
 import Radio from "@modules/common/components/radio";
 import clsx from "clsx";
 import React from "react";

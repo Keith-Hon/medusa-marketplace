@@ -4,7 +4,7 @@ import {
   ProductCollection,
   ProductTag,
   ProductType,
-} from "@medusajs/medusa"
+} from "medusa"
 import { debounce } from "lodash"
 import React, { useEffect } from "react"
 import {

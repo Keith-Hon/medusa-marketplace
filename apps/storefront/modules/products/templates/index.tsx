@@ -1,6 +1,6 @@
 import { ProductProvider } from "@lib/context/product-context";
 import { useIntersection } from "@lib/hooks/use-in-view";
-import { Product } from "@medusajs/medusa";
+import { Product } from "medusa";
 import ProductTabs from "@modules/products/components/product-tabs";
 import RelatedProducts from "@modules/products/components/related-products";
 import ProductInfo from "@modules/products/templates/product-info";

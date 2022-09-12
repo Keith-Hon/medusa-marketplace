@@ -1,5 +1,5 @@
 import { useCheckout } from "@lib/context/checkout-context";
-import { PaymentSession } from "@medusajs/medusa";
+import { PaymentSession } from "medusa";
 import Button from "@modules/common/components/button";
 import Spinner from "@modules/common/icons/spinner";
 import { OnApproveActions, OnApproveData } from "@paypal/paypal-js";

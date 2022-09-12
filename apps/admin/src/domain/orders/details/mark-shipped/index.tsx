@@ -1,4 +1,4 @@
-import { ClaimOrder, Fulfillment, Order, Swap } from "@medusajs/medusa"
+import { ClaimOrder, Fulfillment, Order, Swap } from "medusa"
 import {
   useAdminCreateClaimShipment,
   useAdminCreateShipment,

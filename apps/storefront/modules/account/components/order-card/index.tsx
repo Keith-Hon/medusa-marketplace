@@ -1,4 +1,4 @@
-import { Order } from "@medusajs/medusa";
+import { Order } from "medusa";
 import Button from "@modules/common/components/button";
 import Thumbnail from "@modules/products/components/thumbnail";
 import { formatAmount } from "medusa-react";

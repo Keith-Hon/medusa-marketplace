@@ -1,4 +1,4 @@
-import { BatchJob } from "@medusajs/medusa/dist"
+import { BatchJob } from "medusa"
 import clsx from "clsx"
 import {
   useAdminCancelBatchJob,

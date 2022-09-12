@@ -9,7 +9,7 @@ import {
 import { UseMutateFunction } from "react-query"
 import { navigate } from "gatsby"
 
-import { Customer } from "@medusajs/medusa"
+import { Customer } from "medusa"
 
 import { CUSTOMER_GROUPS_CUSTOMERS_LIST_TABLE_COLUMNS } from "./config"
 import Table, { TablePagination } from "../../molecules/table"

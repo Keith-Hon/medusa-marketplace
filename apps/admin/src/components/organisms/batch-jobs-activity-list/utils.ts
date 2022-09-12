@@ -1,4 +1,4 @@
-import { BatchJob } from "@medusajs/medusa/dist"
+import { BatchJob } from "medusa"
 
 export function batchJobDescriptionBuilder(
   batchJob: BatchJob,

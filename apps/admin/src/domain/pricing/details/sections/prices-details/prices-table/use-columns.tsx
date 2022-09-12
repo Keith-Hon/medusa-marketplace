@@ -1,4 +1,4 @@
-import { Product } from "@medusajs/medusa"
+import { Product } from "medusa"
 import * as React from "react"
 import { Column } from "react-table"
 import ImagePlaceholder from "../../../../../../components/fundamentals/image-placeholder"

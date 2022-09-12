@@ -1,4 +1,4 @@
-import { Customer } from "@medusajs/medusa"
+import { Customer } from "medusa"
 import { useAdminCustomerGroups, useAdminCustomers } from "medusa-react"
 import React, { useEffect, useState } from "react"
 import {
@@ -73,20 +73,11 @@ type EditCustomersTableProps = {
  * Container for the "edit customers" table.
  */
 function EditCustomersTable(props: EditCustomersTableProps) {
-  const {
-    setSelectedCustomerIds,
-    selectedCustomerIds,
-    handleSubmit,
-    onClose,
-  } = props
+  const { setSelectedCustomerIds, selectedCustomerIds, handleSubmit, onClose } =
+    props
 
-  const {
-    paginate,
-    setQuery,
-    setFilters,
-    filters,
-    queryObject,
-  } = useQueryFilters(defaultQueryProps)
+  const { paginate, setQuery, setFilters, filters, queryObject } =
+    useQueryFilters(defaultQueryProps)
 
   const [numPages, setNumPages] = useState(0)
   const [activeGroupId, setActiveGroupId] = useState()

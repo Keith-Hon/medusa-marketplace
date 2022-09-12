@@ -1,7 +1,7 @@
 import { medusaClient } from "@lib/config";
 import { IS_BROWSER } from "@lib/constants";
 import { getProductHandles } from "@lib/util/get-product-handles";
-import { Product, StoreProductsListRes } from "@medusajs/medusa";
+import { Product, StoreProductsListRes } from "medusa";
 import { ResponsePromise } from "@medusajs/medusa-js";
 import Head from "@modules/common/components/head";
 import Layout from "@modules/layout/templates";

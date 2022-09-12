@@ -1,6 +1,6 @@
 import { medusaClient } from "@lib/config";
 import { handleError } from "@lib/util/handle-error";
-import { Region } from "@medusajs/medusa";
+import { Region } from "medusa";
 import { useCart, useCreateLineItem, useDeleteLineItem, useUpdateLineItem } from "medusa-react";
 import React, { useEffect, useState } from "react";
 import { useCartDropdown } from "./cart-dropdown-context";

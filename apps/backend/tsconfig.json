@@ -1,12 +1,5 @@
 {
     "extends": "../../tsconfig.base.json",
     "files": [],
-    "include": [],
-    "compilerOptions": {
-        "paths": {
-            "@medusajs/medusa": ["submodules/medusa/packages/medusa"],
-            "@medusajs/medusa/*": ["submodules/medusa/packages/medusa/*"],
-            "medusa-extender": ["submodules/medusa-extender"]
-        }
-    }
+    "include": []
 }

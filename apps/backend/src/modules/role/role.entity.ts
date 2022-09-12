@@ -1,6 +1,6 @@
 import { BeforeInsert, Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany } from "typeorm";
 
-import { BaseEntity } from "@medusajs/medusa";
+import { BaseEntity } from "medusa";
 import { Entity as MedusaEntity } from "medusa-extender";
 import { Permission } from '../permission/permission.entity';
 import { Store } from "../store/entities/store.entity";

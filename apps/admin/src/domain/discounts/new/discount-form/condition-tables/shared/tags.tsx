@@ -1,4 +1,4 @@
-import { ProductTag } from "@medusajs/medusa"
+import { ProductTag } from "medusa"
 import React from "react"
 import { Column, HeaderGroup, Row } from "react-table"
 import SortingIcon from "../../../../../../components/fundamentals/icons/sorting-icon"

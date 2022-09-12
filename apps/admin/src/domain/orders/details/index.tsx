@@ -1,4 +1,4 @@
-import { Address, ClaimOrder, Fulfillment, Swap } from "@medusajs/medusa"
+import { Address, ClaimOrder, Fulfillment, Swap } from "medusa"
 import { navigate } from "gatsby"
 import { capitalize, sum } from "lodash"
 import {
@@ -151,40 +151,36 @@ const OrderDetails = ({ id }) => {
   useHotkeys("esc", () => navigate("/a/orders"))
   useHotkeys("command+i", handleCopy)
 
-  const {
-    hasMovements,
-    swapAmount,
-    manualRefund,
-    swapRefund,
-    returnRefund,
-  } = useMemo(() => {
-    let manualRefund = 0
-    let swapRefund = 0
-    let returnRefund = 0
+  const { hasMovements, swapAmount, manualRefund, swapRefund, returnRefund } =
+    useMemo(() => {
+      let manualRefund = 0
+      let swapRefund = 0
+      let returnRefund = 0
 
-    const swapAmount = sum(order?.swaps.map((s) => s.difference_due) || [0])
+      const swapAmount = sum(order?.swaps.map((s) => s.difference_due) || [0])
 
-    if (order?.refunds?.length) {
-      order.refunds.forEach((ref) => {
-        if (ref.reason === "other" || ref.reason === "discount") {
-          manualRefund += ref.amount
-        }
-        if (ref.reason === "return") {
-          returnRefund += ref.amount
-        }
-        if (ref.reason === "swap") {
-          swapRefund += ref.amount
-        }
-      })
-    }
-    return {
-      hasMovements: swapAmount + manualRefund + swapRefund + returnRefund !== 0,
-      swapAmount,
-      manualRefund,
-      swapRefund,
-      returnRefund,
-    }
-  }, [order])
+      if (order?.refunds?.length) {
+        order.refunds.forEach((ref) => {
+          if (ref.reason === "other" || ref.reason === "discount") {
+            manualRefund += ref.amount
+          }
+          if (ref.reason === "return") {
+            returnRefund += ref.amount
+          }
+          if (ref.reason === "swap") {
+            swapRefund += ref.amount
+          }
+        })
+      }
+      return {
+        hasMovements:
+          swapAmount + manualRefund + swapRefund + returnRefund !== 0,
+        swapAmount,
+        manualRefund,
+        swapRefund,
+        returnRefund,
+      }
+    }, [order])
 
   const handleDeleteOrder = async () => {
     const shouldDelete = await dialog({

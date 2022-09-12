@@ -1,4 +1,4 @@
-import { Address, ShippingMethod } from "@medusajs/medusa";
+import { Address, ShippingMethod } from "medusa";
 
 type ShippingDetailsProps = {
     address: Address;

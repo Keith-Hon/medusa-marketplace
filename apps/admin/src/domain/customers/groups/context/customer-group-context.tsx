@@ -1,6 +1,6 @@
 import React, { createContext, PropsWithChildren, useState } from "react"
 
-import { CustomerGroup } from "@medusajs/medusa"
+import { CustomerGroup } from "medusa"
 import {
   useAdminCreateCustomerGroup,
   useAdminUpdateCustomerGroup,

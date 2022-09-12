@@ -1,4 +1,4 @@
-import { Return, Swap } from "@medusajs/medusa"
+import { Return, Swap } from "medusa"
 import {
   useAdminNotes,
   useAdminNotifications,
@@ -236,7 +236,7 @@ export const useBuildTimelime = (orderId: string) => {
         type: "return",
         noNotification: event.no_notification,
         orderId: order.id,
-        raw: (event as unknown) as Return,
+        raw: event as unknown as Return,
         refunded: getWasRefundClaim(event.claim_order_id, order),
       } as ReturnEvent)
 
@@ -272,7 +272,7 @@ export const useBuildTimelime = (orderId: string) => {
           event.payment_status !== "captured" ? event.cart_id : undefined,
         canceledAt: event.canceled_at,
         orderId: event.order_id,
-        raw: (event as unknown) as Swap,
+        raw: event as unknown as Swap,
       } as ExchangeEvent)
 
       if (
