@@ -1,12 +1,12 @@
 import { ConfigModule } from "../types/global";
-import { getConfigFile } from "medusa-core-utils/dist";
+import { getConfigFile } from "medusa-core-utils";
 
 const isProduction = ["production", "prod"].includes(process.env.NODE_ENV || "");
 
 const errorHandler = isProduction
     ? (msg: string): never => {
-          throw new Error(msg);
-      }
+        throw new Error(msg);
+    }
     : console.log;
 
 export default (rootDirectory: string): ConfigModule => {

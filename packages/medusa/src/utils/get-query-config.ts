@@ -1,6 +1,6 @@
 import { pick } from "lodash";
 import { FindConfig, QueryConfig, RequestQueryFields } from "../types/common";
-import { MedusaError } from "medusa-core-utils/dist";
+import { MedusaError } from "medusa-core-utils";
 import { BaseEntity } from "../interfaces/models/base-entity";
 
 export function pickByConfig<TModel extends BaseEntity>(obj: TModel | TModel[], config: FindConfig<TModel>): Partial<TModel> | Partial<TModel>[] {

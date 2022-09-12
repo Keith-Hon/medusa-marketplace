@@ -1,5 +1,5 @@
-import loaders from "@medusajs/medusa/dist/loaders";
-import { getConfigFile } from "medusa-core-utils/dist";
+import loaders from "medusa";
+import { getConfigFile } from "medusa-core-utils";
 import * as getEndpoints from "express-list-endpoints";
 import { Express } from "express";
 import { Logger, MedusaContainer, Type } from "./core";

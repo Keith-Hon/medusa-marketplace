@@ -6,7 +6,7 @@
  * @param config - optional config
  * @returns the rawId given that nothing failed
  */
-import { MedusaError } from "medusa-core-utils/dist";
+import { MedusaError } from "medusa-core-utils";
 
 export function validateId(rawId: string, config: { prefix?: string; length?: number } = {}): string {
     const { prefix, length } = config;

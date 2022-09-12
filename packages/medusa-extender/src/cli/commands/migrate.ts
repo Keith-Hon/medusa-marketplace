@@ -1,5 +1,5 @@
 import { createConnection } from "typeorm";
-import { getConfigFile } from "medusa-core-utils/dist";
+import { getConfigFile } from "medusa-core-utils";
 import { normalize, resolve } from "path";
 
 type ConfigModule = {

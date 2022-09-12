@@ -1,4 +1,4 @@
-import { MedusaError } from "medusa-core-utils/dist";
+import { MedusaError } from "medusa-core-utils";
 
 /**
  * Dedicated method to set metadata.
