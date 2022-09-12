@@ -13,7 +13,7 @@ Instructions:
 
 1. Run the workspace in gitpod container
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/Keith-Hon/medusa-marketplace)
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/Keith-Hon/medusa-marketplace/tree/submodules)
 
 2. Open it in VS Code locally
 
