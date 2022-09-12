@@ -4,6 +4,7 @@
     "projects": {
         "admin": "apps/admin",
         "backend": "apps/backend",
+        "medusa": "packages/medusa",
         "medusa-extender": "packages/medusa-extender",
         "storefront": "apps/storefront",
         "test": "apps/test"

@@ -15,6 +15,7 @@
         "skipDefaultLibCheck": true,
         "baseUrl": ".",
         "paths": {
+            "@medusa-marketplace/medusa": ["packages/medusa/src/index.ts"],
             "@medusa-marketplace/medusa-extender": ["packages/medusa-extender/src/index.ts"],
             "@medusajs/medusa-cli": ["submodules/medusa/packages/medusa-cli"],
             "@medusajs/medusa-cli/*": ["submodules/medusa/packages/medusa-cli/*"],
