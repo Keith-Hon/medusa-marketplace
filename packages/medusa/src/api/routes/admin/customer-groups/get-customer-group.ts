@@ -1,6 +1,6 @@
-import { CustomerGroupService } from "../../../../services"
-import { FindParams } from "../../../../types/common"
-import { Request, Response } from "express"
+import { CustomerGroupService } from "../../../../services";
+import { FindParams } from "../../../../types/common";
+import { Request, Response } from "express";
 
 /**
  * @oas [get] /customer-groups/{id}
@@ -23,18 +23,13 @@ import { Request, Response } from "express"
  *               $ref: "#/components/schemas/customer_group"
  */
 export default async (req: Request, res: Response) => {
-  const { id } = req.params
+    const { id } = req.params;
 
-  const customerGroupService: CustomerGroupService = req.scope.resolve(
-    "customerGroupService"
-  )
+    const customerGroupService: CustomerGroupService = req.scope.resolve("customerGroupService");
 
-  const customerGroup = await customerGroupService.retrieve(
-    id,
-    req.retrieveConfig
-  )
+    const customerGroup = await customerGroupService.retrieve(id, req.retrieveConfig);
 
-  res.json({ customer_group: customerGroup })
-}
+    res.json({ customer_group: customerGroup });
+};
 
 export class AdminGetCustomerGroupsGroupParams extends FindParams {}

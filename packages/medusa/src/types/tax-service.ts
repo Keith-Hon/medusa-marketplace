@@ -4,36 +4,34 @@
  * plugin.
  */
 export type TaxServiceRate = {
-  rate?: number | null
-  name: string
-  code: string | null
-}
+    rate?: number | null;
+    name: string;
+    code: string | null;
+};
 
 /**
  * The tax line properties for a given shipping method.
  */
 export type ProviderShippingMethodTaxLine = {
-  rate: number
-  name: string
-  code: string | null
-  metadata?: Record<string, unknown>
-  shipping_method_id: string
-}
+    rate: number;
+    name: string;
+    code: string | null;
+    metadata?: Record<string, unknown>;
+    shipping_method_id: string;
+};
 
 /**
  * The tax line properties for a given line item.
  */
 export type ProviderLineItemTaxLine = {
-  rate: number
-  name: string
-  code: string | null
-  item_id: string
-  metadata?: Record<string, unknown>
-}
+    rate: number;
+    name: string;
+    code: string | null;
+    item_id: string;
+    metadata?: Record<string, unknown>;
+};
 
 /**
  * A union type of the possible provider tax lines.
  */
-export type ProviderTaxLine =
-  | ProviderLineItemTaxLine
-  | ProviderShippingMethodTaxLine
+export type ProviderTaxLine = ProviderLineItemTaxLine | ProviderShippingMethodTaxLine;

@@ -1,8 +1,8 @@
-import { Type } from "class-transformer"
-import { IsNumber, IsOptional, IsString } from "class-validator"
-import { CustomerGroupService } from "../../../../services"
-import { FilterableCustomerGroupProps } from "../../../../types/customer-groups"
-import { Request, Response } from "express"
+import { Type } from "class-transformer";
+import { IsNumber, IsOptional, IsString } from "class-validator";
+import { CustomerGroupService } from "../../../../services";
+import { FilterableCustomerGroupProps } from "../../../../types/customer-groups";
+import { Request, Response } from "express";
 
 /**
  * @oas [get] /customer-groups
@@ -34,40 +34,35 @@ import { Request, Response } from "express"
  *               $ref: "#/components/schemas/customer_group"
  */
 export default async (req: Request, res: Response) => {
-  const customerGroupService: CustomerGroupService = req.scope.resolve(
-    "customerGroupService"
-  )
+    const customerGroupService: CustomerGroupService = req.scope.resolve("customerGroupService");
 
-  const [data, count] = await customerGroupService.listAndCount(
-    req.filterableFields,
-    req.listConfig
-  )
+    const [data, count] = await customerGroupService.listAndCount(req.filterableFields, req.listConfig);
 
-  const { limit, offset } = req.validatedQuery
-  res.json({
-    count,
-    customer_groups: data,
-    offset,
-    limit,
-  })
-}
+    const { limit, offset } = req.validatedQuery;
+    res.json({
+        count,
+        customer_groups: data,
+        offset,
+        limit
+    });
+};
 
 export class AdminGetCustomerGroupsParams extends FilterableCustomerGroupProps {
-  @IsString()
-  @IsOptional()
-  order?: string
+    @IsString()
+    @IsOptional()
+    order?: string;
 
-  @IsNumber()
-  @IsOptional()
-  @Type(() => Number)
-  offset?: number = 0
+    @IsNumber()
+    @IsOptional()
+    @Type(() => Number)
+    offset?: number = 0;
 
-  @IsNumber()
-  @IsOptional()
-  @Type(() => Number)
-  limit?: number = 10
+    @IsNumber()
+    @IsOptional()
+    @Type(() => Number)
+    limit?: number = 10;
 
-  @IsString()
-  @IsOptional()
-  expand?: string
+    @IsString()
+    @IsOptional()
+    expand?: string;
 }

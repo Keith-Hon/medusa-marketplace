@@ -1,7 +1,7 @@
-import { IsBoolean, IsOptional, IsString } from "class-validator"
-import { Request, Response } from "express"
-import { SalesChannelService } from "../../../../services"
-import { EntityManager } from "typeorm"
+import { IsBoolean, IsOptional, IsString } from "class-validator";
+import { Request, Response } from "express";
+import { SalesChannelService } from "../../../../services";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /sales-channels/{id}
@@ -38,36 +38,30 @@ import { EntityManager } from "typeorm"
  *               $ref: "#/components/schemas/sales-channel"
  */
 export default async (req: Request, res: Response) => {
-  const { id } = req.params
-  const { validatedBody } = req as {
-    validatedBody: AdminPostSalesChannelsSalesChannelReq
-  }
+    const { id } = req.params;
+    const { validatedBody } = req as {
+        validatedBody: AdminPostSalesChannelsSalesChannelReq;
+    };
 
-  const salesChannelService: SalesChannelService = req.scope.resolve(
-    "salesChannelService"
-  )
-  const manager: EntityManager = req.scope.resolve("manager")
-  const sales_channel = await manager.transaction(
-    async (transactionManager) => {
-      return await salesChannelService
-        .withTransaction(transactionManager)
-        .update(id, validatedBody)
-    }
-  )
+    const salesChannelService: SalesChannelService = req.scope.resolve("salesChannelService");
+    const manager: EntityManager = req.scope.resolve("manager");
+    const sales_channel = await manager.transaction(async (transactionManager) => {
+        return await salesChannelService.withTransaction(transactionManager).update(id, validatedBody);
+    });
 
-  res.status(200).json({ sales_channel })
-}
+    res.status(200).json({ sales_channel });
+};
 
 export class AdminPostSalesChannelsSalesChannelReq {
-  @IsOptional()
-  @IsString()
-  name?: string
+    @IsOptional()
+    @IsString()
+    name?: string;
 
-  @IsOptional()
-  @IsString()
-  description?: string
+    @IsOptional()
+    @IsString()
+    description?: string;
 
-  @IsBoolean()
-  @IsOptional()
-  is_disabled?: boolean
+    @IsBoolean()
+    @IsOptional()
+    is_disabled?: boolean;
 }

@@ -1,8 +1,8 @@
-import { IsArray, IsNotEmpty, IsOptional, IsString } from "class-validator"
-import { defaultAdminOrdersFields, defaultAdminOrdersRelations } from "."
-import { ClaimService, OrderService } from "../../../../services"
-import { validator } from "../../../../utils/validator"
-import { EntityManager } from "typeorm"
+import { IsArray, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { defaultAdminOrdersFields, defaultAdminOrdersRelations } from ".";
+import { ClaimService, OrderService } from "../../../../services";
+import { validator } from "../../../../utils/validator";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /orders/{id}/claims/{claim_id}/shipments
@@ -41,42 +41,37 @@ import { EntityManager } from "typeorm"
  *               $ref: "#/components/schemas/order"
  */
 export default async (req, res) => {
-  const { id, claim_id } = req.params
+    const { id, claim_id } = req.params;
 
-  const validated = await validator(
-    AdminPostOrdersOrderClaimsClaimShipmentsReq,
-    req.body
-  )
+    const validated = await validator(AdminPostOrdersOrderClaimsClaimShipmentsReq, req.body);
 
-  const orderService: OrderService = req.scope.resolve("orderService")
-  const claimService: ClaimService = req.scope.resolve("claimService")
+    const orderService: OrderService = req.scope.resolve("orderService");
+    const claimService: ClaimService = req.scope.resolve("claimService");
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await claimService
-      .withTransaction(transactionManager)
-      .createShipment(
-        claim_id,
-        validated.fulfillment_id,
-        validated.tracking_numbers?.map((n) => ({ tracking_number: n }))
-      )
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await claimService.withTransaction(transactionManager).createShipment(
+            claim_id,
+            validated.fulfillment_id,
+            validated.tracking_numbers?.map((n) => ({ tracking_number: n }))
+        );
+    });
 
-  const order = await orderService.retrieve(id, {
-    select: defaultAdminOrdersFields,
-    relations: defaultAdminOrdersRelations,
-  })
+    const order = await orderService.retrieve(id, {
+        select: defaultAdminOrdersFields,
+        relations: defaultAdminOrdersRelations
+    });
 
-  res.json({ order })
-}
+    res.json({ order });
+};
 
 export class AdminPostOrdersOrderClaimsClaimShipmentsReq {
-  @IsString()
-  @IsNotEmpty()
-  fulfillment_id: string
+    @IsString()
+    @IsNotEmpty()
+    fulfillment_id: string;
 
-  @IsArray()
-  @IsOptional()
-  @IsString({ each: true })
-  tracking_numbers?: string[]
+    @IsArray()
+    @IsOptional()
+    @IsString({ each: true })
+    tracking_numbers?: string[];
 }

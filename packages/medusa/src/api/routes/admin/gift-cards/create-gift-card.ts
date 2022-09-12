@@ -1,9 +1,9 @@
-import { Type } from "class-transformer"
-import { IsBoolean, IsDate, IsInt, IsOptional, IsString } from "class-validator"
-import { defaultAdminGiftCardFields, defaultAdminGiftCardRelations } from "."
-import { GiftCardService } from "../../../../services"
-import { validator } from "../../../../utils/validator"
-import { EntityManager } from "typeorm"
+import { Type } from "class-transformer";
+import { IsBoolean, IsDate, IsInt, IsOptional, IsString } from "class-validator";
+import { defaultAdminGiftCardFields, defaultAdminGiftCardRelations } from ".";
+import { GiftCardService } from "../../../../services";
+import { validator } from "../../../../utils/validator";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /gift-cards
@@ -47,43 +47,43 @@ import { EntityManager } from "typeorm"
  *               $ref: "#/components/schemas/gift_card"
  */
 export default async (req, res) => {
-  const validated = await validator(AdminPostGiftCardsReq, req.body)
+    const validated = await validator(AdminPostGiftCardsReq, req.body);
 
-  const giftCardService: GiftCardService = req.scope.resolve("giftCardService")
+    const giftCardService: GiftCardService = req.scope.resolve("giftCardService");
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  const newly = await manager.transaction(async (transactionManager) => {
-    return await giftCardService.withTransaction(transactionManager).create({
-      ...validated,
-      balance: validated.value,
-    })
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    const newly = await manager.transaction(async (transactionManager) => {
+        return await giftCardService.withTransaction(transactionManager).create({
+            ...validated,
+            balance: validated.value
+        });
+    });
 
-  const giftCard = await giftCardService.retrieve(newly.id, {
-    select: defaultAdminGiftCardFields,
-    relations: defaultAdminGiftCardRelations,
-  })
+    const giftCard = await giftCardService.retrieve(newly.id, {
+        select: defaultAdminGiftCardFields,
+        relations: defaultAdminGiftCardRelations
+    });
 
-  res.status(200).json({ gift_card: giftCard })
-}
+    res.status(200).json({ gift_card: giftCard });
+};
 
 export class AdminPostGiftCardsReq {
-  @IsOptional()
-  @IsInt()
-  value?: number
+    @IsOptional()
+    @IsInt()
+    value?: number;
 
-  @IsOptional()
-  @IsDate()
-  @Type(() => Date)
-  ends_at?: Date
+    @IsOptional()
+    @IsDate()
+    @Type(() => Date)
+    ends_at?: Date;
 
-  @IsOptional()
-  @IsBoolean()
-  is_disabled?: boolean
+    @IsOptional()
+    @IsBoolean()
+    is_disabled?: boolean;
 
-  @IsString()
-  region_id: string
+    @IsString()
+    region_id: string;
 
-  @IsOptional()
-  metadata?: Record<string, unknown>
+    @IsOptional()
+    metadata?: Record<string, unknown>;
 }

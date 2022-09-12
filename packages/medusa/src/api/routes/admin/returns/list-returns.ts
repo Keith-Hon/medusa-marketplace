@@ -1,7 +1,7 @@
-import { Type } from "class-transformer"
-import { IsNumber, IsOptional } from "class-validator"
-import { ReturnService } from "../../../../services"
-import { validator } from "../../../../utils/validator"
+import { Type } from "class-transformer";
+import { IsNumber, IsOptional } from "class-validator";
+import { ReturnService } from "../../../../services";
+import { validator } from "../../../../utils/validator";
 
 /**
  * @oas [get] /returns
@@ -26,37 +26,37 @@ import { validator } from "../../../../utils/validator"
  *                 $ref: "#/components/schemas/return"
  */
 export default async (req, res) => {
-  const returnService: ReturnService = req.scope.resolve("returnService")
+    const returnService: ReturnService = req.scope.resolve("returnService");
 
-  const validated = await validator(AdminGetReturnsParams, req.query)
+    const validated = await validator(AdminGetReturnsParams, req.query);
 
-  const selector = {}
+    const selector = {};
 
-  const listConfig = {
-    relations: ["swap", "order"],
-    skip: validated.offset,
-    take: validated.limit,
-    order: { created_at: "DESC" },
-  }
+    const listConfig = {
+        relations: ["swap", "order"],
+        skip: validated.offset,
+        take: validated.limit,
+        order: { created_at: "DESC" }
+    };
 
-  const returns = await returnService.list(selector, { ...listConfig })
+    const returns = await returnService.list(selector, { ...listConfig });
 
-  res.json({
-    returns,
-    count: returns.length,
-    offset: validated.offset,
-    limit: validated.limit,
-  })
-}
+    res.json({
+        returns,
+        count: returns.length,
+        offset: validated.offset,
+        limit: validated.limit
+    });
+};
 
 export class AdminGetReturnsParams {
-  @IsOptional()
-  @IsNumber()
-  @Type(() => Number)
-  limit?: number = 50
+    @IsOptional()
+    @IsNumber()
+    @Type(() => Number)
+    limit?: number = 50;
 
-  @IsOptional()
-  @IsNumber()
-  @Type(() => Number)
-  offset?: number = 0
+    @IsOptional()
+    @IsNumber()
+    @Type(() => Number)
+    offset?: number = 0;
 }

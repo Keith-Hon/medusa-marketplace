@@ -1,1 +1,1 @@
-export type DraftOrderListSelector = { q?: string }
+export type DraftOrderListSelector = { q?: string };

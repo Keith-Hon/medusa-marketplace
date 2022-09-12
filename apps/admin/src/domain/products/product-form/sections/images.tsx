@@ -54,13 +54,8 @@ const columns = [
 ]
 
 const Images = () => {
-  const {
-    images,
-    setImages,
-    appendImage,
-    removeImage,
-    control,
-  } = useProductForm()
+  const { images, setImages, appendImage, removeImage, control } =
+    useProductForm()
 
   return (
     <BodyCard title="Images" subtitle="Add up to 10 images to your product">

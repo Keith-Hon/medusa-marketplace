@@ -7,7 +7,7 @@ export default {
   component: ShippingOption,
 } as ComponentMeta<typeof ShippingOption>
 
-const Template = args => <ShippingOption {...args} />
+const Template = (args) => <ShippingOption {...args} />
 
 export const FlatRate = Template.bind({})
 FlatRate.args = {

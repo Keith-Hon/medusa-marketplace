@@ -60,9 +60,9 @@ export type ProductPreviewType = {
         price_type: "default" | "sale";
     };
     store?: {
-        name: string,
-        store_id: string
-    }
+        name: string;
+        store_id: string;
+    };
 };
 
 export type InfiniteProductPage = {

@@ -1,10 +1,10 @@
-import * as dedent from 'dedent';
+import * as dedent from "dedent";
 
 /**
  * Provide a basic template for the main entry point file generation.
  */
 export function getMainEntryPointTemplate(): string {
-	return dedent`
+    return dedent`
         import express = require('express');
         const config = require('../medusa-config');
         import { Medusa } from 'medusa-extender';

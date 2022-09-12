@@ -1,66 +1,59 @@
-import {
-  BeforeInsert,
-  Column,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  OneToMany,
-} from "typeorm"
-import { PriceListStatus, PriceListType } from "../types/price-list"
-import { DbAwareColumn, resolveDbType } from "../utils/db-aware-column"
-import { CustomerGroup } from "./customer-group"
-import { MoneyAmount } from "./money-amount"
-import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity"
-import { generateEntityId } from "../utils/generate-entity-id"
+import { BeforeInsert, Column, Entity, JoinTable, ManyToMany, OneToMany } from "typeorm";
+import { PriceListStatus, PriceListType } from "../types/price-list";
+import { DbAwareColumn, resolveDbType } from "../utils/db-aware-column";
+import { CustomerGroup } from "./customer-group";
+import { MoneyAmount } from "./money-amount";
+import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity";
+import { generateEntityId } from "../utils/generate-entity-id";
 
 @Entity()
 export class PriceList extends SoftDeletableEntity {
-  @Column()
-  name: string
+    @Column()
+    name: string;
 
-  @Column()
-  description: string
+    @Column()
+    description: string;
 
-  @DbAwareColumn({ type: "enum", enum: PriceListType, default: "sale" })
-  type: PriceListType
+    @DbAwareColumn({ type: "enum", enum: PriceListType, default: "sale" })
+    type: PriceListType;
 
-  @DbAwareColumn({ type: "enum", enum: PriceListStatus, default: "draft" })
-  status: PriceListStatus
+    @DbAwareColumn({ type: "enum", enum: PriceListStatus, default: "draft" })
+    status: PriceListStatus;
 
-  @Column({
-    type: resolveDbType("timestamptz"),
-    nullable: true,
-  })
-  starts_at: Date | null
+    @Column({
+        type: resolveDbType("timestamptz"),
+        nullable: true
+    })
+    starts_at: Date | null;
 
-  @Column({ type: resolveDbType("timestamptz"), nullable: true })
-  ends_at: Date | null
+    @Column({ type: resolveDbType("timestamptz"), nullable: true })
+    ends_at: Date | null;
 
-  @JoinTable({
-    name: "price_list_customer_groups",
-    joinColumn: {
-      name: "price_list_id",
-      referencedColumnName: "id",
-    },
-    inverseJoinColumn: {
-      name: "customer_group_id",
-      referencedColumnName: "id",
-    },
-  })
-  @ManyToMany(() => CustomerGroup, (cg) => cg.price_lists, {
-    onDelete: "CASCADE",
-  })
-  customer_groups: CustomerGroup[]
+    @JoinTable({
+        name: "price_list_customer_groups",
+        joinColumn: {
+            name: "price_list_id",
+            referencedColumnName: "id"
+        },
+        inverseJoinColumn: {
+            name: "customer_group_id",
+            referencedColumnName: "id"
+        }
+    })
+    @ManyToMany(() => CustomerGroup, (cg) => cg.price_lists, {
+        onDelete: "CASCADE"
+    })
+    customer_groups: CustomerGroup[];
 
-  @OneToMany(() => MoneyAmount, (moneyAmount) => moneyAmount.price_list, {
-    onDelete: "CASCADE",
-  })
-  prices: MoneyAmount[]
+    @OneToMany(() => MoneyAmount, (moneyAmount) => moneyAmount.price_list, {
+        onDelete: "CASCADE"
+    })
+    prices: MoneyAmount[];
 
-  @BeforeInsert()
-  private beforeInsert(): undefined | void {
-    this.id = generateEntityId(this.id, "pl")
-  }
+    @BeforeInsert()
+    private beforeInsert(): undefined | void {
+        this.id = generateEntityId(this.id, "pl");
+    }
 }
 
 /**

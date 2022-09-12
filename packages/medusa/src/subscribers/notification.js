@@ -1,15 +1,15 @@
 class NotificationSubscriber {
-  constructor({ eventBusService, notificationService }) {
-    this.notificationService_ = notificationService
+    constructor({ eventBusService, notificationService }) {
+        this.notificationService_ = notificationService;
 
-    this.eventBus_ = eventBusService
+        this.eventBus_ = eventBusService;
 
-    this.eventBus_.subscribe("*", this.onEvent)
-  }
+        this.eventBus_.subscribe("*", this.onEvent);
+    }
 
-  onEvent = (data, eventName) => {
-    return this.notificationService_.handleEvent(eventName, data)
-  }
+    onEvent = (data, eventName) => {
+        return this.notificationService_.handleEvent(eventName, data);
+    };
 }
 
-export default NotificationSubscriber
+export default NotificationSubscriber;

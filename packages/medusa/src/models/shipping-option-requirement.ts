@@ -1,49 +1,40 @@
-import {
-  BeforeInsert,
-  Column,
-  DeleteDateColumn,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  PrimaryColumn,
-} from "typeorm"
-import { DbAwareColumn, resolveDbType } from "../utils/db-aware-column"
+import { BeforeInsert, Column, DeleteDateColumn, Entity, Index, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
+import { DbAwareColumn, resolveDbType } from "../utils/db-aware-column";
 
-import { ShippingOption } from "./shipping-option"
-import { generateEntityId } from "../utils/generate-entity-id"
+import { ShippingOption } from "./shipping-option";
+import { generateEntityId } from "../utils/generate-entity-id";
 
 export enum RequirementType {
-  MIN_SUBTOTAL = "min_subtotal",
-  MAX_SUBTOTAL = "max_subtotal",
+    MIN_SUBTOTAL = "min_subtotal",
+    MAX_SUBTOTAL = "max_subtotal"
 }
 
 @Entity()
 export class ShippingOptionRequirement {
-  @PrimaryColumn()
-  id: string
+    @PrimaryColumn()
+    id: string;
 
-  @Index()
-  @Column()
-  shipping_option_id: string
+    @Index()
+    @Column()
+    shipping_option_id: string;
 
-  @ManyToOne(() => ShippingOption)
-  @JoinColumn({ name: "shipping_option_id" })
-  shipping_option: ShippingOption
+    @ManyToOne(() => ShippingOption)
+    @JoinColumn({ name: "shipping_option_id" })
+    shipping_option: ShippingOption;
 
-  @DbAwareColumn({ type: "enum", enum: RequirementType })
-  type: RequirementType
+    @DbAwareColumn({ type: "enum", enum: RequirementType })
+    type: RequirementType;
 
-  @Column({ type: "int" })
-  amount: number
+    @Column({ type: "int" })
+    amount: number;
 
-  @DeleteDateColumn({ type: resolveDbType("timestamptz") })
-  deleted_at: Date
+    @DeleteDateColumn({ type: resolveDbType("timestamptz") })
+    deleted_at: Date;
 
-  @BeforeInsert()
-  private beforeInsert(): void {
-    this.id = generateEntityId(this.id, "sor")
-  }
+    @BeforeInsert()
+    private beforeInsert(): void {
+        this.id = generateEntityId(this.id, "sor");
+    }
 }
 
 /**

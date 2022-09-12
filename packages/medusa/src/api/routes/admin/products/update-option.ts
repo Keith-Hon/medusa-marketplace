@@ -1,8 +1,8 @@
-import { IsString } from "class-validator"
-import { defaultAdminProductFields, defaultAdminProductRelations } from "."
-import { ProductService } from "../../../../services"
-import { validator } from "../../../../utils/validator"
-import { EntityManager } from "typeorm"
+import { IsString } from "class-validator";
+import { defaultAdminProductFields, defaultAdminProductRelations } from ".";
+import { ProductService } from "../../../../services";
+import { validator } from "../../../../utils/validator";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /products/{id}/options/{option_id}
@@ -36,31 +36,26 @@ import { EntityManager } from "typeorm"
  *               $ref: "#/components/schemas/product"
  */
 export default async (req, res) => {
-  const { id, option_id } = req.params
+    const { id, option_id } = req.params;
 
-  const validated = await validator(
-    AdminPostProductsProductOptionsOption,
-    req.body
-  )
+    const validated = await validator(AdminPostProductsProductOptionsOption, req.body);
 
-  const productService: ProductService = req.scope.resolve("productService")
+    const productService: ProductService = req.scope.resolve("productService");
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await productService
-      .withTransaction(transactionManager)
-      .updateOption(id, option_id, validated)
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await productService.withTransaction(transactionManager).updateOption(id, option_id, validated);
+    });
 
-  const product = await productService.retrieve(id, {
-    select: defaultAdminProductFields,
-    relations: defaultAdminProductRelations,
-  })
+    const product = await productService.retrieve(id, {
+        select: defaultAdminProductFields,
+        relations: defaultAdminProductRelations
+    });
 
-  res.json({ product })
-}
+    res.json({ product });
+};
 
 export class AdminPostProductsProductOptionsOption {
-  @IsString()
-  title: string
+    @IsString()
+    title: string;
 }

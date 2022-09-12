@@ -1,8 +1,8 @@
-import { IsObject } from "class-validator"
-import { defaultStoreCartFields, defaultStoreCartRelations } from "."
-import { CartService } from "../../../../services"
-import { validator } from "../../../../utils/validator"
-import { decorateLineItemsWithTotals } from "./decorate-line-items-with-totals"
+import { IsObject } from "class-validator";
+import { defaultStoreCartFields, defaultStoreCartRelations } from ".";
+import { CartService } from "../../../../services";
+import { validator } from "../../../../utils/validator";
+import { decorateLineItemsWithTotals } from "./decorate-line-items-with-totals";
 import { EntityManager } from "typeorm";
 
 /**
@@ -27,31 +27,28 @@ import { EntityManager } from "typeorm";
  *               $ref: "#/components/schemas/cart"
  */
 export default async (req, res) => {
-  const { id, provider_id } = req.params
+    const { id, provider_id } = req.params;
 
-  const validated = await validator(
-    StorePostCartsCartPaymentSessionUpdateReq,
-    req.body
-  )
+    const validated = await validator(StorePostCartsCartPaymentSessionUpdateReq, req.body);
 
-  const cartService: CartService = req.scope.resolve("cartService")
+    const cartService: CartService = req.scope.resolve("cartService");
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    await cartService.withTransaction(transactionManager).setPaymentSession(id, provider_id)
-    await cartService.withTransaction(transactionManager).updatePaymentSession(id, validated.data)
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        await cartService.withTransaction(transactionManager).setPaymentSession(id, provider_id);
+        await cartService.withTransaction(transactionManager).updatePaymentSession(id, validated.data);
+    });
 
-  const cart = await cartService.retrieve(id, {
-    select: defaultStoreCartFields,
-    relations: defaultStoreCartRelations,
-  })
-  const data = await decorateLineItemsWithTotals(cart, req)
+    const cart = await cartService.retrieve(id, {
+        select: defaultStoreCartFields,
+        relations: defaultStoreCartRelations
+    });
+    const data = await decorateLineItemsWithTotals(cart, req);
 
-  res.status(200).json({ cart: data })
-}
+    res.status(200).json({ cart: data });
+};
 
 export class StorePostCartsCartPaymentSessionUpdateReq {
-  @IsObject()
-  data: object
+    @IsObject()
+    data: object;
 }

@@ -1,5 +1,5 @@
-import CustomerController from "../../../../controllers/customers"
-import { Request, Response } from "express"
+import CustomerController from "../../../../controllers/customers";
+import { Request, Response } from "express";
 
 /**
  * @oas [get] /customer-groups/{id}/customers
@@ -20,15 +20,11 @@ import { Request, Response } from "express"
  *               $ref: "#/components/schemas/customer"
  */
 export default async (req: Request, res: Response) => {
-  const { id } = req.params
+    const { id } = req.params;
 
-  req.query.groups = [id]
+    req.query.groups = [id];
 
-  const result = await CustomerController.listAndCount(
-    req.scope,
-    req.query,
-    req.body
-  )
+    const result = await CustomerController.listAndCount(req.scope, req.query, req.body);
 
-  res.json(result)
-}
+    res.json(result);
+};

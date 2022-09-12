@@ -1,5 +1,5 @@
-import { ShippingProfileService } from "../../../../services"
-import { EntityManager } from "typeorm"
+import { ShippingProfileService } from "../../../../services";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [delete] /shipping-profiles/{id}
@@ -28,21 +28,17 @@ import { EntityManager } from "typeorm"
  *               type: boolean
  */
 export default async (req, res) => {
-  const { profile_id } = req.params
-  const profileService: ShippingProfileService = req.scope.resolve(
-    "shippingProfileService"
-  )
+    const { profile_id } = req.params;
+    const profileService: ShippingProfileService = req.scope.resolve("shippingProfileService");
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await profileService
-      .withTransaction(transactionManager)
-      .delete(profile_id)
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await profileService.withTransaction(transactionManager).delete(profile_id);
+    });
 
-  res.status(200).json({
-    id: profile_id,
-    object: "shipping_profile",
-    deleted: true,
-  })
-}
+    res.status(200).json({
+        id: profile_id,
+        object: "shipping_profile",
+        deleted: true
+    });
+};

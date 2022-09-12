@@ -624,7 +624,7 @@ export function countryLookup(isoCountryCode) {
   } else {
     // try iso alpha 3
     const isoRecord = countries.find(
-      record => record.alpha3 === normalizedIsoCountryCode
+      (record) => record.alpha3 === normalizedIsoCountryCode
     )
 
     if (isoRecord) {

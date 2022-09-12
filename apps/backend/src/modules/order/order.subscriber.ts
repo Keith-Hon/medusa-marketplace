@@ -1,15 +1,15 @@
 import { EventBusService } from "@medusajs/medusa/dist/services";
-import { FulfillmentStatus, LineItem, OrderStatus, PaymentStatus } from '@medusajs/medusa';
+import { FulfillmentStatus, LineItem, OrderStatus, PaymentStatus } from "@medusajs/medusa";
 
 import { EntityManager } from "typeorm";
-import { LineItemRepository } from '@medusajs/medusa/dist/repositories/line-item';
-import { Order } from './order.entity';
+import { LineItemRepository } from "@medusajs/medusa/dist/repositories/line-item";
+import { Order } from "./order.entity";
 import { OrderRepository } from "./order.repository";
 import { PaymentRepository } from "@medusajs/medusa/dist/repositories/payment";
 import { Product } from "../product/entities/product.entity";
-import { ProductService } from './../product/services/product.service';
+import { ProductService } from "./../product/services/product.service";
 import { ShippingMethodRepository } from "@medusajs/medusa/dist/repositories/shipping-method";
-import { Subscriber } from 'medusa-extender';;
+import { Subscriber } from "medusa-extender";
 import { OrderService } from "./order.service";
 
 type InjectedDependencies = {
@@ -33,7 +33,16 @@ export class OrderSubscriber {
     private readonly lineItemRepository: typeof LineItemRepository;
     private readonly shippingMethodRepository: typeof ShippingMethodRepository;
 
-    constructor({ eventBusService, orderService, orderRepository, productService, manager, lineItemRepository, shippingMethodRepository, paymentRepository }: InjectedDependencies) {
+    constructor({
+        eventBusService,
+        orderService,
+        orderRepository,
+        productService,
+        manager,
+        lineItemRepository,
+        shippingMethodRepository,
+        paymentRepository
+    }: InjectedDependencies) {
         this.eventBusService = eventBusService;
         this.orderService = orderService;
         this.orderRepository = orderRepository;
@@ -41,36 +50,24 @@ export class OrderSubscriber {
         this.manager = manager;
         this.lineItemRepository = lineItemRepository;
         this.shippingMethodRepository = shippingMethodRepository;
-        this.eventBusService.subscribe(
-            OrderService.Events.PLACED,
-            this.handleOrderPlaced.bind(this)
-        );
+        this.eventBusService.subscribe(OrderService.Events.PLACED, this.handleOrderPlaced.bind(this));
 
-        this.eventBusService.subscribe(
-            OrderService.Events.CANCELED,
-            this.checkStatus.bind(this)
-        );
-        this.eventBusService.subscribe(
-            OrderService.Events.UPDATED,
-            this.checkStatus.bind(this)
-        );
-        this.eventBusService.subscribe(
-            OrderService.Events.COMPLETED,
-            this.checkStatus.bind(this)
-        );
+        this.eventBusService.subscribe(OrderService.Events.CANCELED, this.checkStatus.bind(this));
+        this.eventBusService.subscribe(OrderService.Events.UPDATED, this.checkStatus.bind(this));
+        this.eventBusService.subscribe(OrderService.Events.COMPLETED, this.checkStatus.bind(this));
     }
 
     private async handleOrderPlaced({ id }: { id: string }): Promise<void> {
         //create child orders
         //retrieve order
         const order: Order = await this.orderService.retrieve(id, {
-            relations: ['items', 'items.variant', 'cart', 'shipping_methods', 'payments']
+            relations: ["items", "items.variant", "cart", "shipping_methods", "payments"]
         });
         //group items by store id
         const groupedItems = {};
 
         for (const item of order.items) {
-            const product: Product = await this.productService.retrieve(item.variant.product_id, { select: ['store_id'] });
+            const product: Product = await this.productService.retrieve(item.variant.product_id, { select: ["store_id"] });
             const store_id = product.store_id;
             if (!store_id) {
                 continue;
@@ -120,7 +117,7 @@ export class OrderSubscriber {
                     id: null,
                     order_id: orderResult.id,
                     cart_id: null
-                })
+                });
                 await lineItemRepo.save(newItem);
             }
         }
@@ -134,7 +131,7 @@ export class OrderSubscriber {
             //retrieve parent
             const orderRepo = this.manager.getCustomRepository(this.orderRepository);
             const parentOrder = await this.orderService.retrieve(order.order_parent_id, {
-                relations: ['children']
+                relations: ["children"]
             });
 
             const newStatus = this.getStatusFromChildren(parentOrder);
@@ -155,16 +152,15 @@ export class OrderSubscriber {
                         // parentOrder.fulfillment_status = FulfillmentStatus.REQUIRES_ACTION;
                         // parentOrder.payment_status = PaymentStatus.REQUIRES_ACTION;
                         await orderRepo.save(parentOrder);
-                        break
+                        break;
                     case OrderStatus.REQUIRES_ACTION:
                         // *** TODO ****
                         parentOrder.status = newStatus;
                         // parentOrder.fulfillment_status = newStatus;
                         // parentOrder.payment_status = newStatus;
                         await orderRepo.save(parentOrder);
-                        break
+                        break;
                     default:
-
                         break;
                 }
             }
@@ -208,5 +204,4 @@ export class OrderSubscriber {
         //and requires action statuses, only pending and complete left. So, return pending
         return OrderStatus.PENDING;
     }
-
 }

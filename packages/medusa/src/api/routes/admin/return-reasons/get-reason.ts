@@ -1,8 +1,5 @@
-import {
-  defaultAdminReturnReasonsFields,
-  defaultAdminReturnReasonsRelations,
-} from "."
-import { ReturnReasonService } from "../../../../services"
+import { defaultAdminReturnReasonsFields, defaultAdminReturnReasonsRelations } from ".";
+import { ReturnReasonService } from "../../../../services";
 
 /**
  * @oas [get] /return-reasons/{id}
@@ -25,15 +22,13 @@ import { ReturnReasonService } from "../../../../services"
  *               $ref: "#/components/schemas/return_reason"
  */
 export default async (req, res) => {
-  const { id } = req.params
-  const returnReasonService: ReturnReasonService = req.scope.resolve(
-    "returnReasonService"
-  )
+    const { id } = req.params;
+    const returnReasonService: ReturnReasonService = req.scope.resolve("returnReasonService");
 
-  const data = await returnReasonService.retrieve(id, {
-    select: defaultAdminReturnReasonsFields,
-    relations: defaultAdminReturnReasonsRelations,
-  })
+    const data = await returnReasonService.retrieve(id, {
+        select: defaultAdminReturnReasonsFields,
+        relations: defaultAdminReturnReasonsRelations
+    });
 
-  res.status(200).json({ return_reason: data })
-}
+    res.status(200).json({ return_reason: data });
+};

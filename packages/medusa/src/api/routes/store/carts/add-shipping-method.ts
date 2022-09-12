@@ -1,9 +1,9 @@
-import { IsOptional, IsString } from "class-validator"
-import { EntityManager } from "typeorm"
-import { defaultStoreCartFields, defaultStoreCartRelations } from "."
-import { CartService } from "../../../../services"
-import { validator } from "../../../../utils/validator"
-import { decorateLineItemsWithTotals } from "./decorate-line-items-with-totals"
+import { IsOptional, IsString } from "class-validator";
+import { EntityManager } from "typeorm";
+import { defaultStoreCartFields, defaultStoreCartRelations } from ".";
+import { CartService } from "../../../../services";
+import { validator } from "../../../../utils/validator";
+import { decorateLineItemsWithTotals } from "./decorate-line-items-with-totals";
 
 /**
  * @oas [post] /carts/{id}/shipping-methods
@@ -27,48 +27,41 @@ import { decorateLineItemsWithTotals } from "./decorate-line-items-with-totals"
  *              $ref: "#/components/schemas/cart"
  */
 export default async (req, res) => {
-  const { id } = req.params
+    const { id } = req.params;
 
-  const validated = await validator(
-    StorePostCartsCartShippingMethodReq,
-    req.body
-  )
+    const validated = await validator(StorePostCartsCartShippingMethodReq, req.body);
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  const cartService: CartService = req.scope.resolve("cartService")
+    const manager: EntityManager = req.scope.resolve("manager");
+    const cartService: CartService = req.scope.resolve("cartService");
 
-  await manager.transaction(async (m) => {
-    const txCartService = cartService.withTransaction(m)
+    await manager.transaction(async (m) => {
+        const txCartService = cartService.withTransaction(m);
 
-    await txCartService.addShippingMethod(
-      id,
-      validated.option_id,
-      validated.data
-    )
+        await txCartService.addShippingMethod(id, validated.option_id, validated.data);
 
-    const updated = await txCartService.retrieve(id, {
-      relations: ["payment_sessions"],
-    })
+        const updated = await txCartService.retrieve(id, {
+            relations: ["payment_sessions"]
+        });
 
-    if (updated.payment_sessions?.length) {
-      await txCartService.setPaymentSessions(id)
-    }
-  })
+        if (updated.payment_sessions?.length) {
+            await txCartService.setPaymentSessions(id);
+        }
+    });
 
-  const updatedCart = await cartService.retrieve(id, {
-    select: defaultStoreCartFields,
-    relations: defaultStoreCartRelations,
-  })
+    const updatedCart = await cartService.retrieve(id, {
+        select: defaultStoreCartFields,
+        relations: defaultStoreCartRelations
+    });
 
-  const data = await decorateLineItemsWithTotals(updatedCart, req)
+    const data = await decorateLineItemsWithTotals(updatedCart, req);
 
-  res.status(200).json({ cart: data })
-}
+    res.status(200).json({ cart: data });
+};
 
 export class StorePostCartsCartShippingMethodReq {
-  @IsString()
-  option_id: string
+    @IsString()
+    option_id: string;
 
-  @IsOptional()
-  data?: Record<string, any> = {}
+    @IsOptional()
+    data?: Record<string, any> = {};
 }

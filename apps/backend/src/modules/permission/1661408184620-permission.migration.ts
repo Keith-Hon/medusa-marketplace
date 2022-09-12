@@ -1,10 +1,10 @@
-import { MigrationInterface, QueryRunner } from 'typeorm';
-import { Migration } from 'medusa-extender';
-import { TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner } from "typeorm";
+import { Migration } from "medusa-extender";
+import { TableForeignKey } from "typeorm";
 
 @Migration()
 export class PermissionMigration1661408184620 implements MigrationInterface {
-    name = 'PermissionMigration1661408184620';
+    name = "PermissionMigration1661408184620";
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         let query = `
@@ -13,7 +13,7 @@ export class PermissionMigration1661408184620 implements MigrationInterface {
         "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now())`;
         await queryRunner.query(query);
 
-        await queryRunner.createPrimaryKey("permission", ["id"])
+        await queryRunner.createPrimaryKey("permission", ["id"]);
 
         query = `
         CREATE TABLE "role_permissions" ("role_id" character varying NOT NULL, "permission_id" character varying NOT NULL,
@@ -21,23 +21,29 @@ export class PermissionMigration1661408184620 implements MigrationInterface {
 
         await queryRunner.query(query);
 
-        await queryRunner.createPrimaryKey("role_permissions", ["role_id", "permission_id"])
+        await queryRunner.createPrimaryKey("role_permissions", ["role_id", "permission_id"]);
 
-        await queryRunner.createForeignKey("role_permissions", new TableForeignKey({
-            columnNames: ["role_id"],
-            referencedColumnNames: ["id"],
-            referencedTableName: "role",
-            onDelete: "CASCADE",
-            onUpdate: "CASCADE"
-        }))
+        await queryRunner.createForeignKey(
+            "role_permissions",
+            new TableForeignKey({
+                columnNames: ["role_id"],
+                referencedColumnNames: ["id"],
+                referencedTableName: "role",
+                onDelete: "CASCADE",
+                onUpdate: "CASCADE"
+            })
+        );
 
-        await queryRunner.createForeignKey("role_permissions", new TableForeignKey({
-            columnNames: ["permission_id"],
-            referencedColumnNames: ["id"],
-            referencedTableName: "permission",
-            onDelete: "CASCADE",
-            onUpdate: "CASCADE"
-        }))
+        await queryRunner.createForeignKey(
+            "role_permissions",
+            new TableForeignKey({
+                columnNames: ["permission_id"],
+                referencedColumnNames: ["id"],
+                referencedTableName: "permission",
+                onDelete: "CASCADE",
+                onUpdate: "CASCADE"
+            })
+        );
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {

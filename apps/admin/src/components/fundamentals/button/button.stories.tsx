@@ -22,7 +22,7 @@ export default {
   },
 } as ComponentMeta<typeof Button>
 
-const Template = args => <Button {...args}>Action</Button>
+const Template = (args) => <Button {...args}>Action</Button>
 
 export const PrimaryLarge = Template.bind({})
 PrimaryLarge.args = {
@@ -144,7 +144,7 @@ GhostSmallLoading.args = {
   loading: true,
 }
 
-const TemplateWithIcon = args => (
+const TemplateWithIcon = (args) => (
   <Button {...args}>
     <HappyIcon size={20} /> Action
   </Button>

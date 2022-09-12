@@ -15,7 +15,7 @@ export default {
   },
 } as ComponentMeta<typeof PercentIcon>
 
-const Template = args => <PercentIcon {...args} />
+const Template = (args) => <PercentIcon {...args} />
 
 export const Icon = Template.bind({})
 Icon.args = {

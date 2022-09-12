@@ -19,6 +19,6 @@
  *              $ref: "#/components/schemas/batch_job"
  */
 export default async (req, res) => {
-  const batch_job = req.batch_job
-  res.status(200).json({ batch_job: batch_job })
-}
+    const batch_job = req.batch_job;
+    res.status(200).json({ batch_job: batch_job });
+};

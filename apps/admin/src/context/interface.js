@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 
 export const defaultInterfaceContext = {
-  onSearch: query => {},
+  onSearch: (query) => {},
   setOnSearch: (query) => {},
   onUnmount: () => {},
   display: false,
@@ -13,7 +13,7 @@ export const InterfaceProvider = ({ children }) => {
   const [searchHandler, setSearchHandler] = useState(() => () => {})
   const [display, setDisplay] = useState(false)
 
-  const setOnSearch = handler => {
+  const setOnSearch = (handler) => {
     if (handler) {
       setDisplay(true)
       setSearchHandler(() => {

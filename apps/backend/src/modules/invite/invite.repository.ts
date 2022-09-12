@@ -6,4 +6,4 @@ import { InviteRepository as MedusaInviteRepository } from "@medusajs/medusa/dis
 
 @MedusaRepository({ override: MedusaInviteRepository })
 @EntityRepository(Invite)
-export class InviteRepository extends Utils.repositoryMixin<Invite, MedusaInviteRepository>(MedusaInviteRepository) { }
+export class InviteRepository extends Utils.repositoryMixin<Invite, MedusaInviteRepository>(MedusaInviteRepository) {}

@@ -1,22 +1,12 @@
-import { MedusaError } from "medusa-core-utils"
-import {
-  defaultAdminDraftOrdersCartFields,
-  defaultAdminDraftOrdersCartRelations,
-} from "."
-import {
-  IsArray,
-  IsBoolean,
-  IsEmail,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from "class-validator"
-import { CartService, DraftOrderService } from "../../../../services"
-import { Type } from "class-transformer"
-import { AddressPayload } from "../../../../types/common"
-import { validator } from "../../../../utils/validator"
-import { EntityManager } from "typeorm"
-import { DraftOrderStatus } from "../../../../models"
+import { MedusaError } from "medusa-core-utils";
+import { defaultAdminDraftOrdersCartFields, defaultAdminDraftOrdersCartRelations } from ".";
+import { IsArray, IsBoolean, IsEmail, IsOptional, IsString, ValidateNested } from "class-validator";
+import { CartService, DraftOrderService } from "../../../../services";
+import { Type } from "class-transformer";
+import { AddressPayload } from "../../../../types/common";
+import { validator } from "../../../../utils/validator";
+import { EntityManager } from "typeorm";
+import { DraftOrderStatus } from "../../../../models";
 
 /**
  * @oas [post] /admin/draft-orders/{id}
@@ -73,84 +63,76 @@ import { DraftOrderStatus } from "../../../../models"
  */
 
 export default async (req, res) => {
-  const { id } = req.params
+    const { id } = req.params;
 
-  const validated = await validator(AdminPostDraftOrdersDraftOrderReq, req.body)
+    const validated = await validator(AdminPostDraftOrdersDraftOrderReq, req.body);
 
-  const draftOrderService: DraftOrderService =
-    req.scope.resolve("draftOrderService")
-  const cartService: CartService = req.scope.resolve("cartService")
+    const draftOrderService: DraftOrderService = req.scope.resolve("draftOrderService");
+    const cartService: CartService = req.scope.resolve("cartService");
 
-  const draftOrder = await draftOrderService.retrieve(id)
+    const draftOrder = await draftOrderService.retrieve(id);
 
-  if (draftOrder.status === DraftOrderStatus.COMPLETED) {
-    throw new MedusaError(
-      MedusaError.Types.NOT_ALLOWED,
-      "You are only allowed to update open draft orders"
-    )
-  }
-
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    if (validated.no_notification_order !== undefined) {
-      await draftOrderService
-        .withTransaction(transactionManager)
-        .update(draftOrder.id, {
-          no_notification_order: validated.no_notification_order,
-        })
-      delete validated.no_notification_order
+    if (draftOrder.status === DraftOrderStatus.COMPLETED) {
+        throw new MedusaError(MedusaError.Types.NOT_ALLOWED, "You are only allowed to update open draft orders");
     }
 
-    await cartService
-      .withTransaction(transactionManager)
-      .update(draftOrder.cart_id, validated)
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        if (validated.no_notification_order !== undefined) {
+            await draftOrderService.withTransaction(transactionManager).update(draftOrder.id, {
+                no_notification_order: validated.no_notification_order
+            });
+            delete validated.no_notification_order;
+        }
 
-  draftOrder.cart = await cartService.retrieve(draftOrder.cart_id, {
-    relations: defaultAdminDraftOrdersCartRelations,
-    select: defaultAdminDraftOrdersCartFields,
-  })
+        await cartService.withTransaction(transactionManager).update(draftOrder.cart_id, validated);
+    });
 
-  res.status(200).json({ draft_order: draftOrder })
-}
+    draftOrder.cart = await cartService.retrieve(draftOrder.cart_id, {
+        relations: defaultAdminDraftOrdersCartRelations,
+        select: defaultAdminDraftOrdersCartFields
+    });
+
+    res.status(200).json({ draft_order: draftOrder });
+};
 
 export class AdminPostDraftOrdersDraftOrderReq {
-  @IsString()
-  @IsOptional()
-  region_id?: string
+    @IsString()
+    @IsOptional()
+    region_id?: string;
 
-  @IsString()
-  @IsOptional()
-  country_code?: string
+    @IsString()
+    @IsOptional()
+    country_code?: string;
 
-  @IsEmail()
-  @IsOptional()
-  email?: string
+    @IsEmail()
+    @IsOptional()
+    email?: string;
 
-  @IsOptional()
-  @Type(() => AddressPayload)
-  billing_address?: AddressPayload
+    @IsOptional()
+    @Type(() => AddressPayload)
+    billing_address?: AddressPayload;
 
-  @IsOptional()
-  @Type(() => AddressPayload)
-  shipping_address?: AddressPayload
+    @IsOptional()
+    @Type(() => AddressPayload)
+    shipping_address?: AddressPayload;
 
-  @IsArray()
-  @IsOptional()
-  @Type(() => Discount)
-  @ValidateNested({ each: true })
-  discounts?: Discount[]
+    @IsArray()
+    @IsOptional()
+    @Type(() => Discount)
+    @ValidateNested({ each: true })
+    discounts?: Discount[];
 
-  @IsString()
-  @IsOptional()
-  customer_id?: string
+    @IsString()
+    @IsOptional()
+    customer_id?: string;
 
-  @IsBoolean()
-  @IsOptional()
-  no_notification_order?: boolean
+    @IsBoolean()
+    @IsOptional()
+    no_notification_order?: boolean;
 }
 
 class Discount {
-  @IsString()
-  code: string
+    @IsString()
+    code: string;
 }

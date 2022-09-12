@@ -4,10 +4,6 @@ import { PermissionMigration1661408184620 } from "./1661408184620-permission.mig
 import { PermissionRepository } from "./permission.repository";
 
 @Module({
-    imports: [
-        Permission,
-        PermissionRepository,
-        PermissionMigration1661408184620
-    ]
+    imports: [Permission, PermissionRepository, PermissionMigration1661408184620]
 })
-export class PermissionModule { }
+export class PermissionModule {}

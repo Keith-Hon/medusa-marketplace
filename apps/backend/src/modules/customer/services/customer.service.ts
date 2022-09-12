@@ -1,13 +1,12 @@
 import { Service } from "medusa-extender";
-import { CustomerService as MedusaCustomerService } from '@medusajs/medusa/dist/services';
+import { CustomerService as MedusaCustomerService } from "@medusajs/medusa/dist/services";
 import { FindConfig } from "@medusajs/medusa/dist/types/common";
 import { Customer } from "medusa";
 
-type InjectedDependencies = { manager, customerRepository, eventBusService, addressRepository, }
+type InjectedDependencies = { manager; customerRepository; eventBusService; addressRepository };
 
-@Service({ scope: 'SCOPED', override: MedusaCustomerService })
+@Service({ scope: "SCOPED", override: MedusaCustomerService })
 export class CustomerService extends MedusaCustomerService {
-
     constructor({ manager, customerRepository, eventBusService, addressRepository }: InjectedDependencies) {
         super({ manager, customerRepository, eventBusService, addressRepository });
     }

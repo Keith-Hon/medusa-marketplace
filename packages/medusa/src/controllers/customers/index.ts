@@ -1,2 +1,2 @@
-import listAndCount from "./list-customers"
-export default { listAndCount }
+import listAndCount from "./list-customers";
+export default { listAndCount };

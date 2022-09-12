@@ -1,4 +1,4 @@
-import RegionService from "../../../../services/region"
+import RegionService from "../../../../services/region";
 /**
  * @oas [get] /regions/{id}
  * operationId: GetRegionsRegion
@@ -19,13 +19,13 @@ import RegionService from "../../../../services/region"
  *               $ref: "#/components/schemas/region"
  */
 export default async (req, res) => {
-  const { region_id } = req.params
+    const { region_id } = req.params;
 
-  const regionService: RegionService = req.scope.resolve("regionService")
+    const regionService: RegionService = req.scope.resolve("regionService");
 
-  const region = await regionService.retrieve(region_id, {
-    relations: ["countries", "payment_providers", "fulfillment_providers"],
-  })
+    const region = await regionService.retrieve(region_id, {
+        relations: ["countries", "payment_providers", "fulfillment_providers"]
+    });
 
-  res.json({ region })
-}
+    res.json({ region });
+};

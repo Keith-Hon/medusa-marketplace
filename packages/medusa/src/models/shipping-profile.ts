@@ -1,38 +1,38 @@
-import { BeforeInsert, Column, Entity, OneToMany } from "typeorm"
-import { DbAwareColumn } from "../utils/db-aware-column"
+import { BeforeInsert, Column, Entity, OneToMany } from "typeorm";
+import { DbAwareColumn } from "../utils/db-aware-column";
 
-import { ShippingOption } from "./shipping-option"
-import { Product } from "./product"
-import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity"
-import { generateEntityId } from "../utils/generate-entity-id"
+import { ShippingOption } from "./shipping-option";
+import { Product } from "./product";
+import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity";
+import { generateEntityId } from "../utils/generate-entity-id";
 
 export enum ShippingProfileType {
-  DEFAULT = "default",
-  GIFT_CARD = "gift_card",
-  CUSTOM = "custom",
+    DEFAULT = "default",
+    GIFT_CARD = "gift_card",
+    CUSTOM = "custom"
 }
 
 @Entity()
 export class ShippingProfile extends SoftDeletableEntity {
-  @Column()
-  name: string
+    @Column()
+    name: string;
 
-  @DbAwareColumn({ type: "enum", enum: ShippingProfileType })
-  type: ShippingProfileType
+    @DbAwareColumn({ type: "enum", enum: ShippingProfileType })
+    type: ShippingProfileType;
 
-  @OneToMany(() => Product, (product) => product.profile)
-  products: Product[]
+    @OneToMany(() => Product, (product) => product.profile)
+    products: Product[];
 
-  @OneToMany(() => ShippingOption, (so) => so.profile)
-  shipping_options: ShippingOption[]
+    @OneToMany(() => ShippingOption, (so) => so.profile)
+    shipping_options: ShippingOption[];
 
-  @DbAwareColumn({ type: "jsonb", nullable: true })
-  metadata: Record<string, unknown>
+    @DbAwareColumn({ type: "jsonb", nullable: true })
+    metadata: Record<string, unknown>;
 
-  @BeforeInsert()
-  private beforeInsert(): void {
-    this.id = generateEntityId(this.id, "sp")
-  }
+    @BeforeInsert()
+    private beforeInsert(): void {
+        this.id = generateEntityId(this.id, "sp");
+    }
 }
 
 /**

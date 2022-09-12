@@ -1,8 +1,8 @@
-import { Customer } from "../../../.."
-import CustomerService from "../../../../services/customer"
-import PaymentProviderService from "../../../../services/payment-provider"
-import StoreService from "../../../../services/store"
-import { PaymentProvider } from "../../../../models"
+import { Customer } from "../../../..";
+import CustomerService from "../../../../services/customer";
+import PaymentProviderService from "../../../../services/payment-provider";
+import StoreService from "../../../../services/store";
+import { PaymentProvider } from "../../../../models";
 
 /**
  * @oas [get] /customers/me/payment-methods
@@ -31,34 +31,29 @@ import { PaymentProvider } from "../../../../models"
  *                     description: The data needed for the Payment Provider to use the saved payment method.
  */
 export default async (req, res) => {
-  const id = req.user.customer_id
+    const id = req.user.customer_id;
 
-  const paymentProviderService: PaymentProviderService = req.scope.resolve(
-    "paymentProviderService"
-  )
+    const paymentProviderService: PaymentProviderService = req.scope.resolve("paymentProviderService");
 
-  const customerService: CustomerService = req.scope.resolve("customerService")
+    const customerService: CustomerService = req.scope.resolve("customerService");
 
-  const customer: Customer = await customerService.retrieve(id)
+    const customer: Customer = await customerService.retrieve(id);
 
-  const paymentProviders: PaymentProvider[] =
-    await paymentProviderService.list()
+    const paymentProviders: PaymentProvider[] = await paymentProviderService.list();
 
-  const methods = await Promise.all(
-    paymentProviders.map(async (paymentProvider: PaymentProvider) => {
-      const provider = paymentProviderService.retrieveProvider(
-        paymentProvider.id
-      )
+    const methods = await Promise.all(
+        paymentProviders.map(async (paymentProvider: PaymentProvider) => {
+            const provider = paymentProviderService.retrieveProvider(paymentProvider.id);
 
-      const pMethods = await provider.retrieveSavedMethods(customer)
-      return pMethods.map((m) => ({
-        provider_id: paymentProvider.id,
-        data: m,
-      }))
-    })
-  )
+            const pMethods = await provider.retrieveSavedMethods(customer);
+            return pMethods.map((m) => ({
+                provider_id: paymentProvider.id,
+                data: m
+            }));
+        })
+    );
 
-  res.json({
-    payment_methods: methods.flat(),
-  })
-}
+    res.json({
+        payment_methods: methods.flat()
+    });
+};

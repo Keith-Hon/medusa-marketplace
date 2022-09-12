@@ -1,4 +1,4 @@
-import { TaxProviderService } from "../../../../services"
+import { TaxProviderService } from "../../../../services";
 
 /**
  * @oas [get] /store/tax-providers
@@ -21,8 +21,7 @@ import { TaxProviderService } from "../../../../services"
  *                 $ref: "#/components/schemas/store"
  */
 export default async (req, res) => {
-  const taxProviderService: TaxProviderService =
-    req.scope.resolve("taxProviderService")
-  const taxProviders = await taxProviderService.list()
-  res.status(200).json({ tax_providers: taxProviders })
-}
+    const taxProviderService: TaxProviderService = req.scope.resolve("taxProviderService");
+    const taxProviders = await taxProviderService.list();
+    res.status(200).json({ tax_providers: taxProviders });
+};

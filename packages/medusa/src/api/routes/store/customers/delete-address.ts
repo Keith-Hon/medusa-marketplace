@@ -1,6 +1,6 @@
-import { defaultStoreCustomersFields, defaultStoreCustomersRelations } from "."
-import CustomerService from "../../../../services/customer"
-import { EntityManager } from "typeorm"
+import { defaultStoreCustomersFields, defaultStoreCustomersRelations } from ".";
+import CustomerService from "../../../../services/customer";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [delete] /customers/me/addresses/{address_id}
@@ -23,23 +23,21 @@ import { EntityManager } from "typeorm"
  *               $ref: "#/components/schemas/customer"
  */
 export default async (req, res) => {
-  const id = req.user.customer_id
+    const id = req.user.customer_id;
 
-  const { address_id } = req.params
+    const { address_id } = req.params;
 
-  const customerService: CustomerService = req.scope.resolve("customerService")
+    const customerService: CustomerService = req.scope.resolve("customerService");
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await customerService
-      .withTransaction(transactionManager)
-      .removeAddress(id, address_id)
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await customerService.withTransaction(transactionManager).removeAddress(id, address_id);
+    });
 
-  const customer = await customerService.retrieve(id, {
-    relations: defaultStoreCustomersRelations,
-    select: defaultStoreCustomersFields,
-  })
+    const customer = await customerService.retrieve(id, {
+        relations: defaultStoreCustomersRelations,
+        select: defaultStoreCustomersFields
+    });
 
-  res.json({ customer })
-}
+    res.json({ customer });
+};

@@ -1,10 +1,10 @@
-import { Type } from "class-transformer"
-import { ValidateNested } from "class-validator"
-import { CustomerGroupService } from "../../../../services"
-import { CustomerGroupsBatchCustomer } from "../../../../types/customer-groups"
-import { validator } from "../../../../utils/validator"
-import { Request, Response } from "express"
-import { EntityManager } from "typeorm"
+import { Type } from "class-transformer";
+import { ValidateNested } from "class-validator";
+import { CustomerGroupService } from "../../../../services";
+import { CustomerGroupsBatchCustomer } from "../../../../types/customer-groups";
+import { validator } from "../../../../utils/validator";
+import { Request, Response } from "express";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /customer-groups/{id}/customers/batch
@@ -29,33 +29,24 @@ import { EntityManager } from "typeorm"
  */
 
 export default async (req: Request, res: Response) => {
-  const { id } = req.params
-  const validated = await validator(
-    AdminPostCustomerGroupsGroupCustomersBatchReq,
-    req.body
-  )
+    const { id } = req.params;
+    const validated = await validator(AdminPostCustomerGroupsGroupCustomersBatchReq, req.body);
 
-  const customerGroupService: CustomerGroupService = req.scope.resolve(
-    "customerGroupService"
-  )
+    const customerGroupService: CustomerGroupService = req.scope.resolve("customerGroupService");
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  const customer_group = await manager.transaction(
-    async (transactionManager) => {
-      return await customerGroupService
-        .withTransaction(transactionManager)
-        .addCustomers(
-          id,
-          validated.customer_ids.map(({ id }) => id)
-        )
-    }
-  )
+    const manager: EntityManager = req.scope.resolve("manager");
+    const customer_group = await manager.transaction(async (transactionManager) => {
+        return await customerGroupService.withTransaction(transactionManager).addCustomers(
+            id,
+            validated.customer_ids.map(({ id }) => id)
+        );
+    });
 
-  res.status(200).json({ customer_group })
-}
+    res.status(200).json({ customer_group });
+};
 
 export class AdminPostCustomerGroupsGroupCustomersBatchReq {
-  @ValidateNested({ each: true })
-  @Type(() => CustomerGroupsBatchCustomer)
-  customer_ids: CustomerGroupsBatchCustomer[]
+    @ValidateNested({ each: true })
+    @Type(() => CustomerGroupsBatchCustomer)
+    customer_ids: CustomerGroupsBatchCustomer[];
 }

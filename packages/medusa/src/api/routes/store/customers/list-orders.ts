@@ -1,13 +1,10 @@
-import { Type } from "class-transformer"
-import { IsNumber, IsOptional, IsString } from "class-validator"
-import OrderService from "../../../../services/order"
-import { validator } from "../../../../utils/validator"
-import {
-  allowedStoreOrdersFields,
-  allowedStoreOrdersRelations,
-} from "../orders"
-import { FindConfig } from "../../../../types/common"
-import { Order } from "../../../../models"
+import { Type } from "class-transformer";
+import { IsNumber, IsOptional, IsString } from "class-validator";
+import OrderService from "../../../../services/order";
+import { validator } from "../../../../utils/validator";
+import { allowedStoreOrdersFields, allowedStoreOrdersRelations } from "../orders";
+import { FindConfig } from "../../../../types/common";
+import { Order } from "../../../../models";
 
 /**
  * @oas [get] /customers/me/orders
@@ -44,64 +41,57 @@ import { Order } from "../../../../models"
  *                 $ref: "#/components/schemas/orders"
  */
 export default async (req, res) => {
-  const id: string = req.user.customer_id
+    const id: string = req.user.customer_id;
 
-  const orderService: OrderService = req.scope.resolve("orderService")
+    const orderService: OrderService = req.scope.resolve("orderService");
 
-  const selector = {
-    customer_id: id,
-  }
+    const selector = {
+        customer_id: id
+    };
 
-  const validated = await validator(
-    StoreGetCustomersCustomerOrdersParams,
-    req.query
-  )
+    const validated = await validator(StoreGetCustomersCustomerOrdersParams, req.query);
 
-  let includeFields: string[] = []
-  if (validated.fields) {
-    includeFields = validated.fields.split(",")
-    includeFields = includeFields.filter((f) =>
-      allowedStoreOrdersFields.includes(f)
-    )
-  }
+    let includeFields: string[] = [];
+    if (validated.fields) {
+        includeFields = validated.fields.split(",");
+        includeFields = includeFields.filter((f) => allowedStoreOrdersFields.includes(f));
+    }
 
-  let expandFields: string[] = []
-  if (validated.expand) {
-    expandFields = validated.expand.split(",")
-    expandFields = expandFields.filter((f) =>
-      allowedStoreOrdersRelations.includes(f)
-    )
-  }
+    let expandFields: string[] = [];
+    if (validated.expand) {
+        expandFields = validated.expand.split(",");
+        expandFields = expandFields.filter((f) => allowedStoreOrdersRelations.includes(f));
+    }
 
-  const listConfig = {
-    select: includeFields.length ? includeFields : allowedStoreOrdersFields,
-    relations: expandFields.length ? expandFields : allowedStoreOrdersRelations,
-    skip: validated.offset,
-    take: validated.limit,
-    order: { created_at: "DESC" },
-  } as FindConfig<Order>
+    const listConfig = {
+        select: includeFields.length ? includeFields : allowedStoreOrdersFields,
+        relations: expandFields.length ? expandFields : allowedStoreOrdersRelations,
+        skip: validated.offset,
+        take: validated.limit,
+        order: { created_at: "DESC" }
+    } as FindConfig<Order>;
 
-  const [orders, count] = await orderService.listAndCount(selector, listConfig)
+    const [orders, count] = await orderService.listAndCount(selector, listConfig);
 
-  res.json({ orders, count, offset: validated.offset, limit: validated.limit })
-}
+    res.json({ orders, count, offset: validated.offset, limit: validated.limit });
+};
 
 export class StoreGetCustomersCustomerOrdersParams {
-  @IsOptional()
-  @IsNumber()
-  @Type(() => Number)
-  limit = 10
+    @IsOptional()
+    @IsNumber()
+    @Type(() => Number)
+    limit = 10;
 
-  @IsOptional()
-  @IsNumber()
-  @Type(() => Number)
-  offset = 0
+    @IsOptional()
+    @IsNumber()
+    @Type(() => Number)
+    offset = 0;
 
-  @IsOptional()
-  @IsString()
-  fields?: string
+    @IsOptional()
+    @IsString()
+    fields?: string;
 
-  @IsOptional()
-  @IsString()
-  expand?: string
+    @IsOptional()
+    @IsString()
+    expand?: string;
 }

@@ -1,4 +1,4 @@
-import { OrderService } from "../../../../services"
+import { OrderService } from "../../../../services";
 
 /**
  * @oas [get] /orders/{id}
@@ -21,11 +21,11 @@ import { OrderService } from "../../../../services"
  *               $ref: "#/components/schemas/order"
  */
 export default async (req, res) => {
-  const { id } = req.params
+    const { id } = req.params;
 
-  const orderService: OrderService = req.scope.resolve("orderService")
+    const orderService: OrderService = req.scope.resolve("orderService");
 
-  const order = await orderService.retrieve(id, req.retrieveConfig)
+    const order = await orderService.retrieve(id, req.retrieveConfig);
 
-  res.json({ order })
-}
+    res.json({ order });
+};

@@ -1,88 +1,79 @@
-import {
-  BeforeInsert,
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  JoinTable,
-  ManyToMany,
-  ManyToOne,
-} from "typeorm"
-import { DbAwareColumn, resolveDbType } from "../utils/db-aware-column"
-import { DiscountRule } from "./discount-rule"
-import { Region } from "./region"
-import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity"
-import { generateEntityId } from "../utils/generate-entity-id"
+import { BeforeInsert, Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne } from "typeorm";
+import { DbAwareColumn, resolveDbType } from "../utils/db-aware-column";
+import { DiscountRule } from "./discount-rule";
+import { Region } from "./region";
+import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity";
+import { generateEntityId } from "../utils/generate-entity-id";
 
 @Entity()
 export class Discount extends SoftDeletableEntity {
-  @Index({ unique: true, where: "deleted_at IS NULL" })
-  @Column()
-  code: string
+    @Index({ unique: true, where: "deleted_at IS NULL" })
+    @Column()
+    code: string;
 
-  @Column()
-  is_dynamic: boolean
+    @Column()
+    is_dynamic: boolean;
 
-  @Index()
-  @Column({ nullable: true })
-  rule_id: string
+    @Index()
+    @Column({ nullable: true })
+    rule_id: string;
 
-  @ManyToOne(() => DiscountRule, { cascade: true })
-  @JoinColumn({ name: "rule_id" })
-  rule: DiscountRule
+    @ManyToOne(() => DiscountRule, { cascade: true })
+    @JoinColumn({ name: "rule_id" })
+    rule: DiscountRule;
 
-  @Column()
-  is_disabled: boolean
+    @Column()
+    is_disabled: boolean;
 
-  @Column({ nullable: true })
-  parent_discount_id: string
+    @Column({ nullable: true })
+    parent_discount_id: string;
 
-  @ManyToOne(() => Discount)
-  @JoinColumn({ name: "parent_discount_id" })
-  parent_discount: Discount
+    @ManyToOne(() => Discount)
+    @JoinColumn({ name: "parent_discount_id" })
+    parent_discount: Discount;
 
-  @Column({
-    type: resolveDbType("timestamptz"),
-    default: () => "CURRENT_TIMESTAMP",
-  })
-  starts_at: Date
+    @Column({
+        type: resolveDbType("timestamptz"),
+        default: () => "CURRENT_TIMESTAMP"
+    })
+    starts_at: Date;
 
-  @Column({ type: resolveDbType("timestamptz"), nullable: true })
-  ends_at: Date | null
+    @Column({ type: resolveDbType("timestamptz"), nullable: true })
+    ends_at: Date | null;
 
-  @Column({ type: String, nullable: true })
-  valid_duration: string | null
+    @Column({ type: String, nullable: true })
+    valid_duration: string | null;
 
-  @ManyToMany(() => Region, { cascade: true })
-  @JoinTable({
-    name: "discount_regions",
-    joinColumn: {
-      name: "discount_id",
-      referencedColumnName: "id",
-    },
-    inverseJoinColumn: {
-      name: "region_id",
-      referencedColumnName: "id",
-    },
-  })
-  regions: Region[]
+    @ManyToMany(() => Region, { cascade: true })
+    @JoinTable({
+        name: "discount_regions",
+        joinColumn: {
+            name: "discount_id",
+            referencedColumnName: "id"
+        },
+        inverseJoinColumn: {
+            name: "region_id",
+            referencedColumnName: "id"
+        }
+    })
+    regions: Region[];
 
-  @Column({ type: Number, nullable: true })
-  usage_limit: number | null
+    @Column({ type: Number, nullable: true })
+    usage_limit: number | null;
 
-  @Column({ default: 0 })
-  usage_count: number
+    @Column({ default: 0 })
+    usage_count: number;
 
-  @DbAwareColumn({ type: "jsonb", nullable: true })
-  metadata: Record<string, unknown>
+    @DbAwareColumn({ type: "jsonb", nullable: true })
+    metadata: Record<string, unknown>;
 
-  @BeforeInsert()
-  private upperCaseCode(): void {
-    if (this.id) return
+    @BeforeInsert()
+    private upperCaseCode(): void {
+        if (this.id) return;
 
-    this.id = generateEntityId(this.id, "disc")
-    this.code = this.code.toUpperCase()
-  }
+        this.id = generateEntityId(this.id, "disc");
+        this.code = this.code.toUpperCase();
+    }
 }
 
 /**

@@ -1,6 +1,6 @@
-import { defaultAdminPriceListFields, defaultAdminPriceListRelations } from "."
-import { PriceList } from "../../../.."
-import PriceListService from "../../../../services/price-list"
+import { defaultAdminPriceListFields, defaultAdminPriceListRelations } from ".";
+import { PriceList } from "../../../..";
+import PriceListService from "../../../../services/price-list";
 
 /**
  * @oas [get] /price-lists/{id}
@@ -23,15 +23,14 @@ import PriceListService from "../../../../services/price-list"
  *               $ref: "#/components/schemas/price_list"
  */
 export default async (req, res) => {
-  const { id } = req.params
+    const { id } = req.params;
 
-  const priceListService: PriceListService =
-    req.scope.resolve("priceListService")
+    const priceListService: PriceListService = req.scope.resolve("priceListService");
 
-  const priceList = await priceListService.retrieve(id, {
-    select: defaultAdminPriceListFields as (keyof PriceList)[],
-    relations: defaultAdminPriceListRelations,
-  })
+    const priceList = await priceListService.retrieve(id, {
+        select: defaultAdminPriceListFields as (keyof PriceList)[],
+        relations: defaultAdminPriceListRelations
+    });
 
-  res.status(200).json({ price_list: priceList })
-}
+    res.status(200).json({ price_list: priceList });
+};

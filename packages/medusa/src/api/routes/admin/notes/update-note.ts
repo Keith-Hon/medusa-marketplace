@@ -1,7 +1,7 @@
-import { IsString } from "class-validator"
-import NoteService from "../../../../services/note"
-import { validator } from "../../../../utils/validator"
-import { EntityManager } from "typeorm"
+import { IsString } from "class-validator";
+import NoteService from "../../../../services/note";
+import { validator } from "../../../../utils/validator";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /notes/{id}
@@ -35,22 +35,20 @@ import { EntityManager } from "typeorm"
  *
  */
 export default async (req, res) => {
-  const { id } = req.params
+    const { id } = req.params;
 
-  const validated = await validator(AdminPostNotesNoteReq, req.body)
+    const validated = await validator(AdminPostNotesNoteReq, req.body);
 
-  const noteService: NoteService = req.scope.resolve("noteService")
-  const manager: EntityManager = req.scope.resolve("manager")
-  const note = await manager.transaction(async (transactionManager) => {
-    return await noteService
-      .withTransaction(transactionManager)
-      .update(id, validated.value)
-  })
+    const noteService: NoteService = req.scope.resolve("noteService");
+    const manager: EntityManager = req.scope.resolve("manager");
+    const note = await manager.transaction(async (transactionManager) => {
+        return await noteService.withTransaction(transactionManager).update(id, validated.value);
+    });
 
-  res.status(200).json({ note })
-}
+    res.status(200).json({ note });
+};
 
 export class AdminPostNotesNoteReq {
-  @IsString()
-  value: string
+    @IsString()
+    value: string;
 }

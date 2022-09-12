@@ -1,8 +1,8 @@
-import { Type } from "class-transformer"
-import { IsNumber, IsOptional, IsString } from "class-validator"
-import PriceListService from "../../../../services/price-list"
-import { FilterablePriceListProps } from "../../../../types/price-list"
-import { Request } from "express"
+import { Type } from "class-transformer";
+import { IsNumber, IsOptional, IsString } from "class-validator";
+import PriceListService from "../../../../services/price-list";
+import { FilterablePriceListProps } from "../../../../types/price-list";
+import { Request } from "express";
 /**
  * @oas [get] /price-lists
  * operationId: "GetPriceLists"
@@ -33,40 +33,36 @@ import { Request } from "express"
  *               type: integer
  */
 export default async (req: Request, res) => {
-  const validated = req.validatedQuery
+    const validated = req.validatedQuery;
 
-  const priceListService: PriceListService =
-    req.scope.resolve("priceListService")
+    const priceListService: PriceListService = req.scope.resolve("priceListService");
 
-  const [price_lists, count] = await priceListService.listAndCount(
-    req.filterableFields,
-    req.listConfig
-  )
+    const [price_lists, count] = await priceListService.listAndCount(req.filterableFields, req.listConfig);
 
-  res.json({
-    price_lists,
-    count,
-    offset: validated.offset,
-    limit: validated.limit,
-  })
-}
+    res.json({
+        price_lists,
+        count,
+        offset: validated.offset,
+        limit: validated.limit
+    });
+};
 
 export class AdminGetPriceListPaginationParams extends FilterablePriceListProps {
-  @IsNumber()
-  @IsOptional()
-  @Type(() => Number)
-  offset?: number = 0
+    @IsNumber()
+    @IsOptional()
+    @Type(() => Number)
+    offset?: number = 0;
 
-  @IsNumber()
-  @IsOptional()
-  @Type(() => Number)
-  limit?: number = 10
+    @IsNumber()
+    @IsOptional()
+    @Type(() => Number)
+    limit?: number = 10;
 
-  @IsString()
-  @IsOptional()
-  expand?: string
+    @IsString()
+    @IsOptional()
+    expand?: string;
 
-  @IsString()
-  @IsOptional()
-  order?: string
+    @IsString()
+    @IsOptional()
+    order?: string;
 }

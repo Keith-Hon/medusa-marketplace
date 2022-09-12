@@ -1,8 +1,8 @@
-import { Type } from "class-transformer"
-import { IsNotEmpty, IsString, ValidateNested } from "class-validator"
-import InviteService from "../../../../services/invite"
-import { validator } from "../../../../utils/validator"
-import { EntityManager } from "typeorm"
+import { Type } from "class-transformer";
+import { IsNotEmpty, IsString, ValidateNested } from "class-validator";
+import InviteService from "../../../../services/invite";
+import { validator } from "../../../../utils/validator";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /invites/accept
@@ -44,38 +44,36 @@ import { EntityManager } from "typeorm"
  *     description: OK
  */
 export default async (req, res) => {
-  const validated = await validator(AdminPostInvitesInviteAcceptReq, req.body)
+    const validated = await validator(AdminPostInvitesInviteAcceptReq, req.body);
 
-  const inviteService: InviteService = req.scope.resolve("inviteService")
+    const inviteService: InviteService = req.scope.resolve("inviteService");
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await inviteService
-      .withTransaction(transactionManager)
-      .accept(validated.token, validated.user)
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await inviteService.withTransaction(transactionManager).accept(validated.token, validated.user);
+    });
 
-  res.sendStatus(200)
-}
+    res.sendStatus(200);
+};
 
 export class AdminPostInvitesInviteAcceptUserReq {
-  @IsString()
-  first_name: string
+    @IsString()
+    first_name: string;
 
-  @IsString()
-  last_name: string
+    @IsString()
+    last_name: string;
 
-  @IsString()
-  password: string
+    @IsString()
+    password: string;
 }
 
 export class AdminPostInvitesInviteAcceptReq {
-  @IsString()
-  @IsNotEmpty()
-  token: string
+    @IsString()
+    @IsNotEmpty()
+    token: string;
 
-  @IsNotEmpty()
-  @ValidateNested()
-  @Type(() => AdminPostInvitesInviteAcceptUserReq)
-  user: AdminPostInvitesInviteAcceptUserReq
+    @IsNotEmpty()
+    @ValidateNested()
+    @Type(() => AdminPostInvitesInviteAcceptUserReq)
+    user: AdminPostInvitesInviteAcceptUserReq;
 }

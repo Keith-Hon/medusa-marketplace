@@ -1,39 +1,32 @@
-import {
-  CreateDateColumn,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryColumn,
-  UpdateDateColumn,
-} from "typeorm"
-import { DbAwareColumn, resolveDbType } from "../utils/db-aware-column"
-import { DiscountCondition } from "./discount-condition"
-import { ProductCollection } from "./product-collection"
+import { CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
+import { DbAwareColumn, resolveDbType } from "../utils/db-aware-column";
+import { DiscountCondition } from "./discount-condition";
+import { ProductCollection } from "./product-collection";
 
 @Entity()
 export class DiscountConditionProductCollection {
-  @PrimaryColumn()
-  product_collection_id: string
+    @PrimaryColumn()
+    product_collection_id: string;
 
-  @PrimaryColumn()
-  condition_id: string
+    @PrimaryColumn()
+    condition_id: string;
 
-  @ManyToOne(() => ProductCollection, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "product_collection_id" })
-  product_collection?: ProductCollection
+    @ManyToOne(() => ProductCollection, { onDelete: "CASCADE" })
+    @JoinColumn({ name: "product_collection_id" })
+    product_collection?: ProductCollection;
 
-  @ManyToOne(() => DiscountCondition, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "condition_id" })
-  discount_condition?: DiscountCondition
+    @ManyToOne(() => DiscountCondition, { onDelete: "CASCADE" })
+    @JoinColumn({ name: "condition_id" })
+    discount_condition?: DiscountCondition;
 
-  @CreateDateColumn({ type: resolveDbType("timestamptz") })
-  created_at: Date
+    @CreateDateColumn({ type: resolveDbType("timestamptz") })
+    created_at: Date;
 
-  @UpdateDateColumn({ type: resolveDbType("timestamptz") })
-  updated_at: Date
+    @UpdateDateColumn({ type: resolveDbType("timestamptz") })
+    updated_at: Date;
 
-  @DbAwareColumn({ type: "jsonb", nullable: true })
-  metadata: Record<string, unknown>
+    @DbAwareColumn({ type: "jsonb", nullable: true })
+    metadata: Record<string, unknown>;
 }
 
 /**

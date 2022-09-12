@@ -1,14 +1,8 @@
-import {
-  IsBoolean,
-  IsInt,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-} from "class-validator"
-import { defaultAdminOrdersRelations, defaultAdminOrdersFields } from "."
-import { OrderService } from "../../../../services"
-import { validator } from "../../../../utils/validator"
-import { EntityManager } from "typeorm"
+import { IsBoolean, IsInt, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { defaultAdminOrdersRelations, defaultAdminOrdersFields } from ".";
+import { OrderService } from "../../../../services";
+import { validator } from "../../../../utils/validator";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /orders/{id}/refunds
@@ -51,43 +45,41 @@ import { EntityManager } from "typeorm"
  *               $ref: "#/components/schemas/order"
  */
 export default async (req, res) => {
-  const { id } = req.params
+    const { id } = req.params;
 
-  const validated = await validator(AdminPostOrdersOrderRefundsReq, req.body)
+    const validated = await validator(AdminPostOrdersOrderRefundsReq, req.body);
 
-  const orderService: OrderService = req.scope.resolve("orderService")
+    const orderService: OrderService = req.scope.resolve("orderService");
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await orderService
-      .withTransaction(transactionManager)
-      .createRefund(id, validated.amount, validated.reason, validated.note, {
-        no_notification: validated.no_notification,
-      })
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await orderService.withTransaction(transactionManager).createRefund(id, validated.amount, validated.reason, validated.note, {
+            no_notification: validated.no_notification
+        });
+    });
 
-  const order = await orderService.retrieve(id, {
-    select: defaultAdminOrdersFields,
-    relations: defaultAdminOrdersRelations,
-  })
+    const order = await orderService.retrieve(id, {
+        select: defaultAdminOrdersFields,
+        relations: defaultAdminOrdersRelations
+    });
 
-  res.status(200).json({ order })
-}
+    res.status(200).json({ order });
+};
 
 export class AdminPostOrdersOrderRefundsReq {
-  @IsInt()
-  @IsNotEmpty()
-  amount: number
+    @IsInt()
+    @IsNotEmpty()
+    amount: number;
 
-  @IsString()
-  @IsNotEmpty()
-  reason: string
+    @IsString()
+    @IsNotEmpty()
+    reason: string;
 
-  @IsString()
-  @IsOptional()
-  note?: string
+    @IsString()
+    @IsOptional()
+    note?: string;
 
-  @IsBoolean()
-  @IsOptional()
-  no_notification?: boolean
+    @IsBoolean()
+    @IsOptional()
+    no_notification?: boolean;
 }

@@ -79,13 +79,8 @@ const NewProductPage = () => {
 }
 
 const SaveNotification = ({ isLoading = false }) => {
-  const {
-    formState,
-    onSubmit,
-    handleSubmit,
-    resetForm,
-    additionalDirtyState,
-  } = useProductForm()
+  const { formState, onSubmit, handleSubmit, resetForm, additionalDirtyState } =
+    useProductForm()
   const [visible, setVisible] = useState(false)
 
   const onPublish = (values: FieldValues) => {

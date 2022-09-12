@@ -1,8 +1,8 @@
-import { IsEnum, IsObject, IsOptional, IsString } from "class-validator"
-import { UserRoles } from "../../../../models/user"
-import UserService from "../../../../services/user"
-import { validator } from "../../../../utils/validator"
-import { EntityManager } from "typeorm"
+import { IsEnum, IsObject, IsOptional, IsString } from "class-validator";
+import { UserRoles } from "../../../../models/user";
+import UserService from "../../../../services/user";
+import { validator } from "../../../../utils/validator";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /users/{user_id}
@@ -29,39 +29,37 @@ import { EntityManager } from "typeorm"
  *               $ref: "#/components/schemas/user"
  */
 export default async (req, res) => {
-  const { user_id } = req.params
+    const { user_id } = req.params;
 
-  const validated = await validator(AdminUpdateUserRequest, req.body)
+    const validated = await validator(AdminUpdateUserRequest, req.body);
 
-  const userService: UserService = req.scope.resolve("userService")
-  const manager: EntityManager = req.scope.resolve("manager")
-  const data = await manager.transaction(async (transactionManager) => {
-    return await userService
-      .withTransaction(transactionManager)
-      .update(user_id, validated)
-  })
+    const userService: UserService = req.scope.resolve("userService");
+    const manager: EntityManager = req.scope.resolve("manager");
+    const data = await manager.transaction(async (transactionManager) => {
+        return await userService.withTransaction(transactionManager).update(user_id, validated);
+    });
 
-  res.status(200).json({ user: data })
-}
+    res.status(200).json({ user: data });
+};
 
 export class AdminUpdateUserRequest {
-  @IsString()
-  @IsOptional()
-  first_name?: string
+    @IsString()
+    @IsOptional()
+    first_name?: string;
 
-  @IsString()
-  @IsOptional()
-  last_name?: string
+    @IsString()
+    @IsOptional()
+    last_name?: string;
 
-  @IsEnum(UserRoles)
-  @IsOptional()
-  role?: UserRoles
+    @IsEnum(UserRoles)
+    @IsOptional()
+    role?: UserRoles;
 
-  @IsString()
-  @IsOptional()
-  api_token?: string
+    @IsString()
+    @IsOptional()
+    api_token?: string;
 
-  @IsObject()
-  @IsOptional()
-  metadata?: Record<string, unknown>
+    @IsObject()
+    @IsOptional()
+    metadata?: Record<string, unknown>;
 }

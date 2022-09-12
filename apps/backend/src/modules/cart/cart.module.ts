@@ -4,4 +4,4 @@ import { CartService } from "./cart.service";
 @Module({
     imports: [CartService]
 })
-export class CartModule { }
+export class CartModule {}

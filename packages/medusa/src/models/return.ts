@@ -1,96 +1,87 @@
-import {
-  BeforeInsert,
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  OneToOne,
-} from "typeorm"
-import { DbAwareColumn, resolveDbType } from "../utils/db-aware-column"
+import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, OneToOne } from "typeorm";
+import { DbAwareColumn, resolveDbType } from "../utils/db-aware-column";
 
-import { Order } from "./order"
-import { Swap } from "./swap"
-import { ClaimOrder } from "./claim-order"
-import { ReturnItem } from "./return-item"
-import { ShippingMethod } from "./shipping-method"
-import { BaseEntity } from "../interfaces/models/base-entity"
-import { generateEntityId } from "../utils/generate-entity-id"
+import { Order } from "./order";
+import { Swap } from "./swap";
+import { ClaimOrder } from "./claim-order";
+import { ReturnItem } from "./return-item";
+import { ShippingMethod } from "./shipping-method";
+import { BaseEntity } from "../interfaces/models/base-entity";
+import { generateEntityId } from "../utils/generate-entity-id";
 
 export enum ReturnStatus {
-  REQUESTED = "requested",
-  RECEIVED = "received",
-  REQUIRES_ACTION = "requires_action",
-  CANCELED = "canceled",
+    REQUESTED = "requested",
+    RECEIVED = "received",
+    REQUIRES_ACTION = "requires_action",
+    CANCELED = "canceled"
 }
 
 @Entity()
 export class Return extends BaseEntity {
-  @DbAwareColumn({
-    type: "enum",
-    enum: ReturnStatus,
-    default: ReturnStatus.REQUESTED,
-  })
-  status: ReturnStatus
+    @DbAwareColumn({
+        type: "enum",
+        enum: ReturnStatus,
+        default: ReturnStatus.REQUESTED
+    })
+    status: ReturnStatus;
 
-  @OneToMany(() => ReturnItem, (item) => item.return_order, {
-    eager: true,
-    cascade: ["insert"],
-  })
-  items: ReturnItem[]
+    @OneToMany(() => ReturnItem, (item) => item.return_order, {
+        eager: true,
+        cascade: ["insert"]
+    })
+    items: ReturnItem[];
 
-  @Index()
-  @Column({ nullable: true })
-  swap_id: string
+    @Index()
+    @Column({ nullable: true })
+    swap_id: string;
 
-  @OneToOne(() => Swap, (swap) => swap.return_order)
-  @JoinColumn({ name: "swap_id" })
-  swap: Swap
+    @OneToOne(() => Swap, (swap) => swap.return_order)
+    @JoinColumn({ name: "swap_id" })
+    swap: Swap;
 
-  @Index()
-  @Column({ nullable: true })
-  claim_order_id: string
+    @Index()
+    @Column({ nullable: true })
+    claim_order_id: string;
 
-  @OneToOne(() => ClaimOrder, (co) => co.return_order)
-  @JoinColumn({ name: "claim_order_id" })
-  claim_order: ClaimOrder
+    @OneToOne(() => ClaimOrder, (co) => co.return_order)
+    @JoinColumn({ name: "claim_order_id" })
+    claim_order: ClaimOrder;
 
-  @Index()
-  @Column({ nullable: true })
-  order_id: string
+    @Index()
+    @Column({ nullable: true })
+    order_id: string;
 
-  @ManyToOne(() => Order, (o) => o.returns)
-  @JoinColumn({ name: "order_id" })
-  order: Order
+    @ManyToOne(() => Order, (o) => o.returns)
+    @JoinColumn({ name: "order_id" })
+    order: Order;
 
-  @OneToOne(() => ShippingMethod, (method) => method.return_order, {
-    cascade: true,
-  })
-  shipping_method: ShippingMethod
+    @OneToOne(() => ShippingMethod, (method) => method.return_order, {
+        cascade: true
+    })
+    shipping_method: ShippingMethod;
 
-  @DbAwareColumn({ type: "jsonb", nullable: true })
-  shipping_data: Record<string, unknown>
+    @DbAwareColumn({ type: "jsonb", nullable: true })
+    shipping_data: Record<string, unknown>;
 
-  @Column({ type: "int" })
-  refund_amount: number
+    @Column({ type: "int" })
+    refund_amount: number;
 
-  @Column({ type: resolveDbType("timestamptz"), nullable: true })
-  received_at: Date
+    @Column({ type: resolveDbType("timestamptz"), nullable: true })
+    received_at: Date;
 
-  @Column({ type: "boolean", nullable: true })
-  no_notification: boolean
+    @Column({ type: "boolean", nullable: true })
+    no_notification: boolean;
 
-  @DbAwareColumn({ type: "jsonb", nullable: true })
-  metadata: Record<string, unknown>
+    @DbAwareColumn({ type: "jsonb", nullable: true })
+    metadata: Record<string, unknown>;
 
-  @Column({ nullable: true })
-  idempotency_key: string
+    @Column({ nullable: true })
+    idempotency_key: string;
 
-  @BeforeInsert()
-  private beforeInsert(): void {
-    this.id = generateEntityId(this.id, "ret")
-  }
+    @BeforeInsert()
+    private beforeInsert(): void {
+        this.id = generateEntityId(this.id, "ret");
+    }
 }
 
 /**

@@ -7,7 +7,7 @@ export default {
   component: OSShortcut,
 } as ComponentMeta<typeof OSShortcut>
 
-const Template = args => <OSShortcut {...args} />
+const Template = (args) => <OSShortcut {...args} />
 
 export const CmdK = Template.bind({})
 CmdK.args = {

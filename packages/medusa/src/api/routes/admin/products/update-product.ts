@@ -1,30 +1,14 @@
-import { Type } from "class-transformer"
-import {
-  IsArray,
-  IsBoolean,
-  IsEnum,
-  IsInt,
-  IsNumber,
-  IsObject,
-  IsOptional,
-  IsString,
-  NotEquals,
-  ValidateIf,
-  ValidateNested,
-} from "class-validator"
-import { defaultAdminProductFields, defaultAdminProductRelations } from "."
-import SalesChannelFeatureFlag from "../../../../loaders/feature-flags/sales-channels"
-import { ProductStatus } from "../../../../models"
-import { PricingService, ProductService } from "../../../../services"
-import {
-  ProductSalesChannelReq,
-  ProductTagReq,
-  ProductTypeReq,
-} from "../../../../types/product"
-import { ProductVariantPricesUpdateReq } from "../../../../types/product-variant"
-import { FeatureFlagDecorators } from "../../../../utils/feature-flag-decorators"
-import { validator } from "../../../../utils/validator"
-import { EntityManager } from "typeorm"
+import { Type } from "class-transformer";
+import { IsArray, IsBoolean, IsEnum, IsInt, IsNumber, IsObject, IsOptional, IsString, NotEquals, ValidateIf, ValidateNested } from "class-validator";
+import { defaultAdminProductFields, defaultAdminProductRelations } from ".";
+import SalesChannelFeatureFlag from "../../../../loaders/feature-flags/sales-channels";
+import { ProductStatus } from "../../../../models";
+import { PricingService, ProductService } from "../../../../services";
+import { ProductSalesChannelReq, ProductTagReq, ProductTypeReq } from "../../../../types/product";
+import { ProductVariantPricesUpdateReq } from "../../../../types/product-variant";
+import { FeatureFlagDecorators } from "../../../../utils/feature-flag-decorators";
+import { validator } from "../../../../utils/validator";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /products/{id}
@@ -218,220 +202,213 @@ import { EntityManager } from "typeorm"
  *               $ref: "#/components/schemas/product"
  */
 export default async (req, res) => {
-  const { id } = req.params
+    const { id } = req.params;
 
-  const validated = await validator(AdminPostProductsProductReq, req.body)
+    const validated = await validator(AdminPostProductsProductReq, req.body);
 
-  const productService: ProductService = req.scope.resolve("productService")
-  const pricingService: PricingService = req.scope.resolve("pricingService")
+    const productService: ProductService = req.scope.resolve("productService");
+    const pricingService: PricingService = req.scope.resolve("pricingService");
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    await productService
-      .withTransaction(transactionManager)
-      .update(id, validated)
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        await productService.withTransaction(transactionManager).update(id, validated);
+    });
 
-  const rawProduct = await productService.retrieve(id, {
-    select: defaultAdminProductFields,
-    relations: defaultAdminProductRelations,
-  })
+    const rawProduct = await productService.retrieve(id, {
+        select: defaultAdminProductFields,
+        relations: defaultAdminProductRelations
+    });
 
-  const [product] = await pricingService.setProductPrices([rawProduct])
+    const [product] = await pricingService.setProductPrices([rawProduct]);
 
-  res.json({ product })
-}
+    res.json({ product });
+};
 
 class ProductVariantOptionReq {
-  @IsString()
-  value: string
+    @IsString()
+    value: string;
 
-  @IsString()
-  option_id: string
+    @IsString()
+    option_id: string;
 }
 
 class ProductVariantReq {
-  @IsString()
-  @IsOptional()
-  id?: string
+    @IsString()
+    @IsOptional()
+    id?: string;
 
-  @IsString()
-  @IsOptional()
-  title?: string
+    @IsString()
+    @IsOptional()
+    title?: string;
 
-  @IsString()
-  @IsOptional()
-  sku?: string
+    @IsString()
+    @IsOptional()
+    sku?: string;
 
-  @IsString()
-  @IsOptional()
-  ean?: string
+    @IsString()
+    @IsOptional()
+    ean?: string;
 
-  @IsString()
-  @IsOptional()
-  upc?: string
+    @IsString()
+    @IsOptional()
+    upc?: string;
 
-  @IsString()
-  @IsOptional()
-  barcode?: string
+    @IsString()
+    @IsOptional()
+    barcode?: string;
 
-  @IsString()
-  @IsOptional()
-  hs_code?: string
+    @IsString()
+    @IsOptional()
+    hs_code?: string;
 
-  @IsInt()
-  @IsOptional()
-  inventory_quantity?: number
+    @IsInt()
+    @IsOptional()
+    inventory_quantity?: number;
 
-  @IsBoolean()
-  @IsOptional()
-  allow_backorder?: boolean
+    @IsBoolean()
+    @IsOptional()
+    allow_backorder?: boolean;
 
-  @IsBoolean()
-  @IsOptional()
-  manage_inventory?: boolean
+    @IsBoolean()
+    @IsOptional()
+    manage_inventory?: boolean;
 
-  @IsNumber()
-  @IsOptional()
-  weight?: number
+    @IsNumber()
+    @IsOptional()
+    weight?: number;
 
-  @IsNumber()
-  @IsOptional()
-  length?: number
+    @IsNumber()
+    @IsOptional()
+    length?: number;
 
-  @IsNumber()
-  @IsOptional()
-  height?: number
+    @IsNumber()
+    @IsOptional()
+    height?: number;
 
-  @IsNumber()
-  @IsOptional()
-  width?: number
+    @IsNumber()
+    @IsOptional()
+    width?: number;
 
-  @IsString()
-  @IsOptional()
-  origin_country?: string
+    @IsString()
+    @IsOptional()
+    origin_country?: string;
 
-  @IsString()
-  @IsOptional()
-  mid_code?: string
+    @IsString()
+    @IsOptional()
+    mid_code?: string;
 
-  @IsString()
-  @IsOptional()
-  material?: string
+    @IsString()
+    @IsOptional()
+    material?: string;
 
-  @IsObject()
-  @IsOptional()
-  metadata?: Record<string, unknown>
+    @IsObject()
+    @IsOptional()
+    metadata?: Record<string, unknown>;
 
-  @IsArray()
-  @IsOptional()
-  @ValidateNested({ each: true })
-  @Type(() => ProductVariantPricesUpdateReq)
-  prices: ProductVariantPricesUpdateReq[]
+    @IsArray()
+    @IsOptional()
+    @ValidateNested({ each: true })
+    @Type(() => ProductVariantPricesUpdateReq)
+    prices: ProductVariantPricesUpdateReq[];
 
-  @IsOptional()
-  @Type(() => ProductVariantOptionReq)
-  @ValidateNested({ each: true })
-  @IsArray()
-  options?: ProductVariantOptionReq[] = []
+    @IsOptional()
+    @Type(() => ProductVariantOptionReq)
+    @ValidateNested({ each: true })
+    @IsArray()
+    options?: ProductVariantOptionReq[] = [];
 }
 
 export class AdminPostProductsProductReq {
-  @IsString()
-  @IsOptional()
-  title?: string
+    @IsString()
+    @IsOptional()
+    title?: string;
 
-  @IsString()
-  @IsOptional()
-  subtitle?: string
+    @IsString()
+    @IsOptional()
+    subtitle?: string;
 
-  @IsString()
-  @IsOptional()
-  description?: string
+    @IsString()
+    @IsOptional()
+    description?: string;
 
-  @IsBoolean()
-  @IsOptional()
-  discountable?: boolean
+    @IsBoolean()
+    @IsOptional()
+    discountable?: boolean;
 
-  @IsArray()
-  @IsOptional()
-  images: string[]
+    @IsArray()
+    @IsOptional()
+    images: string[];
 
-  @IsString()
-  @IsOptional()
-  thumbnail?: string
+    @IsString()
+    @IsOptional()
+    thumbnail?: string;
 
-  @IsString()
-  @IsOptional()
-  handle?: string
+    @IsString()
+    @IsOptional()
+    handle?: string;
 
-  @IsEnum(ProductStatus)
-  @NotEquals(null)
-  @ValidateIf((object, value) => value !== undefined)
-  status?: ProductStatus
+    @IsEnum(ProductStatus)
+    @NotEquals(null)
+    @ValidateIf((object, value) => value !== undefined)
+    status?: ProductStatus;
 
-  @IsOptional()
-  @Type(() => ProductTypeReq)
-  @ValidateNested()
-  type?: ProductTypeReq
+    @IsOptional()
+    @Type(() => ProductTypeReq)
+    @ValidateNested()
+    type?: ProductTypeReq;
 
-  @IsOptional()
-  @IsString()
-  collection_id?: string
+    @IsOptional()
+    @IsString()
+    collection_id?: string;
 
-  @IsOptional()
-  @Type(() => ProductTagReq)
-  @ValidateNested({ each: true })
-  @IsArray()
-  tags?: ProductTagReq[]
+    @IsOptional()
+    @Type(() => ProductTagReq)
+    @ValidateNested({ each: true })
+    @IsArray()
+    tags?: ProductTagReq[];
 
-  @FeatureFlagDecorators(SalesChannelFeatureFlag.key, [
-    IsOptional(),
-    Type(() => ProductSalesChannelReq),
-    ValidateNested({ each: true }),
-    IsArray(),
-  ])
-  sales_channels: ProductSalesChannelReq[] | null
+    @FeatureFlagDecorators(SalesChannelFeatureFlag.key, [IsOptional(), Type(() => ProductSalesChannelReq), ValidateNested({ each: true }), IsArray()])
+    sales_channels: ProductSalesChannelReq[] | null;
 
-  @IsOptional()
-  @Type(() => ProductVariantReq)
-  @ValidateNested({ each: true })
-  @IsArray()
-  variants?: ProductVariantReq[]
+    @IsOptional()
+    @Type(() => ProductVariantReq)
+    @ValidateNested({ each: true })
+    @IsArray()
+    variants?: ProductVariantReq[];
 
-  @IsNumber()
-  @IsOptional()
-  weight?: number
+    @IsNumber()
+    @IsOptional()
+    weight?: number;
 
-  @IsNumber()
-  @IsOptional()
-  length?: number
+    @IsNumber()
+    @IsOptional()
+    length?: number;
 
-  @IsNumber()
-  @IsOptional()
-  height?: number
+    @IsNumber()
+    @IsOptional()
+    height?: number;
 
-  @IsNumber()
-  @IsOptional()
-  width?: number
+    @IsNumber()
+    @IsOptional()
+    width?: number;
 
-  @IsString()
-  @IsOptional()
-  hs_code?: string
+    @IsString()
+    @IsOptional()
+    hs_code?: string;
 
-  @IsString()
-  @IsOptional()
-  origin_country?: string
+    @IsString()
+    @IsOptional()
+    origin_country?: string;
 
-  @IsString()
-  @IsOptional()
-  mid_code?: string
+    @IsString()
+    @IsOptional()
+    mid_code?: string;
 
-  @IsString()
-  @IsOptional()
-  material?: string
+    @IsString()
+    @IsOptional()
+    material?: string;
 
-  @IsObject()
-  @IsOptional()
-  metadata?: Record<string, unknown>
+    @IsObject()
+    @IsOptional()
+    metadata?: Record<string, unknown>;
 }

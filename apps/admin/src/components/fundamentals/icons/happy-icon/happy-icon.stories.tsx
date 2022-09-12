@@ -15,7 +15,7 @@ export default {
   },
 } as ComponentMeta<typeof HappyIcon>
 
-const Template = args => <HappyIcon {...args} />
+const Template = (args) => <HappyIcon {...args} />
 
 export const Icon = Template.bind({})
 Icon.args = {

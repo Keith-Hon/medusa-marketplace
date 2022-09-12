@@ -1,7 +1,7 @@
-import { Type } from "class-transformer"
-import { IsNumber, IsOptional, IsString } from "class-validator"
-import customerController from "../../../../controllers/customers"
-import { AdminListCustomerSelector } from "../../../../types/customers"
+import { Type } from "class-transformer";
+import { IsNumber, IsOptional, IsString } from "class-validator";
+import customerController from "../../../../controllers/customers";
+import { AdminListCustomerSelector } from "../../../../types/customers";
 /**
  * @oas [get] /customers
  * operationId: "GetCustomers"
@@ -21,28 +21,24 @@ import { AdminListCustomerSelector } from "../../../../types/customers"
  *               $ref: "#/components/schemas/customer"
  */
 export default async (req, res) => {
-  const result = await customerController.listAndCount(
-    req.scope,
-    req.query,
-    req.body
-  )
+    const result = await customerController.listAndCount(req.scope, req.query, req.body);
 
-  res.json(result)
-}
+    res.json(result);
+};
 
 export class AdminGetCustomersParams extends AdminListCustomerSelector {
-  @IsNumber()
-  @IsOptional()
-  @Type(() => Number)
-  limit = 50
+    @IsNumber()
+    @IsOptional()
+    @Type(() => Number)
+    limit = 50;
 
-  @IsOptional()
-  @IsNumber()
-  @IsOptional()
-  @Type(() => Number)
-  offset = 0
+    @IsOptional()
+    @IsNumber()
+    @IsOptional()
+    @Type(() => Number)
+    offset = 0;
 
-  @IsString()
-  @IsOptional()
-  expand?: string
+    @IsString()
+    @IsOptional()
+    expand?: string;
 }

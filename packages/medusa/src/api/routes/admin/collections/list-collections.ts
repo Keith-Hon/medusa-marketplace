@@ -1,9 +1,9 @@
-import { Type } from "class-transformer"
-import { IsNumber, IsOptional, IsString, ValidateNested } from "class-validator"
-import _, { identity } from "lodash"
-import ProductCollectionService from "../../../../services/product-collection"
-import { DateComparisonOperator } from "../../../../types/common"
-import { Request, Response } from "express"
+import { Type } from "class-transformer";
+import { IsNumber, IsOptional, IsString, ValidateNested } from "class-validator";
+import _, { identity } from "lodash";
+import ProductCollectionService from "../../../../services/product-collection";
+import { DateComparisonOperator } from "../../../../types/common";
+import { Request, Response } from "express";
 
 /**
  * @oas [get] /collections
@@ -32,66 +32,61 @@ import { Request, Response } from "express"
  *              $ref: "#/components/schemas/product_collection"
  */
 export default async (req: Request, res: Response) => {
-  const productCollectionService: ProductCollectionService = req.scope.resolve(
-    "productCollectionService"
-  )
+    const productCollectionService: ProductCollectionService = req.scope.resolve("productCollectionService");
 
-  const {
-    validatedQuery: { limit, offset },
-    filterableFields,
-    listConfig
-  } = req
+    const {
+        validatedQuery: { limit, offset },
+        filterableFields,
+        listConfig
+    } = req;
 
-  const [collections, count] = await productCollectionService.listAndCount(
-    _.pickBy(filterableFields, identity),
-    listConfig
-  )
+    const [collections, count] = await productCollectionService.listAndCount(_.pickBy(filterableFields, identity), listConfig);
 
-  res.status(200).json({
-    collections,
-    count,
-    offset,
-    limit,
-  })
-}
+    res.status(200).json({
+        collections,
+        count,
+        offset,
+        limit
+    });
+};
 
 export class AdminGetCollectionsPaginationParams {
-  @IsNumber()
-  @IsOptional()
-  @Type(() => Number)
-  limit = 10
+    @IsNumber()
+    @IsOptional()
+    @Type(() => Number)
+    limit = 10;
 
-  @IsNumber()
-  @IsOptional()
-  @Type(() => Number)
-  offset = 0
+    @IsNumber()
+    @IsOptional()
+    @Type(() => Number)
+    offset = 0;
 }
 
 export class AdminGetCollectionsParams extends AdminGetCollectionsPaginationParams {
-  @IsOptional()
-  @IsString()
-  title?: string
+    @IsOptional()
+    @IsString()
+    title?: string;
 
-  @IsOptional()
-  @IsString()
-  handle?: string
+    @IsOptional()
+    @IsString()
+    handle?: string;
 
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => DateComparisonOperator)
-  created_at?: DateComparisonOperator
+    @IsOptional()
+    @ValidateNested()
+    @Type(() => DateComparisonOperator)
+    created_at?: DateComparisonOperator;
 
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => DateComparisonOperator)
-  updated_at?: DateComparisonOperator
+    @IsOptional()
+    @ValidateNested()
+    @Type(() => DateComparisonOperator)
+    updated_at?: DateComparisonOperator;
 
-  @ValidateNested()
-  @IsOptional()
-  @Type(() => DateComparisonOperator)
-  deleted_at?: DateComparisonOperator
+    @ValidateNested()
+    @IsOptional()
+    @Type(() => DateComparisonOperator)
+    deleted_at?: DateComparisonOperator;
 
-  @IsString()
-  @IsOptional()
-  q?: string
+    @IsString()
+    @IsOptional()
+    q?: string;
 }

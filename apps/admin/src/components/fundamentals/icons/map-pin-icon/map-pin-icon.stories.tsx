@@ -15,7 +15,7 @@ export default {
   },
 } as ComponentMeta<typeof MapPinIcon>
 
-const Template = args => <MapPinIcon {...args} />
+const Template = (args) => <MapPinIcon {...args} />
 
 export const Icon = Template.bind({})
 Icon.args = {

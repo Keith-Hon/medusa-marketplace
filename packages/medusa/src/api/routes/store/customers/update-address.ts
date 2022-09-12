@@ -1,8 +1,8 @@
-import { defaultStoreCustomersFields, defaultStoreCustomersRelations } from "."
-import CustomerService from "../../../../services/customer"
-import { AddressPayload } from "../../../../types/common"
-import { validator } from "../../../../utils/validator"
-import { EntityManager } from "typeorm"
+import { defaultStoreCustomersFields, defaultStoreCustomersRelations } from ".";
+import CustomerService from "../../../../services/customer";
+import { AddressPayload } from "../../../../types/common";
+import { validator } from "../../../../utils/validator";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /customers/me/addresses/{address_id}
@@ -34,31 +34,24 @@ import { EntityManager } from "typeorm"
  *              $ref: "#/components/schemas/customer"
  */
 export default async (req, res) => {
-  const id = req.user.customer_id
-  const { address_id } = req.params
+    const id = req.user.customer_id;
+    const { address_id } = req.params;
 
-  const validated = await validator(
-    StorePostCustomersCustomerAddressesAddressReq,
-    req.body
-  )
+    const validated = await validator(StorePostCustomersCustomerAddressesAddressReq, req.body);
 
-  const customerService: CustomerService = req.scope.resolve(
-    "customerService"
-  ) as CustomerService
+    const customerService: CustomerService = req.scope.resolve("customerService") as CustomerService;
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await customerService
-      .withTransaction(transactionManager)
-      .updateAddress(id, address_id, validated)
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await customerService.withTransaction(transactionManager).updateAddress(id, address_id, validated);
+    });
 
-  const customer = await customerService.retrieve(id, {
-    relations: defaultStoreCustomersRelations,
-    select: defaultStoreCustomersFields,
-  })
+    const customer = await customerService.retrieve(id, {
+        relations: defaultStoreCustomersRelations,
+        select: defaultStoreCustomersFields
+    });
 
-  res.json({ customer })
-}
+    res.json({ customer });
+};
 
 export class StorePostCustomersCustomerAddressesAddressReq extends AddressPayload {}

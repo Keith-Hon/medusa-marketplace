@@ -1,12 +1,9 @@
-import { Request, Response } from "express"
-import { IsNumber, IsOptional, IsString, ValidateNested } from "class-validator"
-import { Type } from "class-transformer"
-import { removeUndefinedProperties } from "../../../../utils"
-import { SalesChannelService } from "../../../../services"
-import {
-  DateComparisonOperator,
-  extendedFindParamsMixin,
-} from "../../../../types/common"
+import { Request, Response } from "express";
+import { IsNumber, IsOptional, IsString, ValidateNested } from "class-validator";
+import { Type } from "class-transformer";
+import { removeUndefinedProperties } from "../../../../utils";
+import { SalesChannelService } from "../../../../services";
+import { DateComparisonOperator, extendedFindParamsMixin } from "../../../../types/common";
 
 /**
  * @oas [get] /sales-channels
@@ -51,59 +48,54 @@ import {
  *               $ref: "#/components/schemas/sales_channel"
  */
 export default async (req: Request, res: Response) => {
-  const salesChannelService: SalesChannelService = req.scope.resolve(
-    "salesChannelService"
-  )
+    const salesChannelService: SalesChannelService = req.scope.resolve("salesChannelService");
 
-  const listConfig = req.listConfig
-  const filterableFields = req.filterableFields
+    const listConfig = req.listConfig;
+    const filterableFields = req.filterableFields;
 
-  const [salesChannels, count] = await salesChannelService.listAndCount(
-    filterableFields,
-    listConfig
-  )
+    const [salesChannels, count] = await salesChannelService.listAndCount(filterableFields, listConfig);
 
-  res.status(200).json({
-    sales_channels: salesChannels,
-    count,
-    offset: listConfig.skip,
-    limit: listConfig.take,
-  })
-}
+    res.status(200).json({
+        sales_channels: salesChannels,
+        count,
+        offset: listConfig.skip,
+        limit: listConfig.take
+    });
+};
 
 export class AdminGetSalesChannelsParams extends extendedFindParamsMixin() {
-  @IsString()
-  @IsOptional()
-  id?: string
+    @IsString()
+    @IsOptional()
+    id?: string;
 
-  @IsOptional()
-  @IsString()
-  q?: string
+    @IsOptional()
+    @IsString()
+    q?: string;
 
-  @IsOptional()
-  @IsString()
-  name?: string
+    @IsOptional()
+    @IsString()
+    name?: string;
 
-  @IsOptional()
-  @IsString()
-  description?: string
+    @IsOptional()
+    @IsString()
+    description?: string;
 
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => DateComparisonOperator)
-  created_at?: DateComparisonOperator
+    @IsOptional()
+    @ValidateNested()
+    @Type(() => DateComparisonOperator)
+    created_at?: DateComparisonOperator;
 
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => DateComparisonOperator)
-  updated_at?: DateComparisonOperator
+    @IsOptional()
+    @ValidateNested()
+    @Type(() => DateComparisonOperator)
+    updated_at?: DateComparisonOperator;
 
-  @ValidateNested()
-  @IsOptional()
-  @Type(() => DateComparisonOperator)
-  deleted_at?: DateComparisonOperator
+    @ValidateNested()
+    @IsOptional()
+    @Type(() => DateComparisonOperator)
+    deleted_at?: DateComparisonOperator;
 
-  @IsString()
-  @IsOptional()
-  order?: string
+    @IsString()
+    @IsOptional()
+    order?: string;
 }

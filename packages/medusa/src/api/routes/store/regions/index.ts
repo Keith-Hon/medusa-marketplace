@@ -1,25 +1,25 @@
-import { Router } from "express"
-import middlewares from "../../../middlewares"
-import { Region } from "./../../../../"
+import { Router } from "express";
+import middlewares from "../../../middlewares";
+import { Region } from "./../../../../";
 
-const route = Router()
+const route = Router();
 
 export default (app) => {
-  app.use("/regions", route)
+    app.use("/regions", route);
 
-  route.get("/", middlewares.wrap(require("./list-regions").default))
-  route.get("/:region_id", middlewares.wrap(require("./get-region").default))
+    route.get("/", middlewares.wrap(require("./list-regions").default));
+    route.get("/:region_id", middlewares.wrap(require("./get-region").default));
 
-  return app
-}
+    return app;
+};
 
 export type StoreRegionsListRes = {
-  regions: Region[]
-}
+    regions: Region[];
+};
 
 export type StoreRegionsRes = {
-  region: Region
-}
+    region: Region;
+};
 
-export * from "./get-region"
-export * from "./list-regions"
+export * from "./get-region";
+export * from "./list-regions";

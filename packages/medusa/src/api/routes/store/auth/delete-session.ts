@@ -10,6 +10,6 @@
  *    description: OK
  */
 export default async (req, res) => {
-  req.session.jwt = {}
-  res.json({})
-}
+    req.session.jwt = {};
+    res.json({});
+};

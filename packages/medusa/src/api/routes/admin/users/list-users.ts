@@ -1,4 +1,4 @@
-import UserService from "../../../../services/user"
+import UserService from "../../../../services/user";
 
 /**
  * @oas [get] /users
@@ -21,8 +21,8 @@ import UserService from "../../../../services/user"
  *                 $ref: "#/components/schemas/user"
  */
 export default async (req, res) => {
-  const userService: UserService = req.scope.resolve("userService")
-  const users = await userService.list({})
+    const userService: UserService = req.scope.resolve("userService");
+    const users = await userService.list({});
 
-  res.status(200).json({ users })
-}
+    res.status(200).json({ users });
+};

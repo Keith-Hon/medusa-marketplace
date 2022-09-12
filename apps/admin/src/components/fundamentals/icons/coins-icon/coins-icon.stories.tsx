@@ -15,7 +15,7 @@ export default {
   },
 } as ComponentMeta<typeof CoinsIcon>
 
-const Template = args => <CoinsIcon {...args} />
+const Template = (args) => <CoinsIcon {...args} />
 
 export const Icon = Template.bind({})
 Icon.args = {

@@ -1,6 +1,6 @@
-import { CustomerGroupService } from "../../../../services"
-import { Request, Response } from "express"
-import { EntityManager } from "typeorm"
+import { CustomerGroupService } from "../../../../services";
+import { Request, Response } from "express";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [delete] /customer-groups/{id}
@@ -30,22 +30,18 @@ import { EntityManager } from "typeorm"
  */
 
 export default async (req: Request, res: Response) => {
-  const { id } = req.params
+    const { id } = req.params;
 
-  const customerGroupService: CustomerGroupService = req.scope.resolve(
-    "customerGroupService"
-  )
+    const customerGroupService: CustomerGroupService = req.scope.resolve("customerGroupService");
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await customerGroupService
-      .withTransaction(transactionManager)
-      .delete(id)
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await customerGroupService.withTransaction(transactionManager).delete(id);
+    });
 
-  res.json({
-    id: id,
-    object: "customer_group",
-    deleted: true,
-  })
-}
+    res.json({
+        id: id,
+        object: "customer_group",
+        deleted: true
+    });
+};

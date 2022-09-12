@@ -1,18 +1,11 @@
-import {
-  IsArray,
-  IsEmail,
-  IsObject,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from "class-validator"
-import { MedusaError } from "medusa-core-utils"
-import CustomerService from "../../../../services/customer"
-import { validator } from "../../../../utils/validator"
-import { defaultAdminCustomersRelations } from "."
-import { Type } from "class-transformer"
-import { FindParams } from "../../../../types/common"
-import { EntityManager } from "typeorm"
+import { IsArray, IsEmail, IsObject, IsOptional, IsString, ValidateNested } from "class-validator";
+import { MedusaError } from "medusa-core-utils";
+import CustomerService from "../../../../services/customer";
+import { validator } from "../../../../utils/validator";
+import { defaultAdminCustomersRelations } from ".";
+import { Type } from "class-transformer";
+import { FindParams } from "../../../../types/common";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /customers/{id}
@@ -68,78 +61,71 @@ import { EntityManager } from "typeorm"
  *               $ref: "#/components/schemas/customer"
  */
 export default async (req, res) => {
-  const { id } = req.params
+    const { id } = req.params;
 
-  const validatedBody = await validator(AdminPostCustomersCustomerReq, req.body)
-  const validatedQuery = await validator(FindParams, req.query)
+    const validatedBody = await validator(AdminPostCustomersCustomerReq, req.body);
+    const validatedQuery = await validator(FindParams, req.query);
 
-  const customerService: CustomerService = req.scope.resolve("customerService")
+    const customerService: CustomerService = req.scope.resolve("customerService");
 
-  let customer = await customerService.retrieve(id)
+    let customer = await customerService.retrieve(id);
 
-  if (validatedBody.email && customer.has_account) {
-    throw new MedusaError(
-      MedusaError.Types.INVALID_DATA,
-      "Email cannot be changed when the user has registered their account"
-    )
-  }
+    if (validatedBody.email && customer.has_account) {
+        throw new MedusaError(MedusaError.Types.INVALID_DATA, "Email cannot be changed when the user has registered their account");
+    }
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await customerService
-      .withTransaction(transactionManager)
-      .update(id, validatedBody)
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await customerService.withTransaction(transactionManager).update(id, validatedBody);
+    });
 
-  let expandFields: string[] = []
-  if (validatedQuery.expand) {
-    expandFields = validatedQuery.expand.split(",")
-  }
+    let expandFields: string[] = [];
+    if (validatedQuery.expand) {
+        expandFields = validatedQuery.expand.split(",");
+    }
 
-  const findConfig = {
-    relations: expandFields.length
-      ? expandFields
-      : defaultAdminCustomersRelations,
-  }
+    const findConfig = {
+        relations: expandFields.length ? expandFields : defaultAdminCustomersRelations
+    };
 
-  customer = await customerService.retrieve(id, findConfig)
+    customer = await customerService.retrieve(id, findConfig);
 
-  res.status(200).json({ customer })
-}
+    res.status(200).json({ customer });
+};
 
 class Group {
-  @IsString()
-  id: string
+    @IsString()
+    id: string;
 }
 
 export class AdminPostCustomersCustomerReq {
-  @IsEmail()
-  @IsOptional()
-  email?: string
+    @IsEmail()
+    @IsOptional()
+    email?: string;
 
-  @IsString()
-  @IsOptional()
-  first_name?: string
+    @IsString()
+    @IsOptional()
+    first_name?: string;
 
-  @IsString()
-  @IsOptional()
-  last_name?: string
+    @IsString()
+    @IsOptional()
+    last_name?: string;
 
-  @IsString()
-  @IsOptional()
-  password?: string
+    @IsString()
+    @IsOptional()
+    password?: string;
 
-  @IsString()
-  @IsOptional()
-  phone?: string
+    @IsString()
+    @IsOptional()
+    phone?: string;
 
-  @IsObject()
-  @IsOptional()
-  metadata?: Record<string, unknown>
+    @IsObject()
+    @IsOptional()
+    metadata?: Record<string, unknown>;
 
-  @IsArray()
-  @IsOptional()
-  @Type(() => Group)
-  @ValidateNested({ each: true })
-  groups?: Group[]
+    @IsArray()
+    @IsOptional()
+    @Type(() => Group)
+    @ValidateNested({ each: true })
+    groups?: Group[];
 }

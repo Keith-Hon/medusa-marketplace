@@ -1,4 +1,4 @@
-import { EntityManager } from "typeorm"
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [delete] /shipping-options/{id}
@@ -27,19 +27,17 @@ import { EntityManager } from "typeorm"
  *               type: boolean
  */
 export default async (req, res) => {
-  const { option_id } = req.params
-  const optionService = req.scope.resolve("shippingOptionService")
+    const { option_id } = req.params;
+    const optionService = req.scope.resolve("shippingOptionService");
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await optionService
-      .withTransaction(transactionManager)
-      .delete(option_id)
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await optionService.withTransaction(transactionManager).delete(option_id);
+    });
 
-  res.json({
-    id: option_id,
-    object: "shipping-option",
-    deleted: true,
-  })
-}
+    res.json({
+        id: option_id,
+        object: "shipping-option",
+        deleted: true
+    });
+};

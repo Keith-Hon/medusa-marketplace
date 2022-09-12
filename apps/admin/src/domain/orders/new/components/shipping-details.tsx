@@ -17,15 +17,14 @@ const ShippingDetails = ({
 }) => {
   const [addNew, setAddNew] = useState(false)
   const [fetchingAddresses, setFetchingAddresses] = useState(false)
-  const { disableNextPage, enableNextPage, nextStepEnabled } = useContext(
-    SteppedContext
-  )
+  const { disableNextPage, enableNextPage, nextStepEnabled } =
+    useContext(SteppedContext)
 
-  const { shipping, customer: selectedCustomer, requireShipping } = form.watch([
-    "shipping",
-    "customer",
-    "requireShipping",
-  ])
+  const {
+    shipping,
+    customer: selectedCustomer,
+    requireShipping,
+  } = form.watch(["shipping", "customer", "requireShipping"])
 
   useEffect(() => {
     if (

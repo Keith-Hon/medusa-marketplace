@@ -1,6 +1,6 @@
-import { defaultAdminCollectionsRelations } from "."
-import ProductCollectionService from "../../../../services/product-collection"
-import { Request, Response } from "express"
+import { defaultAdminCollectionsRelations } from ".";
+import ProductCollectionService from "../../../../services/product-collection";
+import { Request, Response } from "express";
 /**
  * @oas [get] /collections/{id}
  * operationId: "GetCollectionsCollection"
@@ -22,14 +22,12 @@ import { Request, Response } from "express"
  *              $ref: "#/components/schemas/product_collection"
  */
 export default async (req: Request, res: Response) => {
-  const { id } = req.params
+    const { id } = req.params;
 
-  const productCollectionService: ProductCollectionService = req.scope.resolve(
-    "productCollectionService"
-  )
+    const productCollectionService: ProductCollectionService = req.scope.resolve("productCollectionService");
 
-  const collection = await productCollectionService.retrieve(id, {
-    relations: defaultAdminCollectionsRelations,
-  })
-  res.status(200).json({ collection })
-}
+    const collection = await productCollectionService.retrieve(id, {
+        relations: defaultAdminCollectionsRelations
+    });
+    res.status(200).json({ collection });
+};

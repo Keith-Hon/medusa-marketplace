@@ -1,18 +1,10 @@
-import { Type } from "class-transformer"
-import {
-  IsArray,
-  IsBoolean,
-  IsNumber,
-  IsObject,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from "class-validator"
-import { defaultAdminProductFields, defaultAdminProductRelations } from "."
-import { ProductService, ProductVariantService } from "../../../../services"
-import { ProductVariantPricesCreateReq } from "../../../../types/product-variant"
-import { validator } from "../../../../utils/validator"
-import { EntityManager } from "typeorm"
+import { Type } from "class-transformer";
+import { IsArray, IsBoolean, IsNumber, IsObject, IsOptional, IsString, ValidateNested } from "class-validator";
+import { defaultAdminProductFields, defaultAdminProductRelations } from ".";
+import { ProductService, ProductVariantService } from "../../../../services";
+import { ProductVariantPricesCreateReq } from "../../../../types/product-variant";
+import { validator } from "../../../../utils/validator";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /products/{id}/variants
@@ -124,117 +116,110 @@ import { EntityManager } from "typeorm"
  *               $ref: "#/components/schemas/product"
  */
 export default async (req, res) => {
-  const { id } = req.params
+    const { id } = req.params;
 
-  const validated = await validator(
-    AdminPostProductsProductVariantsReq,
-    req.body
-  )
+    const validated = await validator(AdminPostProductsProductVariantsReq, req.body);
 
-  const productVariantService: ProductVariantService = req.scope.resolve(
-    "productVariantService"
-  )
-  const productService: ProductService = req.scope.resolve("productService")
+    const productVariantService: ProductVariantService = req.scope.resolve("productVariantService");
+    const productService: ProductService = req.scope.resolve("productService");
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await productVariantService
-      .withTransaction(transactionManager)
-      .create(id, validated)
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await productVariantService.withTransaction(transactionManager).create(id, validated);
+    });
 
-  const product = await productService.retrieve(id, {
-    select: defaultAdminProductFields,
-    relations: defaultAdminProductRelations,
-  })
+    const product = await productService.retrieve(id, {
+        select: defaultAdminProductFields,
+        relations: defaultAdminProductRelations
+    });
 
-  res.json({ product })
-}
+    res.json({ product });
+};
 
 class ProductVariantOptionReq {
-  @IsString()
-  value: string
+    @IsString()
+    value: string;
 
-  @IsString()
-  option_id: string
+    @IsString()
+    option_id: string;
 }
 
 export class AdminPostProductsProductVariantsReq {
-  @IsString()
-  title: string
+    @IsString()
+    title: string;
 
-  @IsString()
-  @IsOptional()
-  sku?: string
+    @IsString()
+    @IsOptional()
+    sku?: string;
 
-  @IsString()
-  @IsOptional()
-  ean?: string
+    @IsString()
+    @IsOptional()
+    ean?: string;
 
-  @IsString()
-  @IsOptional()
-  upc?: string
+    @IsString()
+    @IsOptional()
+    upc?: string;
 
-  @IsString()
-  @IsOptional()
-  barcode?: string
+    @IsString()
+    @IsOptional()
+    barcode?: string;
 
-  @IsString()
-  @IsOptional()
-  hs_code?: string
+    @IsString()
+    @IsOptional()
+    hs_code?: string;
 
-  @IsNumber()
-  @IsOptional()
-  inventory_quantity = 0
+    @IsNumber()
+    @IsOptional()
+    inventory_quantity = 0;
 
-  @IsBoolean()
-  @IsOptional()
-  allow_backorder?: boolean
+    @IsBoolean()
+    @IsOptional()
+    allow_backorder?: boolean;
 
-  @IsBoolean()
-  @IsOptional()
-  manage_inventory?: boolean
+    @IsBoolean()
+    @IsOptional()
+    manage_inventory?: boolean;
 
-  @IsNumber()
-  @IsOptional()
-  weight?: number
+    @IsNumber()
+    @IsOptional()
+    weight?: number;
 
-  @IsNumber()
-  @IsOptional()
-  length?: number
+    @IsNumber()
+    @IsOptional()
+    length?: number;
 
-  @IsNumber()
-  @IsOptional()
-  height?: number
+    @IsNumber()
+    @IsOptional()
+    height?: number;
 
-  @IsNumber()
-  @IsOptional()
-  width?: number
+    @IsNumber()
+    @IsOptional()
+    width?: number;
 
-  @IsString()
-  @IsOptional()
-  origin_country?: string
+    @IsString()
+    @IsOptional()
+    origin_country?: string;
 
-  @IsString()
-  @IsOptional()
-  mid_code?: string
+    @IsString()
+    @IsOptional()
+    mid_code?: string;
 
-  @IsString()
-  @IsOptional()
-  material?: string
+    @IsString()
+    @IsOptional()
+    material?: string;
 
-  @IsObject()
-  @IsOptional()
-  metadata?: object
+    @IsObject()
+    @IsOptional()
+    metadata?: object;
 
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => ProductVariantPricesCreateReq)
-  prices: ProductVariantPricesCreateReq[]
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => ProductVariantPricesCreateReq)
+    prices: ProductVariantPricesCreateReq[];
 
-  @IsOptional()
-  @Type(() => ProductVariantOptionReq)
-  @ValidateNested({ each: true })
-  @IsArray()
-  options: ProductVariantOptionReq[] = []
+    @IsOptional()
+    @Type(() => ProductVariantOptionReq)
+    @ValidateNested({ each: true })
+    @IsArray()
+    options: ProductVariantOptionReq[] = [];
 }

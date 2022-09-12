@@ -1,21 +1,21 @@
-import { IdMap } from "medusa-test-utils"
-import { request } from "../../../../../helpers/test-request"
-import { ProductVariantServiceMock } from "../../../../../services/__mocks__/product-variant"
+import { IdMap } from "medusa-test-utils";
+import { request } from "../../../../../helpers/test-request";
+import { ProductVariantServiceMock } from "../../../../../services/__mocks__/product-variant";
 
 describe("List variants", () => {
-  describe("list variants successfull", () => {
-    let subject
+    describe("list variants successfull", () => {
+        let subject;
 
-    beforeAll(async () => {
-      subject = await request("GET", `/store/variants`)
-    })
+        beforeAll(async () => {
+            subject = await request("GET", `/store/variants`);
+        });
 
-    beforeEach(async () => {
-      jest.clearAllMocks()
-    })
+        beforeEach(async () => {
+            jest.clearAllMocks();
+        });
 
-    it("returns variants", () => {
-      expect(subject.body.variants[0].id).toEqual(IdMap.getId("testVariant"))
-    })
-  })
-})
+        it("returns variants", () => {
+            expect(subject.body.variants[0].id).toEqual(IdMap.getId("testVariant"));
+        });
+    });
+});

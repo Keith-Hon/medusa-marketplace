@@ -1,8 +1,8 @@
-import { Type } from "class-transformer"
-import { ValidateNested, IsOptional, IsInt } from "class-validator"
-import ProductCollectionService from "../../../../services/product-collection"
-import { validator } from "../../../../utils/validator"
-import { DateComparisonOperator } from "../../../../types/common"
+import { Type } from "class-transformer";
+import { ValidateNested, IsOptional, IsInt } from "class-validator";
+import ProductCollectionService from "../../../../services/product-collection";
+import { validator } from "../../../../utils/validator";
+import { DateComparisonOperator } from "../../../../types/common";
 
 /**
  * @oas [get] /collections
@@ -25,44 +25,39 @@ import { DateComparisonOperator } from "../../../../types/common"
  *              $ref: "#/components/schemas/product_collection"
  */
 export default async (req, res) => {
-  const validated = await validator(StoreGetCollectionsParams, req.query)
-  const { limit, offset, ...filterableFields } = validated
+    const validated = await validator(StoreGetCollectionsParams, req.query);
+    const { limit, offset, ...filterableFields } = validated;
 
-  const productCollectionService: ProductCollectionService = req.scope.resolve(
-    "productCollectionService"
-  )
+    const productCollectionService: ProductCollectionService = req.scope.resolve("productCollectionService");
 
-  const listConfig = {
-    skip: offset,
-    take: limit,
-  }
+    const listConfig = {
+        skip: offset,
+        take: limit
+    };
 
-  const [collections, count] = await productCollectionService.listAndCount(
-    filterableFields,
-    listConfig
-  )
+    const [collections, count] = await productCollectionService.listAndCount(filterableFields, listConfig);
 
-  res.status(200).json({ collections, count, limit, offset })
-}
+    res.status(200).json({ collections, count, limit, offset });
+};
 
 export class StoreGetCollectionsParams {
-  @IsOptional()
-  @IsInt()
-  @Type(() => Number)
-  limit?: number = 10
+    @IsOptional()
+    @IsInt()
+    @Type(() => Number)
+    limit?: number = 10;
 
-  @IsOptional()
-  @IsInt()
-  @Type(() => Number)
-  offset?: number = 0
+    @IsOptional()
+    @IsInt()
+    @Type(() => Number)
+    offset?: number = 0;
 
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => DateComparisonOperator)
-  created_at?: DateComparisonOperator
+    @IsOptional()
+    @ValidateNested()
+    @Type(() => DateComparisonOperator)
+    created_at?: DateComparisonOperator;
 
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => DateComparisonOperator)
-  updated_at?: DateComparisonOperator
+    @IsOptional()
+    @ValidateNested()
+    @Type(() => DateComparisonOperator)
+    updated_at?: DateComparisonOperator;
 }

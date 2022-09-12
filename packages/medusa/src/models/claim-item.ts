@@ -1,92 +1,82 @@
-import {
-  BeforeInsert,
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  JoinTable,
-  ManyToMany,
-  ManyToOne,
-  OneToMany,
-} from "typeorm"
-import { DbAwareColumn } from "../utils/db-aware-column"
+import { BeforeInsert, Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany } from "typeorm";
+import { DbAwareColumn } from "../utils/db-aware-column";
 
-import { LineItem } from "./line-item"
-import { ClaimImage } from "./claim-image"
-import { ClaimTag } from "./claim-tag"
-import { ClaimOrder } from "./claim-order"
-import { ProductVariant } from "./product-variant"
-import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity"
-import { generateEntityId } from "../utils/generate-entity-id"
+import { LineItem } from "./line-item";
+import { ClaimImage } from "./claim-image";
+import { ClaimTag } from "./claim-tag";
+import { ClaimOrder } from "./claim-order";
+import { ProductVariant } from "./product-variant";
+import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity";
+import { generateEntityId } from "../utils/generate-entity-id";
 
 export enum ClaimReason {
-  MISSING_ITEM = "missing_item",
-  WRONG_ITEM = "wrong_item",
-  PRODUCTION_FAILURE = "production_failure",
-  OTHER = "other",
+    MISSING_ITEM = "missing_item",
+    WRONG_ITEM = "wrong_item",
+    PRODUCTION_FAILURE = "production_failure",
+    OTHER = "other"
 }
 
 @Entity()
 export class ClaimItem extends SoftDeletableEntity {
-  @OneToMany(() => ClaimImage, (ci) => ci.claim_item, {
-    cascade: ["insert", "remove"],
-  })
-  images: ClaimImage[]
+    @OneToMany(() => ClaimImage, (ci) => ci.claim_item, {
+        cascade: ["insert", "remove"]
+    })
+    images: ClaimImage[];
 
-  @Index()
-  @Column()
-  claim_order_id: string
+    @Index()
+    @Column()
+    claim_order_id: string;
 
-  @ManyToOne(() => ClaimOrder, (co) => co.claim_items)
-  @JoinColumn({ name: "claim_order_id" })
-  claim_order: ClaimOrder
+    @ManyToOne(() => ClaimOrder, (co) => co.claim_items)
+    @JoinColumn({ name: "claim_order_id" })
+    claim_order: ClaimOrder;
 
-  @Index()
-  @Column()
-  item_id: string
+    @Index()
+    @Column()
+    item_id: string;
 
-  @ManyToOne(() => LineItem)
-  @JoinColumn({ name: "item_id" })
-  item: LineItem
+    @ManyToOne(() => LineItem)
+    @JoinColumn({ name: "item_id" })
+    item: LineItem;
 
-  @Index()
-  @Column()
-  variant_id: string
+    @Index()
+    @Column()
+    variant_id: string;
 
-  @ManyToOne(() => ProductVariant)
-  @JoinColumn({ name: "variant_id" })
-  variant: ProductVariant
+    @ManyToOne(() => ProductVariant)
+    @JoinColumn({ name: "variant_id" })
+    variant: ProductVariant;
 
-  @DbAwareColumn({ type: "enum", enum: ClaimReason })
-  reason: ClaimReason
+    @DbAwareColumn({ type: "enum", enum: ClaimReason })
+    reason: ClaimReason;
 
-  @Column({ nullable: true })
-  note: string
+    @Column({ nullable: true })
+    note: string;
 
-  @Column({ type: "int" })
-  quantity: number
+    @Column({ type: "int" })
+    quantity: number;
 
-  @ManyToMany(() => ClaimTag, { cascade: ["insert"] })
-  @JoinTable({
-    name: "claim_item_tags",
-    joinColumn: {
-      name: "item_id",
-      referencedColumnName: "id",
-    },
-    inverseJoinColumn: {
-      name: "tag_id",
-      referencedColumnName: "id",
-    },
-  })
-  tags: ClaimTag[]
+    @ManyToMany(() => ClaimTag, { cascade: ["insert"] })
+    @JoinTable({
+        name: "claim_item_tags",
+        joinColumn: {
+            name: "item_id",
+            referencedColumnName: "id"
+        },
+        inverseJoinColumn: {
+            name: "tag_id",
+            referencedColumnName: "id"
+        }
+    })
+    tags: ClaimTag[];
 
-  @DbAwareColumn({ type: "jsonb", nullable: true })
-  metadata: Record<string, unknown>
+    @DbAwareColumn({ type: "jsonb", nullable: true })
+    metadata: Record<string, unknown>;
 
-  @BeforeInsert()
-  private beforeInsert(): void {
-    this.id = generateEntityId(this.id, "citm")
-  }
+    @BeforeInsert()
+    private beforeInsert(): void {
+        this.id = generateEntityId(this.id, "citm");
+    }
 }
 
 /**

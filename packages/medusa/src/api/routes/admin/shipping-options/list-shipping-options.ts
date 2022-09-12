@@ -1,9 +1,9 @@
-import { Transform } from "class-transformer"
-import { IsBoolean, IsOptional, IsString } from "class-validator"
-import { defaultFields, defaultRelations } from "."
-import { PricingService } from "../../../../services"
-import { validator } from "../../../../utils/validator"
-import { optionalBooleanMapper } from "../../../../utils/validators/is-boolean"
+import { Transform } from "class-transformer";
+import { IsBoolean, IsOptional, IsString } from "class-validator";
+import { defaultFields, defaultRelations } from ".";
+import { PricingService } from "../../../../services";
+import { validator } from "../../../../utils/validator";
+import { optionalBooleanMapper } from "../../../../utils/validators/is-boolean";
 
 /**
  * @oas [get] /shipping-options
@@ -45,35 +45,32 @@ import { optionalBooleanMapper } from "../../../../utils/validators/is-boolean"
  *                 $ref: "#/components/schemas/shipping_option"
  */
 export default async (req, res) => {
-  const validatedParams = await validator(
-    AdminGetShippingOptionsParams,
-    req.query
-  )
+    const validatedParams = await validator(AdminGetShippingOptionsParams, req.query);
 
-  const optionService = req.scope.resolve("shippingOptionService")
-  const pricingService: PricingService = req.scope.resolve("pricingService")
-  const [data, count] = await optionService.listAndCount(validatedParams, {
-    select: defaultFields,
-    relations: defaultRelations,
-  })
+    const optionService = req.scope.resolve("shippingOptionService");
+    const pricingService: PricingService = req.scope.resolve("pricingService");
+    const [data, count] = await optionService.listAndCount(validatedParams, {
+        select: defaultFields,
+        relations: defaultRelations
+    });
 
-  const options = await pricingService.setShippingOptionPrices(data)
+    const options = await pricingService.setShippingOptionPrices(data);
 
-  res.status(200).json({ shipping_options: options, count })
-}
+    res.status(200).json({ shipping_options: options, count });
+};
 
 export class AdminGetShippingOptionsParams {
-  @IsOptional()
-  @IsString()
-  region_id?: string
+    @IsOptional()
+    @IsString()
+    region_id?: string;
 
-  @IsOptional()
-  @IsBoolean()
-  @Transform(({ value }) => optionalBooleanMapper.get(value))
-  is_return?: boolean
+    @IsOptional()
+    @IsBoolean()
+    @Transform(({ value }) => optionalBooleanMapper.get(value))
+    is_return?: boolean;
 
-  @IsOptional()
-  @IsBoolean()
-  @Transform(({ value }) => optionalBooleanMapper.get(value))
-  admin_only?: boolean
+    @IsOptional()
+    @IsBoolean()
+    @Transform(({ value }) => optionalBooleanMapper.get(value))
+    admin_only?: boolean;
 }

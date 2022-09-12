@@ -1,7 +1,7 @@
-import { IsBooleanString, IsOptional, IsString } from "class-validator"
-import { PricingService, ProductService } from "../../../../services"
-import ShippingOptionService from "../../../../services/shipping-option"
-import { validator } from "../../../../utils/validator"
+import { IsBooleanString, IsOptional, IsString } from "class-validator";
+import { PricingService, ProductService } from "../../../../services";
+import ShippingOptionService from "../../../../services/shipping-option";
+import { validator } from "../../../../utils/validator";
 
 /**
  * @oas [get] /shipping-options
@@ -27,54 +27,51 @@ import { validator } from "../../../../utils/validator"
  *                 $ref: "#/components/schemas/shipping_option"
  */
 export default async (req, res) => {
-  const validated = await validator(StoreGetShippingOptionsParams, req.query)
+    const validated = await validator(StoreGetShippingOptionsParams, req.query);
 
-  const productIds =
-    (validated.product_ids && validated.product_ids.split(",")) || []
-  const regionId = validated.region_id
-  const productService: ProductService = req.scope.resolve("productService")
-  const pricingService: PricingService = req.scope.resolve("pricingService")
-  const shippingOptionService: ShippingOptionService = req.scope.resolve(
-    "shippingOptionService"
-  )
+    const productIds = (validated.product_ids && validated.product_ids.split(",")) || [];
+    const regionId = validated.region_id;
+    const productService: ProductService = req.scope.resolve("productService");
+    const pricingService: PricingService = req.scope.resolve("pricingService");
+    const shippingOptionService: ShippingOptionService = req.scope.resolve("shippingOptionService");
 
-  // should be selector
-  const query: Record<string, unknown> = {}
+    // should be selector
+    const query: Record<string, unknown> = {};
 
-  if ("is_return" in req.query) {
-    query.is_return = validated.is_return === "true"
-  }
+    if ("is_return" in req.query) {
+        query.is_return = validated.is_return === "true";
+    }
 
-  if (regionId) {
-    query.region_id = regionId
-  }
+    if (regionId) {
+        query.region_id = regionId;
+    }
 
-  query.admin_only = false
+    query.admin_only = false;
 
-  if (productIds.length) {
-    const prods = await productService.list({ id: productIds })
-    query.profile_id = prods.map((p) => p.profile_id)
-  }
+    if (productIds.length) {
+        const prods = await productService.list({ id: productIds });
+        query.profile_id = prods.map((p) => p.profile_id);
+    }
 
-  const options = await shippingOptionService.list(query, {
-    relations: ["requirements"],
-  })
+    const options = await shippingOptionService.list(query, {
+        relations: ["requirements"]
+    });
 
-  const data = await pricingService.setShippingOptionPrices(options)
+    const data = await pricingService.setShippingOptionPrices(options);
 
-  res.status(200).json({ shipping_options: data })
-}
+    res.status(200).json({ shipping_options: data });
+};
 
 export class StoreGetShippingOptionsParams {
-  @IsOptional()
-  @IsString()
-  product_ids?: string
+    @IsOptional()
+    @IsString()
+    product_ids?: string;
 
-  @IsOptional()
-  @IsString()
-  region_id?: string
+    @IsOptional()
+    @IsString()
+    region_id?: string;
 
-  @IsOptional()
-  @IsBooleanString()
-  is_return?: string
+    @IsOptional()
+    @IsBooleanString()
+    is_return?: string;
 }

@@ -1,5 +1,5 @@
-import { DraftOrderService } from "../../../../services"
-import { EntityManager } from "typeorm"
+import { DraftOrderService } from "../../../../services";
+import { EntityManager } from "typeorm";
 /**
  * @oas [delete] /draft-orders/{id}
  * operationId: DeleteDraftOrdersDraftOrder
@@ -27,21 +27,18 @@ import { EntityManager } from "typeorm"
  *               type: boolean
  */
 export default async (req, res) => {
-  const { id } = req.params
+    const { id } = req.params;
 
-  const draftOrderService: DraftOrderService =
-    req.scope.resolve("draftOrderService")
+    const draftOrderService: DraftOrderService = req.scope.resolve("draftOrderService");
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await draftOrderService
-      .withTransaction(transactionManager)
-      .delete(id)
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await draftOrderService.withTransaction(transactionManager).delete(id);
+    });
 
-  res.json({
-    id,
-    object: "draft-order",
-    deleted: true,
-  })
-}
+    res.json({
+        id,
+        object: "draft-order",
+        deleted: true
+    });
+};

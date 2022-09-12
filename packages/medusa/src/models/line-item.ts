@@ -1,24 +1,15 @@
-import {
-  BeforeInsert,
-  Check,
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-} from "typeorm"
-import { DbAwareColumn } from "../utils/db-aware-column"
+import { BeforeInsert, Check, Column, Entity, Index, JoinColumn, ManyToOne, OneToMany } from "typeorm";
+import { DbAwareColumn } from "../utils/db-aware-column";
 
-import { LineItemTaxLine } from "./line-item-tax-line"
-import { Swap } from "./swap"
-import { Cart } from "./cart"
-import { Order } from "./order"
-import { ClaimOrder } from "./claim-order"
-import { ProductVariant } from "./product-variant"
-import { LineItemAdjustment } from "./line-item-adjustment"
-import { BaseEntity } from "../interfaces/models/base-entity"
-import { generateEntityId } from "../utils/generate-entity-id"
+import { LineItemTaxLine } from "./line-item-tax-line";
+import { Swap } from "./swap";
+import { Cart } from "./cart";
+import { Order } from "./order";
+import { ClaimOrder } from "./claim-order";
+import { ProductVariant } from "./product-variant";
+import { LineItemAdjustment } from "./line-item-adjustment";
+import { BaseEntity } from "../interfaces/models/base-entity";
+import { generateEntityId } from "../utils/generate-entity-id";
 
 @Check(`"fulfilled_quantity" <= "quantity"`)
 @Check(`"shipped_quantity" <= "fulfilled_quantity"`)
@@ -26,109 +17,109 @@ import { generateEntityId } from "../utils/generate-entity-id"
 @Check(`"quantity" > 0`)
 @Entity()
 export class LineItem extends BaseEntity {
-  @Index()
-  @Column({ nullable: true })
-  cart_id: string
+    @Index()
+    @Column({ nullable: true })
+    cart_id: string;
 
-  @ManyToOne(() => Cart, (cart) => cart.items)
-  @JoinColumn({ name: "cart_id" })
-  cart: Cart
+    @ManyToOne(() => Cart, (cart) => cart.items)
+    @JoinColumn({ name: "cart_id" })
+    cart: Cart;
 
-  @Index()
-  @Column({ nullable: true })
-  order_id: string
+    @Index()
+    @Column({ nullable: true })
+    order_id: string;
 
-  @ManyToOne(() => Order, (order) => order.items)
-  @JoinColumn({ name: "order_id" })
-  order: Order
+    @ManyToOne(() => Order, (order) => order.items)
+    @JoinColumn({ name: "order_id" })
+    order: Order;
 
-  @Index()
-  @Column({ nullable: true })
-  swap_id: string
+    @Index()
+    @Column({ nullable: true })
+    swap_id: string;
 
-  @ManyToOne(() => Swap, (swap) => swap.additional_items)
-  @JoinColumn({ name: "swap_id" })
-  swap: Swap
+    @ManyToOne(() => Swap, (swap) => swap.additional_items)
+    @JoinColumn({ name: "swap_id" })
+    swap: Swap;
 
-  @Index()
-  @Column({ nullable: true })
-  claim_order_id: string
+    @Index()
+    @Column({ nullable: true })
+    claim_order_id: string;
 
-  @ManyToOne(() => ClaimOrder, (co) => co.additional_items)
-  @JoinColumn({ name: "claim_order_id" })
-  claim_order: ClaimOrder
+    @ManyToOne(() => ClaimOrder, (co) => co.additional_items)
+    @JoinColumn({ name: "claim_order_id" })
+    claim_order: ClaimOrder;
 
-  @OneToMany(() => LineItemTaxLine, (tl) => tl.item, { cascade: ["insert"] })
-  tax_lines: LineItemTaxLine[]
+    @OneToMany(() => LineItemTaxLine, (tl) => tl.item, { cascade: ["insert"] })
+    tax_lines: LineItemTaxLine[];
 
-  @OneToMany(() => LineItemAdjustment, (lia) => lia.item, {
-    cascade: ["insert"],
-  })
-  adjustments: LineItemAdjustment[]
+    @OneToMany(() => LineItemAdjustment, (lia) => lia.item, {
+        cascade: ["insert"]
+    })
+    adjustments: LineItemAdjustment[];
 
-  @Column()
-  title: string
+    @Column()
+    title: string;
 
-  @Column({ nullable: true })
-  description: string
+    @Column({ nullable: true })
+    description: string;
 
-  @Column({ type: "text", nullable: true })
-  thumbnail: string | null
+    @Column({ type: "text", nullable: true })
+    thumbnail: string | null;
 
-  @Column({ default: false })
-  is_return: boolean
+    @Column({ default: false })
+    is_return: boolean;
 
-  @Column({ default: false })
-  is_giftcard: boolean
+    @Column({ default: false })
+    is_giftcard: boolean;
 
-  @Column({ default: true })
-  should_merge: boolean
+    @Column({ default: true })
+    should_merge: boolean;
 
-  @Column({ default: true })
-  allow_discounts: boolean
+    @Column({ default: true })
+    allow_discounts: boolean;
 
-  @Column({ nullable: true })
-  has_shipping: boolean
+    @Column({ nullable: true })
+    has_shipping: boolean;
 
-  @Column({ type: "int" })
-  unit_price: number
+    @Column({ type: "int" })
+    unit_price: number;
 
-  @Index()
-  @Column({ nullable: true })
-  variant_id: string
+    @Index()
+    @Column({ nullable: true })
+    variant_id: string;
 
-  @ManyToOne(() => ProductVariant, { eager: true })
-  @JoinColumn({ name: "variant_id" })
-  variant: ProductVariant
+    @ManyToOne(() => ProductVariant, { eager: true })
+    @JoinColumn({ name: "variant_id" })
+    variant: ProductVariant;
 
-  @Column({ type: "int" })
-  quantity: number
+    @Column({ type: "int" })
+    quantity: number;
 
-  @Column({ nullable: true, type: "int" })
-  fulfilled_quantity: number
+    @Column({ nullable: true, type: "int" })
+    fulfilled_quantity: number;
 
-  @Column({ nullable: true, type: "int" })
-  returned_quantity: number
+    @Column({ nullable: true, type: "int" })
+    returned_quantity: number;
 
-  @Column({ nullable: true, type: "int" })
-  shipped_quantity: number
+    @Column({ nullable: true, type: "int" })
+    shipped_quantity: number;
 
-  @DbAwareColumn({ type: "jsonb", nullable: true })
-  metadata: Record<string, unknown>
+    @DbAwareColumn({ type: "jsonb", nullable: true })
+    metadata: Record<string, unknown>;
 
-  refundable?: number | null
-  subtotal?: number | null
-  tax_total?: number | null
-  total?: number | null
-  original_total?: number | null
-  original_tax_total?: number | null
-  discount_total?: number | null
-  gift_card_total?: number | null
+    refundable?: number | null;
+    subtotal?: number | null;
+    tax_total?: number | null;
+    total?: number | null;
+    original_total?: number | null;
+    original_tax_total?: number | null;
+    discount_total?: number | null;
+    gift_card_total?: number | null;
 
-  @BeforeInsert()
-  private beforeInsert(): void {
-    this.id = generateEntityId(this.id, "item")
-  }
+    @BeforeInsert()
+    private beforeInsert(): void {
+        this.id = generateEntityId(this.id, "item");
+    }
 }
 
 /**

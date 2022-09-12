@@ -1,80 +1,70 @@
-import {
-  BeforeInsert,
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  JoinTable,
-  ManyToMany,
-  OneToMany,
-  OneToOne,
-} from "typeorm"
+import { BeforeInsert, Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne } from "typeorm";
 
-import { Address } from "./address"
-import { CustomerGroup } from "./customer-group"
-import { Order } from "./order"
-import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity"
-import { DbAwareColumn } from "../utils/db-aware-column"
-import { generateEntityId } from "../utils/generate-entity-id"
+import { Address } from "./address";
+import { CustomerGroup } from "./customer-group";
+import { Order } from "./order";
+import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity";
+import { DbAwareColumn } from "../utils/db-aware-column";
+import { generateEntityId } from "../utils/generate-entity-id";
 
 @Entity()
 export class Customer extends SoftDeletableEntity {
-  @Index({ unique: true })
-  @Column()
-  email: string
+    @Index({ unique: true })
+    @Column()
+    email: string;
 
-  @Column({ nullable: true })
-  first_name: string
+    @Column({ nullable: true })
+    first_name: string;
 
-  @Column({ nullable: true })
-  last_name: string
+    @Column({ nullable: true })
+    last_name: string;
 
-  @Index()
-  @Column({ nullable: true })
-  billing_address_id: string | null
+    @Index()
+    @Column({ nullable: true })
+    billing_address_id: string | null;
 
-  @OneToOne(() => Address)
-  @JoinColumn({ name: "billing_address_id" })
-  billing_address: Address
+    @OneToOne(() => Address)
+    @JoinColumn({ name: "billing_address_id" })
+    billing_address: Address;
 
-  @OneToMany(() => Address, (address) => address.customer)
-  shipping_addresses: Address[]
+    @OneToMany(() => Address, (address) => address.customer)
+    shipping_addresses: Address[];
 
-  @Column({ nullable: true, select: false })
-  password_hash: string
+    @Column({ nullable: true, select: false })
+    password_hash: string;
 
-  @Column({ nullable: true })
-  phone: string
+    @Column({ nullable: true })
+    phone: string;
 
-  @Column({ default: false })
-  has_account: boolean
+    @Column({ default: false })
+    has_account: boolean;
 
-  @OneToMany(() => Order, (order) => order.customer)
-  orders: Order[]
+    @OneToMany(() => Order, (order) => order.customer)
+    orders: Order[];
 
-  @JoinTable({
-    name: "customer_group_customers",
-    inverseJoinColumn: {
-      name: "customer_group_id",
-      referencedColumnName: "id",
-    },
-    joinColumn: {
-      name: "customer_id",
-      referencedColumnName: "id",
-    },
-  })
-  @ManyToMany(() => CustomerGroup, (cg) => cg.customers, {
-    onDelete: "CASCADE",
-  })
-  groups: CustomerGroup[]
+    @JoinTable({
+        name: "customer_group_customers",
+        inverseJoinColumn: {
+            name: "customer_group_id",
+            referencedColumnName: "id"
+        },
+        joinColumn: {
+            name: "customer_id",
+            referencedColumnName: "id"
+        }
+    })
+    @ManyToMany(() => CustomerGroup, (cg) => cg.customers, {
+        onDelete: "CASCADE"
+    })
+    groups: CustomerGroup[];
 
-  @DbAwareColumn({ type: "jsonb", nullable: true })
-  metadata: Record<string, unknown>
+    @DbAwareColumn({ type: "jsonb", nullable: true })
+    metadata: Record<string, unknown>;
 
-  @BeforeInsert()
-  private beforeInsert(): void {
-    this.id = generateEntityId(this.id, "cus")
-  }
+    @BeforeInsert()
+    private beforeInsert(): void {
+        this.id = generateEntityId(this.id, "cus");
+    }
 }
 
 /**

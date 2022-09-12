@@ -1,7 +1,7 @@
-import {MigrationInterface, QueryRunner} from "typeorm";
+import { MigrationInterface, QueryRunner } from "typeorm";
 
 export class enforceUniqueness1631261634964 implements MigrationInterface {
-    name = 'enforceUniqueness1631261634964'
+    name = "enforceUniqueness1631261634964";
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`DROP INDEX "IDX_e08af711f3493df1e921c4c9ef"`);
@@ -21,7 +21,6 @@ export class enforceUniqueness1631261634964 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-
         await queryRunner.query(`DROP INDEX "IDX_f65bf52e2239ace276ece2b2f4"`);
         await queryRunner.query(`DROP INDEX "IDX_aa16f61348be02dd07ce3fc54e"`);
         await queryRunner.query(`DROP INDEX "IDX_b5b6225539ee8501082fbc0714"`);
@@ -37,5 +36,4 @@ export class enforceUniqueness1631261634964 implements MigrationInterface {
         await queryRunner.query(`CREATE UNIQUE INDEX "IDX_77c4073c30ea7793f484750529" ON "product" ("handle") WHERE (deleted_at IS NOT NULL)`);
         await queryRunner.query(`CREATE UNIQUE INDEX "IDX_e08af711f3493df1e921c4c9ef" ON "product_collection" ("handle") WHERE (deleted_at IS NOT NULL)`);
     }
-
 }

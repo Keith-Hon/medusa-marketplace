@@ -1,5 +1,5 @@
-import { TaxRateService } from "../../../../services"
-import { EntityManager } from "typeorm"
+import { TaxRateService } from "../../../../services";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [delete] /tax-rates/{id}
@@ -28,17 +28,17 @@ import { EntityManager } from "typeorm"
  *               type: boolean
  */
 export default async (req, res) => {
-  const { id } = req.params
-  const taxRateService: TaxRateService = req.scope.resolve("taxRateService")
+    const { id } = req.params;
+    const taxRateService: TaxRateService = req.scope.resolve("taxRateService");
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await taxRateService.withTransaction(transactionManager).delete(id)
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await taxRateService.withTransaction(transactionManager).delete(id);
+    });
 
-  res.json({
-    id: id,
-    object: "tax-rate",
-    deleted: true,
-  })
-}
+    res.json({
+        id: id,
+        object: "tax-rate",
+        deleted: true
+    });
+};

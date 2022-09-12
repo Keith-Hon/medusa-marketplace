@@ -1,4 +1,4 @@
-import { defaultAdminGiftCardFields, defaultAdminGiftCardRelations } from "./"
+import { defaultAdminGiftCardFields, defaultAdminGiftCardRelations } from "./";
 
 /**
  * @oas [get] /gift-cards/{id}
@@ -21,13 +21,13 @@ import { defaultAdminGiftCardFields, defaultAdminGiftCardRelations } from "./"
  *               $ref: "#/components/schemas/gift_card"
  */
 export default async (req, res) => {
-  const { id } = req.params
+    const { id } = req.params;
 
-  const giftCardService = req.scope.resolve("giftCardService")
-  const giftCard = await giftCardService.retrieve(id, {
-    select: defaultAdminGiftCardFields,
-    relations: defaultAdminGiftCardRelations,
-  })
+    const giftCardService = req.scope.resolve("giftCardService");
+    const giftCard = await giftCardService.retrieve(id, {
+        select: defaultAdminGiftCardFields,
+        relations: defaultAdminGiftCardRelations
+    });
 
-  res.status(200).json({ gift_card: giftCard })
-}
+    res.status(200).json({ gift_card: giftCard });
+};

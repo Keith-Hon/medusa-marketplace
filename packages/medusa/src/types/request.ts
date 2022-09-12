@@ -1,3 +1,3 @@
 export type RequestContext = {
-  ip: string
-}
+    ip: string;
+};

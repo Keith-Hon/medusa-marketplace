@@ -1,83 +1,75 @@
-import {
-  BeforeInsert,
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  OneToOne,
-} from "typeorm"
-import { DbAwareColumn, resolveDbType } from "../utils/db-aware-column"
+import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne, OneToOne } from "typeorm";
+import { DbAwareColumn, resolveDbType } from "../utils/db-aware-column";
 
-import { Swap } from "./swap"
-import { Currency } from "./currency"
-import { Cart } from "./cart"
-import { Order } from "./order"
-import { BaseEntity } from "../interfaces/models/base-entity"
-import { generateEntityId } from "../utils/generate-entity-id"
+import { Swap } from "./swap";
+import { Currency } from "./currency";
+import { Cart } from "./cart";
+import { Order } from "./order";
+import { BaseEntity } from "../interfaces/models/base-entity";
+import { generateEntityId } from "../utils/generate-entity-id";
 
 @Entity()
 export class Payment extends BaseEntity {
-  @Index()
-  @Column({ nullable: true })
-  swap_id: string
+    @Index()
+    @Column({ nullable: true })
+    swap_id: string;
 
-  @OneToOne(() => Swap)
-  @JoinColumn({ name: "swap_id" })
-  swap: Swap
+    @OneToOne(() => Swap)
+    @JoinColumn({ name: "swap_id" })
+    swap: Swap;
 
-  @Index()
-  @Column({ nullable: true })
-  cart_id: string
+    @Index()
+    @Column({ nullable: true })
+    cart_id: string;
 
-  @OneToOne(() => Cart)
-  @JoinColumn({ name: "cart_id" })
-  cart: Cart
+    @OneToOne(() => Cart)
+    @JoinColumn({ name: "cart_id" })
+    cart: Cart;
 
-  @Index()
-  @Column({ nullable: true })
-  order_id: string
+    @Index()
+    @Column({ nullable: true })
+    order_id: string;
 
-  @ManyToOne(() => Order, (order) => order.payments)
-  @JoinColumn({ name: "order_id" })
-  order: Order
+    @ManyToOne(() => Order, (order) => order.payments)
+    @JoinColumn({ name: "order_id" })
+    order: Order;
 
-  @Column({ type: "int" })
-  amount: number
+    @Column({ type: "int" })
+    amount: number;
 
-  @Column()
-  currency_code: string
+    @Column()
+    currency_code: string;
 
-  @ManyToOne(() => Currency)
-  @JoinColumn({ name: "currency_code", referencedColumnName: "code" })
-  currency: Currency
+    @ManyToOne(() => Currency)
+    @JoinColumn({ name: "currency_code", referencedColumnName: "code" })
+    currency: Currency;
 
-  @Column({ type: "int", default: 0 })
-  amount_refunded: number
+    @Column({ type: "int", default: 0 })
+    amount_refunded: number;
 
-  @Index()
-  @Column()
-  provider_id: string
+    @Index()
+    @Column()
+    provider_id: string;
 
-  @DbAwareColumn({ type: "jsonb" })
-  data: Record<string, unknown>
+    @DbAwareColumn({ type: "jsonb" })
+    data: Record<string, unknown>;
 
-  @Column({ type: resolveDbType("timestamptz"), nullable: true })
-  captured_at: Date
+    @Column({ type: resolveDbType("timestamptz"), nullable: true })
+    captured_at: Date;
 
-  @Column({ type: resolveDbType("timestamptz"), nullable: true })
-  canceled_at: Date
+    @Column({ type: resolveDbType("timestamptz"), nullable: true })
+    canceled_at: Date;
 
-  @DbAwareColumn({ type: "jsonb", nullable: true })
-  metadata: Record<string, unknown>
+    @DbAwareColumn({ type: "jsonb", nullable: true })
+    metadata: Record<string, unknown>;
 
-  @Column({ nullable: true })
-  idempotency_key: string
+    @Column({ nullable: true })
+    idempotency_key: string;
 
-  @BeforeInsert()
-  private beforeInsert(): void {
-    this.id = generateEntityId(this.id, "pay")
-  }
+    @BeforeInsert()
+    private beforeInsert(): void {
+        this.id = generateEntityId(this.id, "pay");
+    }
 }
 
 /**

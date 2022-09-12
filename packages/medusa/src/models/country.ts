@@ -1,41 +1,34 @@
-import {
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from "typeorm"
-import { Region } from "./region"
+import { Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Region } from "./region";
 
 @Entity()
 export class Country {
-  @PrimaryGeneratedColumn()
-  id: number
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @Index({ unique: true })
-  @Column()
-  iso_2: string
+    @Index({ unique: true })
+    @Column()
+    iso_2: string;
 
-  @Column()
-  iso_3: string
+    @Column()
+    iso_3: string;
 
-  @Column()
-  num_code: number
+    @Column()
+    num_code: number;
 
-  @Column()
-  name: string
+    @Column()
+    name: string;
 
-  @Column()
-  display_name: string
+    @Column()
+    display_name: string;
 
-  @Index()
-  @Column({ nullable: true })
-  region_id: string | null
+    @Index()
+    @Column({ nullable: true })
+    region_id: string | null;
 
-  @ManyToOne(() => Region, (r) => r.countries)
-  @JoinColumn({ name: "region_id" })
-  region: Region
+    @ManyToOne(() => Region, (r) => r.countries)
+    @JoinColumn({ name: "region_id" })
+    region: Region;
 }
 
 /**

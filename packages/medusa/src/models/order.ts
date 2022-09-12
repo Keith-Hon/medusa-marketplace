@@ -1,268 +1,246 @@
-import {
-  BeforeInsert,
-  Column,
-  Entity,
-  Generated,
-  Index,
-  JoinColumn,
-  JoinTable,
-  ManyToMany,
-  ManyToOne,
-  OneToMany,
-  OneToOne,
-} from "typeorm"
-import { BaseEntity } from "../interfaces/models/base-entity"
-import {
-  DbAwareColumn,
-  resolveDbGenerationStrategy,
-  resolveDbType,
-} from "../utils/db-aware-column"
-import { manualAutoIncrement } from "../utils/manual-auto-increment"
-import { Address } from "./address"
-import { Cart } from "./cart"
-import { ClaimOrder } from "./claim-order"
-import { Currency } from "./currency"
-import { Customer } from "./customer"
-import { Discount } from "./discount"
-import { DraftOrder } from "./draft-order"
-import { Fulfillment } from "./fulfillment"
-import { GiftCard } from "./gift-card"
-import { GiftCardTransaction } from "./gift-card-transaction"
-import { LineItem } from "./line-item"
-import { Payment } from "./payment"
-import { Refund } from "./refund"
-import { Region } from "./region"
-import { Return } from "./return"
-import { ShippingMethod } from "./shipping-method"
-import { Swap } from "./swap"
-import { generateEntityId } from "../utils/generate-entity-id"
-import {
-  FeatureFlagColumn,
-  FeatureFlagDecorators,
-} from "../utils/feature-flag-decorators"
-import { SalesChannel } from "./sales-channel"
+import { BeforeInsert, Column, Entity, Generated, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne } from "typeorm";
+import { BaseEntity } from "../interfaces/models/base-entity";
+import { DbAwareColumn, resolveDbGenerationStrategy, resolveDbType } from "../utils/db-aware-column";
+import { manualAutoIncrement } from "../utils/manual-auto-increment";
+import { Address } from "./address";
+import { Cart } from "./cart";
+import { ClaimOrder } from "./claim-order";
+import { Currency } from "./currency";
+import { Customer } from "./customer";
+import { Discount } from "./discount";
+import { DraftOrder } from "./draft-order";
+import { Fulfillment } from "./fulfillment";
+import { GiftCard } from "./gift-card";
+import { GiftCardTransaction } from "./gift-card-transaction";
+import { LineItem } from "./line-item";
+import { Payment } from "./payment";
+import { Refund } from "./refund";
+import { Region } from "./region";
+import { Return } from "./return";
+import { ShippingMethod } from "./shipping-method";
+import { Swap } from "./swap";
+import { generateEntityId } from "../utils/generate-entity-id";
+import { FeatureFlagColumn, FeatureFlagDecorators } from "../utils/feature-flag-decorators";
+import { SalesChannel } from "./sales-channel";
 
 export enum OrderStatus {
-  PENDING = "pending",
-  COMPLETED = "completed",
-  ARCHIVED = "archived",
-  CANCELED = "canceled",
-  REQUIRES_ACTION = "requires_action",
+    PENDING = "pending",
+    COMPLETED = "completed",
+    ARCHIVED = "archived",
+    CANCELED = "canceled",
+    REQUIRES_ACTION = "requires_action"
 }
 
 export enum FulfillmentStatus {
-  NOT_FULFILLED = "not_fulfilled",
-  PARTIALLY_FULFILLED = "partially_fulfilled",
-  FULFILLED = "fulfilled",
-  PARTIALLY_SHIPPED = "partially_shipped",
-  SHIPPED = "shipped",
-  PARTIALLY_RETURNED = "partially_returned",
-  RETURNED = "returned",
-  CANCELED = "canceled",
-  REQUIRES_ACTION = "requires_action",
+    NOT_FULFILLED = "not_fulfilled",
+    PARTIALLY_FULFILLED = "partially_fulfilled",
+    FULFILLED = "fulfilled",
+    PARTIALLY_SHIPPED = "partially_shipped",
+    SHIPPED = "shipped",
+    PARTIALLY_RETURNED = "partially_returned",
+    RETURNED = "returned",
+    CANCELED = "canceled",
+    REQUIRES_ACTION = "requires_action"
 }
 
 export enum PaymentStatus {
-  NOT_PAID = "not_paid",
-  AWAITING = "awaiting",
-  CAPTURED = "captured",
-  PARTIALLY_REFUNDED = "partially_refunded",
-  REFUNDED = "refunded",
-  CANCELED = "canceled",
-  REQUIRES_ACTION = "requires_action",
+    NOT_PAID = "not_paid",
+    AWAITING = "awaiting",
+    CAPTURED = "captured",
+    PARTIALLY_REFUNDED = "partially_refunded",
+    REFUNDED = "refunded",
+    CANCELED = "canceled",
+    REQUIRES_ACTION = "requires_action"
 }
 
 @Entity()
 export class Order extends BaseEntity {
-  readonly object = "order"
+    readonly object = "order";
 
-  @DbAwareColumn({ type: "enum", enum: OrderStatus, default: "pending" })
-  status: OrderStatus
+    @DbAwareColumn({ type: "enum", enum: OrderStatus, default: "pending" })
+    status: OrderStatus;
 
-  @DbAwareColumn({
-    type: "enum",
-    enum: FulfillmentStatus,
-    default: "not_fulfilled",
-  })
-  fulfillment_status: FulfillmentStatus
+    @DbAwareColumn({
+        type: "enum",
+        enum: FulfillmentStatus,
+        default: "not_fulfilled"
+    })
+    fulfillment_status: FulfillmentStatus;
 
-  @DbAwareColumn({ type: "enum", enum: PaymentStatus, default: "not_paid" })
-  payment_status: PaymentStatus
+    @DbAwareColumn({ type: "enum", enum: PaymentStatus, default: "not_paid" })
+    payment_status: PaymentStatus;
 
-  @Index()
-  @Column()
-  @Generated(resolveDbGenerationStrategy("increment"))
-  display_id: number
+    @Index()
+    @Column()
+    @Generated(resolveDbGenerationStrategy("increment"))
+    display_id: number;
 
-  @Index()
-  @Column({ nullable: true })
-  cart_id: string
+    @Index()
+    @Column({ nullable: true })
+    cart_id: string;
 
-  @OneToOne(() => Cart)
-  @JoinColumn({ name: "cart_id" })
-  cart: Cart
+    @OneToOne(() => Cart)
+    @JoinColumn({ name: "cart_id" })
+    cart: Cart;
 
-  @Index()
-  @Column()
-  customer_id: string
+    @Index()
+    @Column()
+    customer_id: string;
 
-  @ManyToOne(() => Customer, { cascade: ["insert"] })
-  @JoinColumn({ name: "customer_id" })
-  customer: Customer
+    @ManyToOne(() => Customer, { cascade: ["insert"] })
+    @JoinColumn({ name: "customer_id" })
+    customer: Customer;
 
-  @Column()
-  email: string
+    @Column()
+    email: string;
 
-  @Index()
-  @Column({ nullable: true })
-  billing_address_id: string
+    @Index()
+    @Column({ nullable: true })
+    billing_address_id: string;
 
-  @ManyToOne(() => Address, { cascade: ["insert"] })
-  @JoinColumn({ name: "billing_address_id" })
-  billing_address: Address
+    @ManyToOne(() => Address, { cascade: ["insert"] })
+    @JoinColumn({ name: "billing_address_id" })
+    billing_address: Address;
 
-  @Index()
-  @Column({ nullable: true })
-  shipping_address_id: string
+    @Index()
+    @Column({ nullable: true })
+    shipping_address_id: string;
 
-  @ManyToOne(() => Address, { cascade: ["insert"] })
-  @JoinColumn({ name: "shipping_address_id" })
-  shipping_address: Address
+    @ManyToOne(() => Address, { cascade: ["insert"] })
+    @JoinColumn({ name: "shipping_address_id" })
+    shipping_address: Address;
 
-  @Index()
-  @Column()
-  region_id: string
+    @Index()
+    @Column()
+    region_id: string;
 
-  @ManyToOne(() => Region)
-  @JoinColumn({ name: "region_id" })
-  region: Region
+    @ManyToOne(() => Region)
+    @JoinColumn({ name: "region_id" })
+    region: Region;
 
-  @Column()
-  currency_code: string
+    @Column()
+    currency_code: string;
 
-  @ManyToOne(() => Currency)
-  @JoinColumn({ name: "currency_code", referencedColumnName: "code" })
-  currency: Currency
+    @ManyToOne(() => Currency)
+    @JoinColumn({ name: "currency_code", referencedColumnName: "code" })
+    currency: Currency;
 
-  @Column({ type: "real", nullable: true })
-  tax_rate: number | null
+    @Column({ type: "real", nullable: true })
+    tax_rate: number | null;
 
-  @ManyToMany(() => Discount, { cascade: ["insert"] })
-  @JoinTable({
-    name: "order_discounts",
-    joinColumn: {
-      name: "order_id",
-      referencedColumnName: "id",
-    },
-    inverseJoinColumn: {
-      name: "discount_id",
-      referencedColumnName: "id",
-    },
-  })
-  discounts: Discount[]
+    @ManyToMany(() => Discount, { cascade: ["insert"] })
+    @JoinTable({
+        name: "order_discounts",
+        joinColumn: {
+            name: "order_id",
+            referencedColumnName: "id"
+        },
+        inverseJoinColumn: {
+            name: "discount_id",
+            referencedColumnName: "id"
+        }
+    })
+    discounts: Discount[];
 
-  @ManyToMany(() => GiftCard, { cascade: ["insert"] })
-  @JoinTable({
-    name: "order_gift_cards",
-    joinColumn: {
-      name: "order_id",
-      referencedColumnName: "id",
-    },
-    inverseJoinColumn: {
-      name: "gift_card_id",
-      referencedColumnName: "id",
-    },
-  })
-  gift_cards: GiftCard[]
+    @ManyToMany(() => GiftCard, { cascade: ["insert"] })
+    @JoinTable({
+        name: "order_gift_cards",
+        joinColumn: {
+            name: "order_id",
+            referencedColumnName: "id"
+        },
+        inverseJoinColumn: {
+            name: "gift_card_id",
+            referencedColumnName: "id"
+        }
+    })
+    gift_cards: GiftCard[];
 
-  @OneToMany(() => ShippingMethod, (method) => method.order, {
-    cascade: ["insert"],
-  })
-  shipping_methods: ShippingMethod[]
+    @OneToMany(() => ShippingMethod, (method) => method.order, {
+        cascade: ["insert"]
+    })
+    shipping_methods: ShippingMethod[];
 
-  @OneToMany(() => Payment, (payment) => payment.order, { cascade: ["insert"] })
-  payments: Payment[]
+    @OneToMany(() => Payment, (payment) => payment.order, { cascade: ["insert"] })
+    payments: Payment[];
 
-  @OneToMany(() => Fulfillment, (fulfillment) => fulfillment.order, {
-    cascade: ["insert"],
-  })
-  fulfillments: Fulfillment[]
+    @OneToMany(() => Fulfillment, (fulfillment) => fulfillment.order, {
+        cascade: ["insert"]
+    })
+    fulfillments: Fulfillment[];
 
-  @OneToMany(() => Return, (ret) => ret.order, { cascade: ["insert"] })
-  returns: Return[]
+    @OneToMany(() => Return, (ret) => ret.order, { cascade: ["insert"] })
+    returns: Return[];
 
-  @OneToMany(() => ClaimOrder, (co) => co.order, { cascade: ["insert"] })
-  claims: ClaimOrder[]
+    @OneToMany(() => ClaimOrder, (co) => co.order, { cascade: ["insert"] })
+    claims: ClaimOrder[];
 
-  @OneToMany(() => Refund, (ref) => ref.order, { cascade: ["insert"] })
-  refunds: Refund[]
+    @OneToMany(() => Refund, (ref) => ref.order, { cascade: ["insert"] })
+    refunds: Refund[];
 
-  @OneToMany(() => Swap, (swap) => swap.order, { cascade: ["insert"] })
-  swaps: Swap[]
+    @OneToMany(() => Swap, (swap) => swap.order, { cascade: ["insert"] })
+    swaps: Swap[];
 
-  @Column({ nullable: true })
-  draft_order_id: string
+    @Column({ nullable: true })
+    draft_order_id: string;
 
-  @OneToOne(() => DraftOrder)
-  @JoinColumn({ name: "draft_order_id" })
-  draft_order: DraftOrder
+    @OneToOne(() => DraftOrder)
+    @JoinColumn({ name: "draft_order_id" })
+    draft_order: DraftOrder;
 
-  @OneToMany(() => LineItem, (lineItem) => lineItem.order, {
-    cascade: ["insert"],
-  })
-  items: LineItem[]
+    @OneToMany(() => LineItem, (lineItem) => lineItem.order, {
+        cascade: ["insert"]
+    })
+    items: LineItem[];
 
-  @OneToMany(() => GiftCardTransaction, (gc) => gc.order)
-  gift_card_transactions: GiftCardTransaction[]
+    @OneToMany(() => GiftCardTransaction, (gc) => gc.order)
+    gift_card_transactions: GiftCardTransaction[];
 
-  @Column({ nullable: true, type: resolveDbType("timestamptz") })
-  canceled_at: Date
+    @Column({ nullable: true, type: resolveDbType("timestamptz") })
+    canceled_at: Date;
 
-  @DbAwareColumn({ type: "jsonb", nullable: true })
-  metadata: Record<string, unknown>
+    @DbAwareColumn({ type: "jsonb", nullable: true })
+    metadata: Record<string, unknown>;
 
-  @Column({ type: "boolean", nullable: true })
-  no_notification: boolean
+    @Column({ type: "boolean", nullable: true })
+    no_notification: boolean;
 
-  @Column({ nullable: true })
-  idempotency_key: string
+    @Column({ nullable: true })
+    idempotency_key: string;
 
-  @Column({ type: "varchar", nullable: true })
-  external_id: string | null
+    @Column({ type: "varchar", nullable: true })
+    external_id: string | null;
 
-  @FeatureFlagColumn("sales_channels", { type: "varchar", nullable: true })
-  sales_channel_id: string | null
+    @FeatureFlagColumn("sales_channels", { type: "varchar", nullable: true })
+    sales_channel_id: string | null;
 
-  @FeatureFlagDecorators("sales_channels", [
-    ManyToOne(() => SalesChannel),
-    JoinColumn({ name: "sales_channel_id" }),
-  ])
-  sales_channel: SalesChannel
+    @FeatureFlagDecorators("sales_channels", [ManyToOne(() => SalesChannel), JoinColumn({ name: "sales_channel_id" })])
+    sales_channel: SalesChannel;
 
-  // Total fields
-  shipping_total: number
-  discount_total: number
-  tax_total: number | null
-  refunded_total: number
-  total: number
-  subtotal: number
-  paid_total: number
-  refundable_amount: number
-  gift_card_total: number
-  gift_card_tax_total: number
+    // Total fields
+    shipping_total: number;
+    discount_total: number;
+    tax_total: number | null;
+    refunded_total: number;
+    total: number;
+    subtotal: number;
+    paid_total: number;
+    refundable_amount: number;
+    gift_card_total: number;
+    gift_card_tax_total: number;
 
-  @BeforeInsert()
-  private async beforeInsert(): Promise<void> {
-    this.id = generateEntityId(this.id, "order")
+    @BeforeInsert()
+    private async beforeInsert(): Promise<void> {
+        this.id = generateEntityId(this.id, "order");
 
-    if (process.env.NODE_ENV === "development" && !this.display_id) {
-      const disId = await manualAutoIncrement("order")
+        if (process.env.NODE_ENV === "development" && !this.display_id) {
+            const disId = await manualAutoIncrement("order");
 
-      if (disId) {
-        this.display_id = disId
-      }
+            if (disId) {
+                this.display_id = disId;
+            }
+        }
     }
-  }
 }
 
 /**

@@ -1,17 +1,17 @@
-import glob from "glob"
-import path from "path"
-import fs from "fs"
-import { isString } from "lodash"
-import { sync as existsSync } from "fs-exists-cached"
-import { getConfigFile, createRequireFromPath } from "medusa-core-utils"
+import glob from "glob";
+import path from "path";
+import fs from "fs";
+import { isString } from "lodash";
+import { sync as existsSync } from "fs-exists-cached";
+import { getConfigFile, createRequireFromPath } from "medusa-core-utils";
 
 function createFileContentHash(path, files) {
-  return path + files
+    return path + files;
 }
 
 // TODO: Create unique id for each plugin
 function createPluginId(name) {
-  return name
+    return name;
 }
 
 /**
@@ -23,127 +23,108 @@ function createPluginId(name) {
  * @return {object} the plugin details
  */
 function resolvePlugin(pluginName) {
-  // Only find plugins when we're not given an absolute path
-  if (!existsSync(pluginName)) {
-    // Find the plugin in the local plugins folder
-    const resolvedPath = path.resolve(`./plugins/${pluginName}`)
+    // Only find plugins when we're not given an absolute path
+    if (!existsSync(pluginName)) {
+        // Find the plugin in the local plugins folder
+        const resolvedPath = path.resolve(`./plugins/${pluginName}`);
 
-    if (existsSync(resolvedPath)) {
-      if (existsSync(`${resolvedPath}/package.json`)) {
-        const packageJSON = JSON.parse(
-          fs.readFileSync(`${resolvedPath}/package.json`, `utf-8`)
-        )
-        const name = packageJSON.name || pluginName
-        // warnOnIncompatiblePeerDependency(name, packageJSON)
+        if (existsSync(resolvedPath)) {
+            if (existsSync(`${resolvedPath}/package.json`)) {
+                const packageJSON = JSON.parse(fs.readFileSync(`${resolvedPath}/package.json`, `utf-8`));
+                const name = packageJSON.name || pluginName;
+                // warnOnIncompatiblePeerDependency(name, packageJSON)
+
+                return {
+                    resolve: resolvedPath,
+                    name,
+                    id: createPluginId(name),
+                    options: {},
+                    version: packageJSON.version || createFileContentHash(resolvedPath, `**`)
+                };
+            } else {
+                // Make package.json a requirement for local plugins too
+                throw new Error(`Plugin ${pluginName} requires a package.json file`);
+            }
+        }
+    }
+
+    const rootDir = path.resolve(".");
+
+    /**
+     *  Here we have an absolute path to an internal plugin, or a name of a module
+     *  which should be located in node_modules.
+     */
+    try {
+        const requireSource = rootDir !== null ? createRequireFromPath(`${rootDir}/:internal:`) : require;
+
+        // If the path is absolute, resolve the directory of the internal plugin,
+        // otherwise resolve the directory containing the package.json
+        const resolvedPath = path.dirname(requireSource.resolve(`${pluginName}/package.json`));
+
+        const packageJSON = JSON.parse(fs.readFileSync(`${resolvedPath}/package.json`, `utf-8`));
+        // warnOnIncompatiblePeerDependency(packageJSON.name, packageJSON)
 
         return {
-          resolve: resolvedPath,
-          name,
-          id: createPluginId(name),
-          options: {},
-          version:
-            packageJSON.version || createFileContentHash(resolvedPath, `**`),
-        }
-      } else {
-        // Make package.json a requirement for local plugins too
-        throw new Error(`Plugin ${pluginName} requires a package.json file`)
-      }
+            resolve: resolvedPath,
+            id: createPluginId(packageJSON.name),
+            name: packageJSON.name,
+            version: packageJSON.version
+        };
+    } catch (err) {
+        throw new Error(`Unable to find plugin "${pluginName}". Perhaps you need to install its package?`);
     }
-  }
-
-  const rootDir = path.resolve(".")
-
-  /**
-   *  Here we have an absolute path to an internal plugin, or a name of a module
-   *  which should be located in node_modules.
-   */
-  try {
-    const requireSource =
-      rootDir !== null
-        ? createRequireFromPath(`${rootDir}/:internal:`)
-        : require
-
-    // If the path is absolute, resolve the directory of the internal plugin,
-    // otherwise resolve the directory containing the package.json
-    const resolvedPath = path.dirname(
-      requireSource.resolve(`${pluginName}/package.json`)
-    )
-
-    const packageJSON = JSON.parse(
-      fs.readFileSync(`${resolvedPath}/package.json`, `utf-8`)
-    )
-    // warnOnIncompatiblePeerDependency(packageJSON.name, packageJSON)
-
-    return {
-      resolve: resolvedPath,
-      id: createPluginId(packageJSON.name),
-      name: packageJSON.name,
-      version: packageJSON.version,
-    }
-  } catch (err) {
-    throw new Error(
-      `Unable to find plugin "${pluginName}". Perhaps you need to install its package?`
-    )
-  }
 }
 
 export default async (directory, featureFlagRouter) => {
-  const { configModule } = getConfigFile(directory, `medusa-config`)
-  const { plugins } = configModule
+    const { configModule } = getConfigFile(directory, `medusa-config`);
+    const { plugins } = configModule;
 
-  const resolved = plugins.map((plugin) => {
-    if (isString(plugin)) {
-      return resolvePlugin(plugin)
+    const resolved = plugins.map((plugin) => {
+        if (isString(plugin)) {
+            return resolvePlugin(plugin);
+        }
+
+        const details = resolvePlugin(plugin.resolve);
+        details.options = plugin.options;
+
+        return details;
+    });
+
+    resolved.push({
+        resolve: `${directory}/dist`,
+        name: `project-plugin`,
+        id: createPluginId(`project-plugin`),
+        options: {},
+        version: createFileContentHash(process.cwd(), `**`)
+    });
+
+    const migrationDirs = [];
+    const coreMigrations = path.resolve(path.join(__dirname, "..", "..", "migrations"));
+
+    migrationDirs.push(path.join(coreMigrations, "*.js"));
+
+    for (const p of resolved) {
+        const exists = existsSync(`${p.resolve}/migrations`);
+        if (exists) {
+            migrationDirs.push(`${p.resolve}/migrations/*.js`);
+        }
     }
 
-    const details = resolvePlugin(plugin.resolve)
-    details.options = plugin.options
-
-    return details
-  })
-
-  resolved.push({
-    resolve: `${directory}/dist`,
-    name: `project-plugin`,
-    id: createPluginId(`project-plugin`),
-    options: {},
-    version: createFileContentHash(process.cwd(), `**`),
-  })
-
-  const migrationDirs = []
-  const coreMigrations = path.resolve(
-    path.join(__dirname, "..", "..", "migrations")
-  )
-
-  migrationDirs.push(path.join(coreMigrations, "*.js"))
-
-  for (const p of resolved) {
-    const exists = existsSync(`${p.resolve}/migrations`)
-    if (exists) {
-      migrationDirs.push(`${p.resolve}/migrations/*.js`)
-    }
-  }
-
-  return getEnabledMigrations(migrationDirs, (flag) =>
-    featureFlagRouter.isFeatureEnabled(flag)
-  )
-}
+    return getEnabledMigrations(migrationDirs, (flag) => featureFlagRouter.isFeatureEnabled(flag));
+};
 
 export const getEnabledMigrations = (migrationDirs, isFlagEnabled) => {
-  const allMigrations = migrationDirs.flatMap((dir) => {
-    return glob.sync(dir)
-  })
-  return allMigrations
-    .map((file) => {
-      const loaded = require(file)
-      if (
-        typeof loaded.featureFlag === "undefined" ||
-        isFlagEnabled(loaded.featureFlag)
-      ) {
-        return file
-      }
+    const allMigrations = migrationDirs.flatMap((dir) => {
+        return glob.sync(dir);
+    });
+    return allMigrations
+        .map((file) => {
+            const loaded = require(file);
+            if (typeof loaded.featureFlag === "undefined" || isFlagEnabled(loaded.featureFlag)) {
+                return file;
+            }
 
-      return false
-    })
-    .filter(Boolean)
-}
+            return false;
+        })
+        .filter(Boolean);
+};

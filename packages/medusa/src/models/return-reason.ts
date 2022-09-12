@@ -1,49 +1,37 @@
-import {
-  BeforeInsert,
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-} from "typeorm"
-import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity"
-import { DbAwareColumn } from "../utils/db-aware-column"
-import { generateEntityId } from "../utils/generate-entity-id"
+import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne, OneToMany } from "typeorm";
+import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity";
+import { DbAwareColumn } from "../utils/db-aware-column";
+import { generateEntityId } from "../utils/generate-entity-id";
 
 @Entity()
 export class ReturnReason extends SoftDeletableEntity {
-  @Index({ unique: true })
-  @Column()
-  value: string
+    @Index({ unique: true })
+    @Column()
+    value: string;
 
-  @Column()
-  label: string
+    @Column()
+    label: string;
 
-  @Column({ nullable: true })
-  description: string
+    @Column({ nullable: true })
+    description: string;
 
-  @Column({ nullable: true })
-  parent_return_reason_id: string | null
+    @Column({ nullable: true })
+    parent_return_reason_id: string | null;
 
-  @ManyToOne(() => ReturnReason, { cascade: ["soft-remove"] })
-  @JoinColumn({ name: "parent_return_reason_id" })
-  parent_return_reason: ReturnReason | null
+    @ManyToOne(() => ReturnReason, { cascade: ["soft-remove"] })
+    @JoinColumn({ name: "parent_return_reason_id" })
+    parent_return_reason: ReturnReason | null;
 
-  @OneToMany(
-    () => ReturnReason,
-    (return_reason) => return_reason.parent_return_reason,
-    { cascade: ["insert", "soft-remove"] }
-  )
-  return_reason_children: ReturnReason[]
+    @OneToMany(() => ReturnReason, (return_reason) => return_reason.parent_return_reason, { cascade: ["insert", "soft-remove"] })
+    return_reason_children: ReturnReason[];
 
-  @DbAwareColumn({ type: "jsonb", nullable: true })
-  metadata: Record<string, unknown>
+    @DbAwareColumn({ type: "jsonb", nullable: true })
+    metadata: Record<string, unknown>;
 
-  @BeforeInsert()
-  private beforeInsert(): void {
-    this.id = generateEntityId(this.id, "rr")
-  }
+    @BeforeInsert()
+    private beforeInsert(): void {
+        this.id = generateEntityId(this.id, "rr");
+    }
 }
 
 /**

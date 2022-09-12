@@ -1,14 +1,8 @@
-import {
-  IsInt,
-  IsNotEmpty,
-  IsObject,
-  IsOptional,
-  IsString,
-} from "class-validator"
-import { defaultAdminOrdersFields, defaultAdminOrdersRelations } from "."
-import { OrderService } from "../../../../services"
-import { validator } from "../../../../utils/validator"
-import { EntityManager } from "typeorm"
+import { IsInt, IsNotEmpty, IsObject, IsOptional, IsString } from "class-validator";
+import { defaultAdminOrdersFields, defaultAdminOrdersRelations } from ".";
+import { OrderService } from "../../../../services";
+import { validator } from "../../../../utils/validator";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /orders/{id}/shipping-methods
@@ -34,42 +28,37 @@ import { EntityManager } from "typeorm"
  *               $ref: "#/components/schemas/order"
  */
 export default async (req, res) => {
-  const { id } = req.params
+    const { id } = req.params;
 
-  const validated = await validator(
-    AdminPostOrdersOrderShippingMethodsReq,
-    req.body
-  )
+    const validated = await validator(AdminPostOrdersOrderShippingMethodsReq, req.body);
 
-  const orderService: OrderService = req.scope.resolve("orderService")
+    const orderService: OrderService = req.scope.resolve("orderService");
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await orderService
-      .withTransaction(transactionManager)
-      .addShippingMethod(id, validated.option_id, validated.data, {
-        price: validated.price,
-      })
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await orderService.withTransaction(transactionManager).addShippingMethod(id, validated.option_id, validated.data, {
+            price: validated.price
+        });
+    });
 
-  const order = await orderService.retrieve(id, {
-    select: defaultAdminOrdersFields,
-    relations: defaultAdminOrdersRelations,
-  })
+    const order = await orderService.retrieve(id, {
+        select: defaultAdminOrdersFields,
+        relations: defaultAdminOrdersRelations
+    });
 
-  res.status(200).json({ order })
-}
+    res.status(200).json({ order });
+};
 
 export class AdminPostOrdersOrderShippingMethodsReq {
-  @IsInt()
-  @IsNotEmpty()
-  price: number
+    @IsInt()
+    @IsNotEmpty()
+    price: number;
 
-  @IsString()
-  @IsNotEmpty()
-  option_id: string
+    @IsString()
+    @IsNotEmpty()
+    option_id: string;
 
-  @IsObject()
-  @IsOptional()
-  data?: Record<string, unknown> = {}
+    @IsObject()
+    @IsOptional()
+    data?: Record<string, unknown> = {};
 }

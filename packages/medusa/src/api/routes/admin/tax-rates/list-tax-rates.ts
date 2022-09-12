@@ -1,13 +1,13 @@
-import { getListConfig, pickByConfig } from "./utils/get-query-config"
-import { IsArray, IsNumber, IsOptional, IsString } from "class-validator"
-import { Type } from "class-transformer"
-import { omit, pickBy, identity } from "lodash"
+import { getListConfig, pickByConfig } from "./utils/get-query-config";
+import { IsArray, IsNumber, IsOptional, IsString } from "class-validator";
+import { Type } from "class-transformer";
+import { omit, pickBy, identity } from "lodash";
 
-import { TaxRate } from "../../../.."
-import { NumericalComparisonOperator } from "../../../../types/common"
-import { TaxRateService } from "../../../../services"
-import { IsType } from "../../../../utils/validators/is-type"
-import { validator } from "../../../../utils/validator"
+import { TaxRate } from "../../../..";
+import { NumericalComparisonOperator } from "../../../../types/common";
+import { TaxRateService } from "../../../../services";
+import { IsType } from "../../../../utils/validators/is-type";
+import { validator } from "../../../../utils/validator";
 
 /**
  * @oas [get] /tax-rates
@@ -41,62 +41,53 @@ import { validator } from "../../../../utils/validator"
  *                 $ref: "#/components/schemas/order"
  */
 export default async (req, res) => {
-  const value = await validator(AdminGetTaxRatesParams, req.query)
+    const value = await validator(AdminGetTaxRatesParams, req.query);
 
-  const rateService: TaxRateService = req.scope.resolve("taxRateService")
+    const rateService: TaxRateService = req.scope.resolve("taxRateService");
 
-  const listConfig = getListConfig()
+    const listConfig = getListConfig();
 
-  const filterableFields = omit(value, [
-    "limit",
-    "offset",
-    "expand",
-    "fields",
-    "order",
-  ])
+    const filterableFields = omit(value, ["limit", "offset", "expand", "fields", "order"]);
 
-  const [rates, count] = await rateService.listAndCount(
-    pickBy(filterableFields, identity),
-    listConfig
-  )
+    const [rates, count] = await rateService.listAndCount(pickBy(filterableFields, identity), listConfig);
 
-  const data = pickByConfig<TaxRate>(rates, listConfig)
+    const data = pickByConfig<TaxRate>(rates, listConfig);
 
-  res.json({ tax_rates: data, count, offset: value.offset, limit: value.limit })
-}
+    res.json({ tax_rates: data, count, offset: value.offset, limit: value.limit });
+};
 
 export class AdminGetTaxRatesParams {
-  @IsOptional()
-  @IsType([String, [String]])
-  region_id?: string | string[]
+    @IsOptional()
+    @IsType([String, [String]])
+    region_id?: string | string[];
 
-  @IsString()
-  @IsOptional()
-  name?: string
+    @IsString()
+    @IsOptional()
+    name?: string;
 
-  @IsString()
-  @IsOptional()
-  code?: string
+    @IsString()
+    @IsOptional()
+    code?: string;
 
-  @IsType([NumericalComparisonOperator, Number])
-  @IsOptional()
-  rate?: number | NumericalComparisonOperator
+    @IsType([NumericalComparisonOperator, Number])
+    @IsOptional()
+    rate?: number | NumericalComparisonOperator;
 
-  @IsNumber()
-  @IsOptional()
-  @Type(() => Number)
-  offset? = 0
+    @IsNumber()
+    @IsOptional()
+    @Type(() => Number)
+    offset? = 0;
 
-  @IsNumber()
-  @IsOptional()
-  @Type(() => Number)
-  limit? = 50
+    @IsNumber()
+    @IsOptional()
+    @Type(() => Number)
+    limit? = 50;
 
-  @IsArray()
-  @IsOptional()
-  expand?: string[]
+    @IsArray()
+    @IsOptional()
+    expand?: string[];
 
-  @IsArray()
-  @IsOptional()
-  fields?: string[]
+    @IsArray()
+    @IsOptional()
+    fields?: string[];
 }

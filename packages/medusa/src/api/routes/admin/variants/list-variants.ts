@@ -1,12 +1,12 @@
-import { defaultAdminVariantFields, defaultAdminVariantRelations } from "./"
+import { defaultAdminVariantFields, defaultAdminVariantRelations } from "./";
 
-import { FilterableProductVariantProps } from "../../../../types/product-variant"
-import { FindConfig } from "../../../../types/common"
-import { ProductVariant } from "../../../../models/product-variant"
-import ProductVariantService from "../../../../services/product-variant"
-import { validator } from "../../../../utils/validator"
-import { Type } from "class-transformer"
-import { IsInt, IsOptional, IsString } from "class-validator"
+import { FilterableProductVariantProps } from "../../../../types/product-variant";
+import { FindConfig } from "../../../../types/common";
+import { ProductVariant } from "../../../../models/product-variant";
+import ProductVariantService from "../../../../services/product-variant";
+import { validator } from "../../../../utils/validator";
+import { Type } from "class-transformer";
+import { IsInt, IsOptional, IsString } from "class-validator";
 /**
  * @oas [get] /variants
  * operationId: "GetVariants"
@@ -32,48 +32,40 @@ import { IsInt, IsOptional, IsString } from "class-validator"
  *                 $ref: "#/components/schemas/product_variant"
  */
 export default async (req, res) => {
-  const variantService: ProductVariantService = req.scope.resolve(
-    "productVariantService"
-  )
+    const variantService: ProductVariantService = req.scope.resolve("productVariantService");
 
-  const { offset, limit, q } = await validator(
-    AdminGetVariantsParams,
-    req.query
-  )
+    const { offset, limit, q } = await validator(AdminGetVariantsParams, req.query);
 
-  const selector: FilterableProductVariantProps = {}
+    const selector: FilterableProductVariantProps = {};
 
-  if ("q" in req.query) {
-    selector.q = q
-  }
+    if ("q" in req.query) {
+        selector.q = q;
+    }
 
-  const listConfig: FindConfig<ProductVariant> = {
-    select: defaultAdminVariantFields,
-    relations: defaultAdminVariantRelations,
-    skip: offset,
-    take: limit,
-  }
+    const listConfig: FindConfig<ProductVariant> = {
+        select: defaultAdminVariantFields,
+        relations: defaultAdminVariantRelations,
+        skip: offset,
+        take: limit
+    };
 
-  const [variants, count] = await variantService.listAndCount(
-    selector,
-    listConfig
-  )
+    const [variants, count] = await variantService.listAndCount(selector, listConfig);
 
-  res.json({ variants, count, offset, limit })
-}
+    res.json({ variants, count, offset, limit });
+};
 
 export class AdminGetVariantsParams {
-  @IsString()
-  @IsOptional()
-  q?: string
+    @IsString()
+    @IsOptional()
+    q?: string;
 
-  @IsInt()
-  @IsOptional()
-  @Type(() => Number)
-  limit?: number = 20
+    @IsInt()
+    @IsOptional()
+    @Type(() => Number)
+    limit?: number = 20;
 
-  @IsInt()
-  @IsOptional()
-  @Type(() => Number)
-  offset?: number = 0
+    @IsInt()
+    @IsOptional()
+    @Type(() => Number)
+    offset?: number = 0;
 }

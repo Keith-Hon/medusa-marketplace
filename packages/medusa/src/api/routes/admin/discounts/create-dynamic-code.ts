@@ -1,14 +1,8 @@
-import {
-  IsNotEmpty,
-  IsNumber,
-  IsObject,
-  IsOptional,
-  IsString,
-} from "class-validator"
-import { defaultAdminDiscountsFields, defaultAdminDiscountsRelations } from "."
-import DiscountService from "../../../../services/discount"
-import { validator } from "../../../../utils/validator"
-import { EntityManager } from "typeorm"
+import { IsNotEmpty, IsNumber, IsObject, IsOptional, IsString } from "class-validator";
+import { defaultAdminDiscountsFields, defaultAdminDiscountsRelations } from ".";
+import DiscountService from "../../../../services/discount";
+import { validator } from "../../../../utils/validator";
+import { EntityManager } from "typeorm";
 /**
  * @oas [post] /discounts/{id}/dynamic-codes
  * operationId: "PostDiscountsDiscountDynamicCodes"
@@ -33,39 +27,34 @@ import { EntityManager } from "typeorm"
  *               $ref: "#/components/schemas/discount"
  */
 export default async (req, res) => {
-  const { discount_id } = req.params
+    const { discount_id } = req.params;
 
-  const validated = await validator(
-    AdminPostDiscountsDiscountDynamicCodesReq,
-    req.body
-  )
+    const validated = await validator(AdminPostDiscountsDiscountDynamicCodesReq, req.body);
 
-  const discountService: DiscountService = req.scope.resolve("discountService")
-  const manager: EntityManager = req.scope.resolve("manager")
-  const created = await manager.transaction(async (transactionManager) => {
-    return await discountService
-      .withTransaction(transactionManager)
-      .createDynamicCode(discount_id, validated)
-  })
+    const discountService: DiscountService = req.scope.resolve("discountService");
+    const manager: EntityManager = req.scope.resolve("manager");
+    const created = await manager.transaction(async (transactionManager) => {
+        return await discountService.withTransaction(transactionManager).createDynamicCode(discount_id, validated);
+    });
 
-  const discount = await discountService.retrieve(created.id, {
-    select: defaultAdminDiscountsFields,
-    relations: defaultAdminDiscountsRelations,
-  })
+    const discount = await discountService.retrieve(created.id, {
+        select: defaultAdminDiscountsFields,
+        relations: defaultAdminDiscountsRelations
+    });
 
-  res.status(200).json({ discount })
-}
+    res.status(200).json({ discount });
+};
 
 export class AdminPostDiscountsDiscountDynamicCodesReq {
-  @IsString()
-  @IsNotEmpty()
-  code: string
+    @IsString()
+    @IsNotEmpty()
+    code: string;
 
-  @IsNumber()
-  @IsOptional()
-  usage_limit = 1
+    @IsNumber()
+    @IsOptional()
+    usage_limit = 1;
 
-  @IsObject()
-  @IsOptional()
-  metadata?: object
+    @IsObject()
+    @IsOptional()
+    metadata?: object;
 }

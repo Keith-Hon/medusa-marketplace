@@ -1,4 +1,4 @@
-import { EntityManager } from "typeorm"
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [delete] /gift-cards/{id}
@@ -27,17 +27,17 @@ import { EntityManager } from "typeorm"
  *               type: boolean
  */
 export default async (req, res) => {
-  const { id } = req.params
+    const { id } = req.params;
 
-  const giftCardService = req.scope.resolve("giftCardService")
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await giftCardService.withTransaction(transactionManager).delete(id)
-  })
+    const giftCardService = req.scope.resolve("giftCardService");
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await giftCardService.withTransaction(transactionManager).delete(id);
+    });
 
-  res.json({
-    id,
-    object: "gift-card",
-    deleted: true,
-  })
-}
+    res.json({
+        id,
+        object: "gift-card",
+        deleted: true
+    });
+};

@@ -1,21 +1,11 @@
-import { Type } from "class-transformer"
-import {
-  IsArray,
-  IsEnum,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from "class-validator"
-import { defaultAdminPriceListFields, defaultAdminPriceListRelations } from "."
-import { PriceList } from "../../../.."
-import PriceListService from "../../../../services/price-list"
-import {
-  AdminPriceListPricesUpdateReq,
-  PriceListStatus,
-  PriceListType,
-} from "../../../../types/price-list"
-import { validator } from "../../../../utils/validator"
-import { EntityManager } from "typeorm"
+import { Type } from "class-transformer";
+import { IsArray, IsEnum, IsOptional, IsString, ValidateNested } from "class-validator";
+import { defaultAdminPriceListFields, defaultAdminPriceListRelations } from ".";
+import { PriceList } from "../../../..";
+import PriceListService from "../../../../services/price-list";
+import { AdminPriceListPricesUpdateReq, PriceListStatus, PriceListType } from "../../../../types/price-list";
+import { validator } from "../../../../utils/validator";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /price_lists/{id}
@@ -94,68 +84,62 @@ import { EntityManager } from "typeorm"
  *               $ref: "#/components/schemas/price_list"
  */
 export default async (req, res) => {
-  const { id } = req.params
+    const { id } = req.params;
 
-  const validated = await validator(
-    AdminPostPriceListsPriceListPriceListReq,
-    req.body
-  )
+    const validated = await validator(AdminPostPriceListsPriceListPriceListReq, req.body);
 
-  const priceListService: PriceListService =
-    req.scope.resolve("priceListService")
+    const priceListService: PriceListService = req.scope.resolve("priceListService");
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await priceListService
-      .withTransaction(transactionManager)
-      .update(id, validated)
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await priceListService.withTransaction(transactionManager).update(id, validated);
+    });
 
-  const priceList = await priceListService.retrieve(id, {
-    select: defaultAdminPriceListFields as (keyof PriceList)[],
-    relations: defaultAdminPriceListRelations,
-  })
+    const priceList = await priceListService.retrieve(id, {
+        select: defaultAdminPriceListFields as (keyof PriceList)[],
+        relations: defaultAdminPriceListRelations
+    });
 
-  res.json({ price_list: priceList })
-}
+    res.json({ price_list: priceList });
+};
 
 class CustomerGroup {
-  @IsString()
-  id: string
+    @IsString()
+    id: string;
 }
 
 export class AdminPostPriceListsPriceListPriceListReq {
-  @IsString()
-  @IsOptional()
-  name?: string
+    @IsString()
+    @IsOptional()
+    name?: string;
 
-  @IsString()
-  @IsOptional()
-  description?: string
+    @IsString()
+    @IsOptional()
+    description?: string;
 
-  @IsOptional()
-  starts_at?: Date | null
+    @IsOptional()
+    starts_at?: Date | null;
 
-  @IsOptional()
-  ends_at?: Date | null
+    @IsOptional()
+    ends_at?: Date | null;
 
-  @IsOptional()
-  @IsEnum(PriceListStatus)
-  status?: PriceListStatus
+    @IsOptional()
+    @IsEnum(PriceListStatus)
+    status?: PriceListStatus;
 
-  @IsOptional()
-  @IsEnum(PriceListType)
-  type?: PriceListType
+    @IsOptional()
+    @IsEnum(PriceListType)
+    type?: PriceListType;
 
-  @IsOptional()
-  @IsArray()
-  @Type(() => AdminPriceListPricesUpdateReq)
-  @ValidateNested({ each: true })
-  prices?: AdminPriceListPricesUpdateReq[]
+    @IsOptional()
+    @IsArray()
+    @Type(() => AdminPriceListPricesUpdateReq)
+    @ValidateNested({ each: true })
+    prices?: AdminPriceListPricesUpdateReq[];
 
-  @IsOptional()
-  @IsArray()
-  @Type(() => CustomerGroup)
-  @ValidateNested({ each: true })
-  customer_groups?: CustomerGroup[]
+    @IsOptional()
+    @IsArray()
+    @Type(() => CustomerGroup)
+    @ValidateNested({ each: true })
+    customer_groups?: CustomerGroup[];
 }

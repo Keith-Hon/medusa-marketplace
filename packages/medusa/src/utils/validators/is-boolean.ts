@@ -7,8 +7,8 @@
 //
 // The solution here is stolen from: https://github.com/typestack/class-transformer/issues/676#issuecomment-822699830
 export const optionalBooleanMapper = new Map([
-  ["undefined", undefined],
-  ["null", null],
-  ["true", true],
-  ["false", false],
-])
+    ["undefined", undefined],
+    ["null", null],
+    ["true", true],
+    ["false", false]
+]);

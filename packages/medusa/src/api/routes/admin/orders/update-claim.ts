@@ -1,18 +1,9 @@
-import { Type } from "class-transformer"
-import {
-  IsArray,
-  ValidateNested,
-  IsOptional,
-  IsString,
-  IsBoolean,
-  IsInt,
-  IsNotEmpty,
-  IsObject,
-} from "class-validator"
-import { defaultAdminOrdersRelations, defaultAdminOrdersFields } from "."
-import { ClaimService, OrderService } from "../../../../services"
-import { validator } from "../../../../utils/validator"
-import { EntityManager } from "typeorm"
+import { Type } from "class-transformer";
+import { IsArray, ValidateNested, IsOptional, IsString, IsBoolean, IsInt, IsNotEmpty, IsObject } from "class-validator";
+import { defaultAdminOrdersRelations, defaultAdminOrdersFields } from ".";
+import { ClaimService, OrderService } from "../../../../services";
+import { validator } from "../../../../utils/validator";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /order/{id}/claims/{claim_id}
@@ -95,111 +86,106 @@ import { EntityManager } from "typeorm"
  *               $ref: "#/components/schemas/order"
  */
 export default async (req, res) => {
-  const { id, claim_id } = req.params
+    const { id, claim_id } = req.params;
 
-  const validated = await validator(
-    AdminPostOrdersOrderClaimsClaimReq,
-    req.body
-  )
+    const validated = await validator(AdminPostOrdersOrderClaimsClaimReq, req.body);
 
-  const orderService: OrderService = req.scope.resolve("orderService")
-  const claimService: ClaimService = req.scope.resolve("claimService")
+    const orderService: OrderService = req.scope.resolve("orderService");
+    const claimService: ClaimService = req.scope.resolve("claimService");
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await claimService
-      .withTransaction(transactionManager)
-      .update(claim_id, validated)
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await claimService.withTransaction(transactionManager).update(claim_id, validated);
+    });
 
-  const data = await orderService.retrieve(id, {
-    select: defaultAdminOrdersFields,
-    relations: defaultAdminOrdersRelations,
-  })
+    const data = await orderService.retrieve(id, {
+        select: defaultAdminOrdersFields,
+        relations: defaultAdminOrdersRelations
+    });
 
-  res.json({ order: data })
-}
+    res.json({ order: data });
+};
 
 export class AdminPostOrdersOrderClaimsClaimReq {
-  @IsArray()
-  @IsOptional()
-  @Type(() => Item)
-  @ValidateNested({ each: true })
-  claim_items?: Item[]
+    @IsArray()
+    @IsOptional()
+    @Type(() => Item)
+    @ValidateNested({ each: true })
+    claim_items?: Item[];
 
-  @IsArray()
-  @IsOptional()
-  @ValidateNested({ each: true })
-  @Type(() => ShippingMethod)
-  shipping_methods?: ShippingMethod[]
+    @IsArray()
+    @IsOptional()
+    @ValidateNested({ each: true })
+    @Type(() => ShippingMethod)
+    shipping_methods?: ShippingMethod[];
 
-  @IsBoolean()
-  @IsOptional()
-  no_notification?: boolean
+    @IsBoolean()
+    @IsOptional()
+    no_notification?: boolean;
 
-  @IsObject()
-  @IsOptional()
-  metadata?: Record<string, unknown>
+    @IsObject()
+    @IsOptional()
+    metadata?: Record<string, unknown>;
 }
 
 class ShippingMethod {
-  @IsString()
-  @IsOptional()
-  id?: string
+    @IsString()
+    @IsOptional()
+    id?: string;
 
-  @IsString()
-  @IsOptional()
-  option_id?: string
+    @IsString()
+    @IsOptional()
+    option_id?: string;
 
-  @IsInt()
-  @IsOptional()
-  price?: number
+    @IsInt()
+    @IsOptional()
+    price?: number;
 }
 
 class Item {
-  @IsString()
-  @IsNotEmpty()
-  id: string
+    @IsString()
+    @IsNotEmpty()
+    id: string;
 
-  @IsString()
-  @IsOptional()
-  note?: string
+    @IsString()
+    @IsOptional()
+    note?: string;
 
-  @IsString()
-  @IsOptional()
-  reason?: string
+    @IsString()
+    @IsOptional()
+    reason?: string;
 
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => Image)
-  images: Image[]
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => Image)
+    images: Image[];
 
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => Tag)
-  tags: Tag[]
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => Tag)
+    tags: Tag[];
 
-  @IsObject()
-  @IsOptional()
-  metadata?: object
+    @IsObject()
+    @IsOptional()
+    metadata?: object;
 }
 
 class Image {
-  @IsString()
-  @IsOptional()
-  id?: string
+    @IsString()
+    @IsOptional()
+    id?: string;
 
-  @IsString()
-  @IsOptional()
-  url?: string
+    @IsString()
+    @IsOptional()
+    url?: string;
 }
 
 class Tag {
-  @IsString()
-  @IsOptional()
-  id?: string
+    @IsString()
+    @IsOptional()
+    id?: string;
 
-  @IsString()
-  @IsOptional()
-  value?: string
+    @IsString()
+    @IsOptional()
+    value?: string;
 }

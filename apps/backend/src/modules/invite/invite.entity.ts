@@ -12,6 +12,6 @@ export class Invite extends MedusaInvite {
     store_id: string;
 
     @ManyToOne(() => Store, (store) => store.invites)
-    @JoinColumn({ name: 'store_id' })
+    @JoinColumn({ name: "store_id" })
     store: Store;
 }

@@ -1,81 +1,69 @@
-import {
-  BeforeInsert,
-  Column,
-  Entity,
-  Generated,
-  Index,
-  JoinColumn,
-  OneToOne,
-} from "typeorm"
-import { BaseEntity } from "../interfaces/models/base-entity"
-import {
-  DbAwareColumn,
-  resolveDbGenerationStrategy,
-  resolveDbType,
-} from "../utils/db-aware-column"
-import { manualAutoIncrement } from "../utils/manual-auto-increment"
-import { Cart } from "./cart"
-import { Order } from "./order"
-import { generateEntityId } from "../utils/generate-entity-id"
+import { BeforeInsert, Column, Entity, Generated, Index, JoinColumn, OneToOne } from "typeorm";
+import { BaseEntity } from "../interfaces/models/base-entity";
+import { DbAwareColumn, resolveDbGenerationStrategy, resolveDbType } from "../utils/db-aware-column";
+import { manualAutoIncrement } from "../utils/manual-auto-increment";
+import { Cart } from "./cart";
+import { Order } from "./order";
+import { generateEntityId } from "../utils/generate-entity-id";
 
 export enum DraftOrderStatus {
-  OPEN = "open",
-  COMPLETED = "completed",
+    OPEN = "open",
+    COMPLETED = "completed"
 }
 
 @Entity()
 export class DraftOrder extends BaseEntity {
-  @DbAwareColumn({ type: "enum", enum: DraftOrderStatus, default: "open" })
-  status: DraftOrderStatus
+    @DbAwareColumn({ type: "enum", enum: DraftOrderStatus, default: "open" })
+    status: DraftOrderStatus;
 
-  @Index()
-  @Column()
-  @Generated(resolveDbGenerationStrategy("increment"))
-  display_id: number
+    @Index()
+    @Column()
+    @Generated(resolveDbGenerationStrategy("increment"))
+    display_id: number;
 
-  @Index()
-  @Column({ nullable: true })
-  cart_id: string
+    @Index()
+    @Column({ nullable: true })
+    cart_id: string;
 
-  @OneToOne(() => Cart, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "cart_id" })
-  cart: Cart
+    @OneToOne(() => Cart, { onDelete: "CASCADE" })
+    @JoinColumn({ name: "cart_id" })
+    cart: Cart;
 
-  @Index()
-  @Column({ nullable: true })
-  order_id: string
+    @Index()
+    @Column({ nullable: true })
+    order_id: string;
 
-  @OneToOne(() => Order)
-  @JoinColumn({ name: "order_id" })
-  order: Order
+    @OneToOne(() => Order)
+    @JoinColumn({ name: "order_id" })
+    order: Order;
 
-  @Column({ nullable: true, type: resolveDbType("timestamptz") })
-  canceled_at: Date
+    @Column({ nullable: true, type: resolveDbType("timestamptz") })
+    canceled_at: Date;
 
-  @Column({ type: resolveDbType("timestamptz"), nullable: true })
-  completed_at: Date
+    @Column({ type: resolveDbType("timestamptz"), nullable: true })
+    completed_at: Date;
 
-  @Column({ nullable: true })
-  no_notification_order: boolean
+    @Column({ nullable: true })
+    no_notification_order: boolean;
 
-  @DbAwareColumn({ type: "jsonb", nullable: true })
-  metadata: Record<string, unknown>
+    @DbAwareColumn({ type: "jsonb", nullable: true })
+    metadata: Record<string, unknown>;
 
-  @Column({ nullable: true })
-  idempotency_key: string
+    @Column({ nullable: true })
+    idempotency_key: string;
 
-  @BeforeInsert()
-  private async beforeInsert(): Promise<void> {
-    this.id = generateEntityId(this.id, "dorder")
+    @BeforeInsert()
+    private async beforeInsert(): Promise<void> {
+        this.id = generateEntityId(this.id, "dorder");
 
-    if (process.env.NODE_ENV === "development" && !this.display_id) {
-      const disId = await manualAutoIncrement("draft_order")
+        if (process.env.NODE_ENV === "development" && !this.display_id) {
+            const disId = await manualAutoIncrement("draft_order");
 
-      if (disId) {
-        this.display_id = disId
-      }
+            if (disId) {
+                this.display_id = disId;
+            }
+        }
     }
-  }
 }
 
 /**

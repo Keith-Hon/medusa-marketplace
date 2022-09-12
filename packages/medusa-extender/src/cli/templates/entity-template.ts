@@ -1,17 +1,17 @@
-import * as dedent from 'dedent';
+import * as dedent from "dedent";
 
 /**
  * Provide a basic template for the entity component generation.
  * @param entityName
  */
 export function getEntityTemplate(entityName: string): string {
-	return dedent`
+    return dedent`
         import { Column, Entity } from "typeorm"; 
         import { Entity as MedusaEntity } from "medusa-extender";
         
         @MedusaEntity()
         @Entity()
-        export class ${entityName.replace('Entity', '')} {
+        export class ${entityName.replace("Entity", "")} {
             @Column()
             name: string;
         }

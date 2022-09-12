@@ -7,7 +7,7 @@ export default {
   component: PageDescription,
 } as ComponentMeta<typeof PageDescription>
 
-const Template = args => <PageDescription {...args} />
+const Template = (args) => <PageDescription {...args} />
 
 export const TitleAndSubtitle = Template.bind({})
 TitleAndSubtitle.args = {

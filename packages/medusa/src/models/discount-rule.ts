@@ -1,51 +1,51 @@
-import { BeforeInsert, Column, Entity, OneToMany } from "typeorm"
-import { DbAwareColumn } from "../utils/db-aware-column"
-import { DiscountCondition } from "./discount-condition"
-import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity"
-import { generateEntityId } from "../utils/generate-entity-id"
+import { BeforeInsert, Column, Entity, OneToMany } from "typeorm";
+import { DbAwareColumn } from "../utils/db-aware-column";
+import { DiscountCondition } from "./discount-condition";
+import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity";
+import { generateEntityId } from "../utils/generate-entity-id";
 
 export enum DiscountRuleType {
-  FIXED = "fixed",
-  PERCENTAGE = "percentage",
-  FREE_SHIPPING = "free_shipping",
+    FIXED = "fixed",
+    PERCENTAGE = "percentage",
+    FREE_SHIPPING = "free_shipping"
 }
 
 export enum AllocationType {
-  TOTAL = "total",
-  ITEM = "item",
+    TOTAL = "total",
+    ITEM = "item"
 }
 
 @Entity()
 export class DiscountRule extends SoftDeletableEntity {
-  @Column({ nullable: true })
-  description: string
+    @Column({ nullable: true })
+    description: string;
 
-  @DbAwareColumn({
-    type: "enum",
-    enum: DiscountRuleType,
-  })
-  type: DiscountRuleType
+    @DbAwareColumn({
+        type: "enum",
+        enum: DiscountRuleType
+    })
+    type: DiscountRuleType;
 
-  @Column()
-  value: number
+    @Column()
+    value: number;
 
-  @DbAwareColumn({
-    type: "enum",
-    enum: AllocationType,
-    nullable: true,
-  })
-  allocation: AllocationType
+    @DbAwareColumn({
+        type: "enum",
+        enum: AllocationType,
+        nullable: true
+    })
+    allocation: AllocationType;
 
-  @OneToMany(() => DiscountCondition, (conditions) => conditions.discount_rule)
-  conditions: DiscountCondition[]
+    @OneToMany(() => DiscountCondition, (conditions) => conditions.discount_rule)
+    conditions: DiscountCondition[];
 
-  @DbAwareColumn({ type: "jsonb", nullable: true })
-  metadata: Record<string, unknown>
+    @DbAwareColumn({ type: "jsonb", nullable: true })
+    metadata: Record<string, unknown>;
 
-  @BeforeInsert()
-  private beforeInsert(): void {
-    this.id = generateEntityId(this.id, "dru")
-  }
+    @BeforeInsert()
+    private beforeInsert(): void {
+        this.id = generateEntityId(this.id, "dru");
+    }
 }
 
 /**

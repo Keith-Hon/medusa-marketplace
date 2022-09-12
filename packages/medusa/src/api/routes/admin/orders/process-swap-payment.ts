@@ -1,6 +1,6 @@
-import { EntityManager } from "typeorm"
-import { defaultAdminOrdersFields, defaultAdminOrdersRelations } from "."
-import { OrderService, SwapService } from "../../../../services"
+import { EntityManager } from "typeorm";
+import { defaultAdminOrdersFields, defaultAdminOrdersRelations } from ".";
+import { OrderService, SwapService } from "../../../../services";
 
 /**
  * @oas [post] /orders/{id}/swaps/{swap_id}/process-payment
@@ -24,20 +24,20 @@ import { OrderService, SwapService } from "../../../../services"
  *               $ref: "#/components/schemas/order"
  */
 export default async (req, res) => {
-  const { id, swap_id } = req.params
+    const { id, swap_id } = req.params;
 
-  const orderService: OrderService = req.scope.resolve("orderService")
-  const swapService: SwapService = req.scope.resolve("swapService")
-  const entityManager: EntityManager = req.scope.resolve("manager")
+    const orderService: OrderService = req.scope.resolve("orderService");
+    const swapService: SwapService = req.scope.resolve("swapService");
+    const entityManager: EntityManager = req.scope.resolve("manager");
 
-  await entityManager.transaction(async (manager) => {
-    await swapService.withTransaction(manager).processDifference(swap_id)
+    await entityManager.transaction(async (manager) => {
+        await swapService.withTransaction(manager).processDifference(swap_id);
 
-    const order = await orderService.withTransaction(manager).retrieve(id, {
-      select: defaultAdminOrdersFields,
-      relations: defaultAdminOrdersRelations,
-    })
+        const order = await orderService.withTransaction(manager).retrieve(id, {
+            select: defaultAdminOrdersFields,
+            relations: defaultAdminOrdersRelations
+        });
 
-    res.json({ order })
-  })
-}
+        res.json({ order });
+    });
+};

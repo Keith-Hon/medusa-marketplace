@@ -1,26 +1,15 @@
-import { Transform, Type } from "class-transformer"
-import {
-  IsArray,
-  IsBoolean,
-  IsNumber,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from "class-validator"
-import { omit, pickBy } from "lodash"
-import { defaultStoreProductsRelations } from "."
-import {
-  ProductService,
-  RegionService,
-  CartService,
-} from "../../../../services"
-import PricingService from "../../../../services/pricing"
-import { DateComparisonOperator } from "../../../../types/common"
-import { PriceSelectionParams } from "../../../../types/price-selection"
-import { validator } from "../../../../utils/validator"
-import { IsType } from "../../../../utils/validators/is-type"
-import { optionalBooleanMapper } from "../../../../utils/validators/is-boolean"
-import { Product } from "../../../../models"
+import { Transform, Type } from "class-transformer";
+import { IsArray, IsBoolean, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator";
+import { omit, pickBy } from "lodash";
+import { defaultStoreProductsRelations } from ".";
+import { ProductService, RegionService, CartService } from "../../../../services";
+import PricingService from "../../../../services/pricing";
+import { DateComparisonOperator } from "../../../../types/common";
+import { PriceSelectionParams } from "../../../../types/price-selection";
+import { validator } from "../../../../utils/validator";
+import { IsType } from "../../../../utils/validators/is-type";
+import { optionalBooleanMapper } from "../../../../utils/validators/is-boolean";
+import { Product } from "../../../../models";
 
 /**
  * @oas [get] /products
@@ -66,146 +55,136 @@ import { Product } from "../../../../models"
  *                 $ref: "#/components/schemas/product"
  */
 export default async (req, res) => {
-  const productService: ProductService = req.scope.resolve("productService")
-  const pricingService: PricingService = req.scope.resolve("pricingService")
-  const cartService: CartService = req.scope.resolve("cartService")
-  const regionService: RegionService = req.scope.resolve("regionService")
+    const productService: ProductService = req.scope.resolve("productService");
+    const pricingService: PricingService = req.scope.resolve("pricingService");
+    const cartService: CartService = req.scope.resolve("cartService");
+    const regionService: RegionService = req.scope.resolve("regionService");
 
-  const validated = await validator(StoreGetProductsParams, req.query)
+    const validated = await validator(StoreGetProductsParams, req.query);
 
-  const filterableFields: StoreGetProductsParams = omit(validated, [
-    "fields",
-    "expand",
-    "limit",
-    "offset",
-    "cart_id",
-    "region_id",
-    "currency_code",
-  ])
+    const filterableFields: StoreGetProductsParams = omit(validated, ["fields", "expand", "limit", "offset", "cart_id", "region_id", "currency_code"]);
 
-  // get only published products for store endpoint
-  filterableFields["status"] = ["published"]
+    // get only published products for store endpoint
+    filterableFields["status"] = ["published"];
 
-  let includeFields: (keyof Product)[] = []
-  if (validated.fields) {
-    const set = new Set(validated.fields.split(",")) as Set<keyof Product>
-    set.add("id")
-    includeFields = [...set]
-  }
+    let includeFields: (keyof Product)[] = [];
+    if (validated.fields) {
+        const set = new Set(validated.fields.split(",")) as Set<keyof Product>;
+        set.add("id");
+        includeFields = [...set];
+    }
 
-  let expandFields: string[] = []
-  if (validated.expand) {
-    expandFields = validated.expand.split(",")
-  }
+    let expandFields: string[] = [];
+    if (validated.expand) {
+        expandFields = validated.expand.split(",");
+    }
 
-  const listConfig = {
-    select: includeFields.length ? includeFields : undefined,
-    relations: expandFields.length
-      ? expandFields
-      : defaultStoreProductsRelations,
-    skip: validated.offset,
-    take: validated.limit,
-  }
+    const listConfig = {
+        select: includeFields.length ? includeFields : undefined,
+        relations: expandFields.length ? expandFields : defaultStoreProductsRelations,
+        skip: validated.offset,
+        take: validated.limit
+    };
 
-  const [rawProducts, count] = await productService.listAndCount(
-    pickBy(filterableFields, (val) => typeof val !== "undefined"),
-    listConfig
-  )
+    const [rawProducts, count] = await productService.listAndCount(
+        pickBy(filterableFields, (val) => typeof val !== "undefined"),
+        listConfig
+    );
 
-  let regionId = validated.region_id
-  let currencyCode = validated.currency_code
-  if (validated.cart_id) {
-    const cart = await cartService.retrieve(validated.cart_id, {
-      select: ["id", "region_id"],
-    })
-    const region = await regionService.retrieve(cart.region_id, {
-      select: ["id", "currency_code"],
-    })
-    regionId = region.id
-    currencyCode = region.currency_code
-  }
+    let regionId = validated.region_id;
+    let currencyCode = validated.currency_code;
+    if (validated.cart_id) {
+        const cart = await cartService.retrieve(validated.cart_id, {
+            select: ["id", "region_id"]
+        });
+        const region = await regionService.retrieve(cart.region_id, {
+            select: ["id", "currency_code"]
+        });
+        regionId = region.id;
+        currencyCode = region.currency_code;
+    }
 
-  const products = await pricingService.setProductPrices(rawProducts, {
-    cart_id: validated.cart_id,
-    region_id: regionId,
-    currency_code: currencyCode,
-    customer_id: req.user?.customer_id,
-    include_discount_prices: true,
-  })
+    const products = await pricingService.setProductPrices(rawProducts, {
+        cart_id: validated.cart_id,
+        region_id: regionId,
+        currency_code: currencyCode,
+        customer_id: req.user?.customer_id,
+        include_discount_prices: true
+    });
 
-  res.json({
-    products,
-    count,
-    offset: validated.offset,
-    limit: validated.limit,
-  })
-}
+    res.json({
+        products,
+        count,
+        offset: validated.offset,
+        limit: validated.limit
+    });
+};
 
 export class StoreGetProductsPaginationParams extends PriceSelectionParams {
-  @IsString()
-  @IsOptional()
-  fields?: string
+    @IsString()
+    @IsOptional()
+    fields?: string;
 
-  @IsString()
-  @IsOptional()
-  expand?: string
+    @IsString()
+    @IsOptional()
+    expand?: string;
 
-  @IsNumber()
-  @IsOptional()
-  @Type(() => Number)
-  offset?: number = 0
+    @IsNumber()
+    @IsOptional()
+    @Type(() => Number)
+    offset?: number = 0;
 
-  @IsNumber()
-  @IsOptional()
-  @Type(() => Number)
-  limit?: number = 100
+    @IsNumber()
+    @IsOptional()
+    @Type(() => Number)
+    limit?: number = 100;
 }
 
 export class StoreGetProductsParams extends StoreGetProductsPaginationParams {
-  @IsOptional()
-  @IsType([String, [String]])
-  id?: string | string[]
+    @IsOptional()
+    @IsType([String, [String]])
+    id?: string | string[];
 
-  @IsString()
-  @IsOptional()
-  q?: string
+    @IsString()
+    @IsOptional()
+    q?: string;
 
-  @IsArray()
-  @IsOptional()
-  collection_id?: string[]
+    @IsArray()
+    @IsOptional()
+    collection_id?: string[];
 
-  @IsArray()
-  @IsOptional()
-  tags?: string[]
+    @IsArray()
+    @IsOptional()
+    tags?: string[];
 
-  @IsString()
-  @IsOptional()
-  title?: string
+    @IsString()
+    @IsOptional()
+    title?: string;
 
-  @IsString()
-  @IsOptional()
-  description?: string
+    @IsString()
+    @IsOptional()
+    description?: string;
 
-  @IsString()
-  @IsOptional()
-  handle?: string
+    @IsString()
+    @IsOptional()
+    handle?: string;
 
-  @IsBoolean()
-  @IsOptional()
-  @Transform(({ value }) => optionalBooleanMapper.get(value.toLowerCase()))
-  is_giftcard?: boolean
+    @IsBoolean()
+    @IsOptional()
+    @Transform(({ value }) => optionalBooleanMapper.get(value.toLowerCase()))
+    is_giftcard?: boolean;
 
-  @IsString()
-  @IsOptional()
-  type?: string
+    @IsString()
+    @IsOptional()
+    type?: string;
 
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => DateComparisonOperator)
-  created_at?: DateComparisonOperator
+    @IsOptional()
+    @ValidateNested()
+    @Type(() => DateComparisonOperator)
+    created_at?: DateComparisonOperator;
 
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => DateComparisonOperator)
-  updated_at?: DateComparisonOperator
+    @IsOptional()
+    @ValidateNested()
+    @Type(() => DateComparisonOperator)
+    updated_at?: DateComparisonOperator;
 }

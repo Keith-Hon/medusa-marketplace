@@ -1,102 +1,93 @@
-import {
-  BeforeInsert,
-  Column,
-  Entity,
-  JoinColumn,
-  JoinTable,
-  ManyToMany,
-  ManyToOne,
-  OneToMany,
-} from "typeorm"
+import { BeforeInsert, Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany } from "typeorm";
 
-import { Currency } from "./currency"
-import { TaxRate } from "./tax-rate"
-import { Country } from "./country"
-import { PaymentProvider } from "./payment-provider"
-import { FulfillmentProvider } from "./fulfillment-provider"
-import { TaxProvider } from "./tax-provider"
-import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity"
-import { DbAwareColumn } from "../utils/db-aware-column"
-import { generateEntityId } from "../utils/generate-entity-id"
+import { Currency } from "./currency";
+import { TaxRate } from "./tax-rate";
+import { Country } from "./country";
+import { PaymentProvider } from "./payment-provider";
+import { FulfillmentProvider } from "./fulfillment-provider";
+import { TaxProvider } from "./tax-provider";
+import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity";
+import { DbAwareColumn } from "../utils/db-aware-column";
+import { generateEntityId } from "../utils/generate-entity-id";
 
 @Entity()
 export class Region extends SoftDeletableEntity {
-  @Column()
-  name: string
+    @Column()
+    name: string;
 
-  @Column()
-  currency_code: string
+    @Column()
+    currency_code: string;
 
-  @ManyToOne(() => Currency)
-  @JoinColumn({ name: "currency_code", referencedColumnName: "code" })
-  currency: Currency
+    @ManyToOne(() => Currency)
+    @JoinColumn({ name: "currency_code", referencedColumnName: "code" })
+    currency: Currency;
 
-  @Column({ type: "real" })
-  tax_rate: number
+    @Column({ type: "real" })
+    tax_rate: number;
 
-  @OneToMany(() => TaxRate, (tr) => tr.region)
-  tax_rates: TaxRate[] | null
+    @OneToMany(() => TaxRate, (tr) => tr.region)
+    tax_rates: TaxRate[] | null;
 
-  @Column({ nullable: true })
-  tax_code: string
+    @Column({ nullable: true })
+    tax_code: string;
 
-  @Column({ default: true })
-  gift_cards_taxable: boolean
+    @Column({ default: true })
+    gift_cards_taxable: boolean;
 
-  @Column({ default: true })
-  automatic_taxes: boolean
+    @Column({ default: true })
+    automatic_taxes: boolean;
 
-  @OneToMany(() => Country, (c) => c.region)
-  countries: Country[]
+    @OneToMany(() => Country, (c) => c.region)
+    countries: Country[];
 
-  @Column({ type: "text", nullable: true })
-  tax_provider_id: string | null
+    @Column({ type: "text", nullable: true })
+    tax_provider_id: string | null;
 
-  @ManyToOne(() => TaxProvider)
-  @JoinColumn({ name: "tax_provider_id" })
-  tax_provider: TaxProvider
+    @ManyToOne(() => TaxProvider)
+    @JoinColumn({ name: "tax_provider_id" })
+    tax_provider: TaxProvider;
 
-  @ManyToMany(() => PaymentProvider, {
-    eager: true,
-    cascade: ["insert", "update"],
-  })
-  @JoinTable({
-    name: "region_payment_providers",
-    joinColumn: {
-      name: "region_id",
-      referencedColumnName: "id",
-    },
-    inverseJoinColumn: {
-      name: "provider_id",
-      referencedColumnName: "id",
-    },
-  })
-  payment_providers: PaymentProvider[]
+    @ManyToMany(() => PaymentProvider, {
+        eager: true,
+        cascade: ["insert", "update"]
+    })
+    @JoinTable({
+        name: "region_payment_providers",
+        joinColumn: {
+            name: "region_id",
+            referencedColumnName: "id"
+        },
+        inverseJoinColumn: {
+            name: "provider_id",
+            referencedColumnName: "id"
+        }
+    })
+    payment_providers: PaymentProvider[];
 
-  @ManyToMany(() => FulfillmentProvider, {
-    eager: true,
-    cascade: ["insert", "update"],
-  })
-  @JoinTable({
-    name: "region_fulfillment_providers",
-    joinColumn: {
-      name: "region_id",
-      referencedColumnName: "id",
-    },
-    inverseJoinColumn: {
-      name: "provider_id",
-      referencedColumnName: "id",
-    },
-  })
-  fulfillment_providers: FulfillmentProvider[]
+    @ManyToMany(() => FulfillmentProvider, {
+        eager: true,
+        cascade: ["insert", "update"]
+    })
+    @JoinTable({
+        name: "region_fulfillment_providers",
+        joinColumn: {
+            name: "region_id",
+            referencedColumnName: "id"
+        },
+        inverseJoinColumn: {
+            name: "provider_id",
+            referencedColumnName: "id"
+        }
+    })
+    fulfillment_providers: FulfillmentProvider[];
 
-  @DbAwareColumn({ type: "jsonb", nullable: true })
-  metadata: Record<string, unknown>
+    @DbAwareColumn({ type: "jsonb", nullable: true })
+    metadata: Record<string, unknown>;
 
-  @BeforeInsert()
-  private beforeInsert(): void {
-    this.id = generateEntityId(this.id, "reg")
-  }
+    @BeforeInsert()
+    private beforeInsert(): void {
+        this.id = generateEntityId(this.id, "reg");
+    }
 }
 
 /**

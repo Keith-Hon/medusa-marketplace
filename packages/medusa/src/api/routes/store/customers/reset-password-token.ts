@@ -1,7 +1,7 @@
-import { IsEmail } from "class-validator"
-import CustomerService from "../../../../services/customer"
-import { validator } from "../../../../utils/validator"
-import { EntityManager } from "typeorm"
+import { IsEmail } from "class-validator";
+import CustomerService from "../../../../services/customer";
+import { validator } from "../../../../utils/validator";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /customers/password-token
@@ -17,29 +17,22 @@ import { EntityManager } from "typeorm"
  *     description: OK
  */
 export default async (req, res) => {
-  const validated = await validator(
-    StorePostCustomersCustomerPasswordTokenReq,
-    req.body
-  )
+    const validated = await validator(StorePostCustomersCustomerPasswordTokenReq, req.body);
 
-  const customerService: CustomerService = req.scope.resolve(
-    "customerService"
-  ) as CustomerService
+    const customerService: CustomerService = req.scope.resolve("customerService") as CustomerService;
 
-  const customer = await customerService.retrieveByEmail(validated.email)
+    const customer = await customerService.retrieveByEmail(validated.email);
 
-  // Will generate a token and send it to the customer via an email provider
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await customerService
-      .withTransaction(transactionManager)
-      .generateResetPasswordToken(customer.id)
-  })
+    // Will generate a token and send it to the customer via an email provider
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await customerService.withTransaction(transactionManager).generateResetPasswordToken(customer.id);
+    });
 
-  res.sendStatus(204)
-}
+    res.sendStatus(204);
+};
 
 export class StorePostCustomersCustomerPasswordTokenReq {
-  @IsEmail()
-  email: string
+    @IsEmail()
+    email: string;
 }

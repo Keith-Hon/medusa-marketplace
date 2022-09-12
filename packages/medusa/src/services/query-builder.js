@@ -1,52 +1,52 @@
-import { BaseService } from "medusa-interfaces"
-import _ from "lodash"
+import { BaseService } from "medusa-interfaces";
+import _ from "lodash";
 
 class QueryBuilderService extends BaseService {
-  buildQuery(params, properties) {
-    const textSearch = _.pick(params, ["q"])
-    const filters = _.pick(params, properties)
+    buildQuery(params, properties) {
+        const textSearch = _.pick(params, ["q"]);
+        const filters = _.pick(params, properties);
 
-    const textQuery = this.buildTextSearchQuery(textSearch, properties)
-    const filterQuery = this.buildFilterQuery(filters)
+        const textQuery = this.buildTextSearchQuery(textSearch, properties);
+        const filterQuery = this.buildFilterQuery(filters);
 
-    if (textQuery && filterQuery) {
-      return {
-        $and: [textQuery, filterQuery],
-      }
-    } else if (!textQuery && filterQuery) {
-      return filterQuery
-    } else if (textQuery && !filterQuery) {
-      return textQuery
-    } else {
-      return {}
-    }
-  }
-
-  buildFilterQuery(filters) {
-    if (_.isEmpty(filters)) {
-      return
+        if (textQuery && filterQuery) {
+            return {
+                $and: [textQuery, filterQuery]
+            };
+        } else if (!textQuery && filterQuery) {
+            return filterQuery;
+        } else if (textQuery && !filterQuery) {
+            return textQuery;
+        } else {
+            return {};
+        }
     }
 
-    const filterQuery = {}
+    buildFilterQuery(filters) {
+        if (_.isEmpty(filters)) {
+            return;
+        }
 
-    Object.keys(filters).map((filter) => {
-      filterQuery[filter] = filters[filter]
-    })
+        const filterQuery = {};
 
-    return filterQuery
-  }
+        Object.keys(filters).map((filter) => {
+            filterQuery[filter] = filters[filter];
+        });
 
-  buildTextSearchQuery(search, searchProperties) {
-    if (_.isEmpty(search)) {
-      return
+        return filterQuery;
     }
 
-    const searchQuery = searchProperties.map((s) => ({
-      [s]: new RegExp(search.q, "i"),
-    }))
+    buildTextSearchQuery(search, searchProperties) {
+        if (_.isEmpty(search)) {
+            return;
+        }
 
-    return { $or: searchQuery }
-  }
+        const searchQuery = searchProperties.map((s) => ({
+            [s]: new RegExp(search.q, "i")
+        }));
+
+        return { $or: searchQuery };
+    }
 }
 
-export default QueryBuilderService
+export default QueryBuilderService;

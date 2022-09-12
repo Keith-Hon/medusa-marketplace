@@ -1,12 +1,12 @@
 import {
-	EntityInjectableOptions,
-	MiddlewareInjectionOptions,
-	RepositoryInjectableOptions,
-	RouterInjectionOptions,
-	ServiceInjectableOptions,
-	ValidatorInjectionOptions,
-} from '../core';
-import { buildComponentDecorator } from './helpers/build-component-decorator';
+    EntityInjectableOptions,
+    MiddlewareInjectionOptions,
+    RepositoryInjectableOptions,
+    RouterInjectionOptions,
+    ServiceInjectableOptions,
+    ValidatorInjectionOptions
+} from "../core";
+import { buildComponentDecorator } from "./helpers/build-component-decorator";
 
 /**
  * Mark a class as an entity to be used by the loader.
@@ -14,7 +14,7 @@ import { buildComponentDecorator } from './helpers/build-component-decorator';
  * @constructor
  */
 export function Entity<T = unknown>(options: EntityInjectableOptions<T> = {}): ClassDecorator {
-	return buildComponentDecorator({ type: 'entity', ...options });
+    return buildComponentDecorator({ type: "entity", ...options });
 }
 
 /**
@@ -23,7 +23,7 @@ export function Entity<T = unknown>(options: EntityInjectableOptions<T> = {}): C
  * @constructor
  */
 export function Service<T = unknown>(options: ServiceInjectableOptions<T> = {}): ClassDecorator {
-	return buildComponentDecorator({ type: 'service', ...options });
+    return buildComponentDecorator({ type: "service", ...options });
 }
 
 /**
@@ -32,7 +32,7 @@ export function Service<T = unknown>(options: ServiceInjectableOptions<T> = {}):
  * @constructor
  */
 export function Repository<T = unknown>(options: RepositoryInjectableOptions<T> = {}): ClassDecorator {
-	return buildComponentDecorator({ type: 'repository', ...options });
+    return buildComponentDecorator({ type: "repository", ...options });
 }
 
 /**
@@ -41,7 +41,7 @@ export function Repository<T = unknown>(options: RepositoryInjectableOptions<T> 
  * @constructor
  */
 export function Middleware(options: MiddlewareInjectionOptions): ClassDecorator {
-	return buildComponentDecorator({ type: 'middleware', ...options });
+    return buildComponentDecorator({ type: "middleware", ...options });
 }
 
 /**
@@ -49,7 +49,7 @@ export function Middleware(options: MiddlewareInjectionOptions): ClassDecorator 
  * @constructor
  */
 export function Migration(): ClassDecorator {
-	return buildComponentDecorator({ type: 'migration' });
+    return buildComponentDecorator({ type: "migration" });
 }
 
 /**
@@ -58,7 +58,7 @@ export function Migration(): ClassDecorator {
  * @constructor
  */
 export function Router(options: RouterInjectionOptions): ClassDecorator {
-	return buildComponentDecorator({ type: 'router', ...options });
+    return buildComponentDecorator({ type: "router", ...options });
 }
 
 /**
@@ -67,7 +67,7 @@ export function Router(options: RouterInjectionOptions): ClassDecorator {
  * @constructor
  */
 export function Validator(options: ValidatorInjectionOptions): ClassDecorator {
-	return buildComponentDecorator({ type: 'validator', ...options });
+    return buildComponentDecorator({ type: "validator", ...options });
 }
 
 /**
@@ -75,5 +75,5 @@ export function Validator(options: ValidatorInjectionOptions): ClassDecorator {
  * @constructor
  */
 export function Subscriber(): ClassDecorator {
-	return buildComponentDecorator({ type: 'subscriber' });
+    return buildComponentDecorator({ type: "subscriber" });
 }

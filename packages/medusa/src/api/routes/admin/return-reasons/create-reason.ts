@@ -1,11 +1,8 @@
-import { IsOptional, IsString } from "class-validator"
-import {
-  defaultAdminReturnReasonsFields,
-  defaultAdminReturnReasonsRelations,
-} from "."
-import { ReturnReasonService } from "../../../../services"
-import { validator } from "../../../../utils/validator"
-import { EntityManager } from "typeorm"
+import { IsOptional, IsString } from "class-validator";
+import { defaultAdminReturnReasonsFields, defaultAdminReturnReasonsRelations } from ".";
+import { ReturnReasonService } from "../../../../services";
+import { validator } from "../../../../utils/validator";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /return-reasons
@@ -49,41 +46,37 @@ import { EntityManager } from "typeorm"
  *               $ref: "#/components/schemas/return_reason"
  */
 export default async (req, res) => {
-  const validated = await validator(AdminPostReturnReasonsReq, req.body)
+    const validated = await validator(AdminPostReturnReasonsReq, req.body);
 
-  const returnReasonService: ReturnReasonService = req.scope.resolve(
-    "returnReasonService"
-  )
-  const manager: EntityManager = req.scope.resolve("manager")
-  const result = await manager.transaction(async (transactionManager) => {
-    return await returnReasonService
-      .withTransaction(transactionManager)
-      .create(validated)
-  })
+    const returnReasonService: ReturnReasonService = req.scope.resolve("returnReasonService");
+    const manager: EntityManager = req.scope.resolve("manager");
+    const result = await manager.transaction(async (transactionManager) => {
+        return await returnReasonService.withTransaction(transactionManager).create(validated);
+    });
 
-  const reason = await returnReasonService.retrieve(result.id, {
-    select: defaultAdminReturnReasonsFields,
-    relations: defaultAdminReturnReasonsRelations,
-  })
+    const reason = await returnReasonService.retrieve(result.id, {
+        select: defaultAdminReturnReasonsFields,
+        relations: defaultAdminReturnReasonsRelations
+    });
 
-  res.status(200).json({ return_reason: reason })
-}
+    res.status(200).json({ return_reason: reason });
+};
 
 export class AdminPostReturnReasonsReq {
-  @IsString()
-  value: string
+    @IsString()
+    value: string;
 
-  @IsString()
-  label: string
+    @IsString()
+    label: string;
 
-  @IsOptional()
-  @IsString()
-  parent_return_reason_id?: string
+    @IsOptional()
+    @IsString()
+    parent_return_reason_id?: string;
 
-  @IsOptional()
-  @IsString()
-  description?: string
+    @IsOptional()
+    @IsString()
+    description?: string;
 
-  @IsOptional()
-  metadata?: Record<string, unknown>
+    @IsOptional()
+    metadata?: Record<string, unknown>;
 }

@@ -1,84 +1,75 @@
-import {
-  BeforeInsert,
-  Check,
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-} from "typeorm"
-import { DbAwareColumn } from "../utils/db-aware-column"
+import { BeforeInsert, Check, Column, Entity, Index, JoinColumn, ManyToOne, OneToMany } from "typeorm";
+import { DbAwareColumn } from "../utils/db-aware-column";
 
-import { ShippingProfile } from "./shipping-profile"
-import { Region } from "./region"
-import { FulfillmentProvider } from "./fulfillment-provider"
-import { ShippingOptionRequirement } from "./shipping-option-requirement"
-import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity"
-import { generateEntityId } from "../utils/generate-entity-id"
+import { ShippingProfile } from "./shipping-profile";
+import { Region } from "./region";
+import { FulfillmentProvider } from "./fulfillment-provider";
+import { ShippingOptionRequirement } from "./shipping-option-requirement";
+import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity";
+import { generateEntityId } from "../utils/generate-entity-id";
 
 export enum ShippingOptionPriceType {
-  FLAT_RATE = "flat_rate",
-  CALCULATED = "calculated",
+    FLAT_RATE = "flat_rate",
+    CALCULATED = "calculated"
 }
 
 @Check(`"amount" >= 0`)
 @Entity()
 export class ShippingOption extends SoftDeletableEntity {
-  @Column()
-  name: string
+    @Column()
+    name: string;
 
-  @Index()
-  @Column()
-  region_id: string
+    @Index()
+    @Column()
+    region_id: string;
 
-  @ManyToOne(() => Region)
-  @JoinColumn({ name: "region_id" })
-  region: Region
+    @ManyToOne(() => Region)
+    @JoinColumn({ name: "region_id" })
+    region: Region;
 
-  @Index()
-  @Column()
-  profile_id: string
+    @Index()
+    @Column()
+    profile_id: string;
 
-  @ManyToOne(() => ShippingProfile)
-  @JoinColumn({ name: "profile_id" })
-  profile: ShippingProfile
+    @ManyToOne(() => ShippingProfile)
+    @JoinColumn({ name: "profile_id" })
+    profile: ShippingProfile;
 
-  @Index()
-  @Column()
-  provider_id: string
+    @Index()
+    @Column()
+    provider_id: string;
 
-  @ManyToOne(() => FulfillmentProvider)
-  @JoinColumn({ name: "provider_id" })
-  provider: FulfillmentProvider
+    @ManyToOne(() => FulfillmentProvider)
+    @JoinColumn({ name: "provider_id" })
+    provider: FulfillmentProvider;
 
-  @DbAwareColumn({ type: "enum", enum: ShippingOptionPriceType })
-  price_type: ShippingOptionPriceType
+    @DbAwareColumn({ type: "enum", enum: ShippingOptionPriceType })
+    price_type: ShippingOptionPriceType;
 
-  @Column({ type: "int", nullable: true })
-  amount: number | null
+    @Column({ type: "int", nullable: true })
+    amount: number | null;
 
-  @Column({ default: false })
-  is_return: boolean
+    @Column({ default: false })
+    is_return: boolean;
 
-  @Column({ default: false })
-  admin_only: boolean
+    @Column({ default: false })
+    admin_only: boolean;
 
-  @OneToMany(() => ShippingOptionRequirement, (req) => req.shipping_option, {
-    cascade: ["insert"],
-  })
-  requirements: ShippingOptionRequirement[]
+    @OneToMany(() => ShippingOptionRequirement, (req) => req.shipping_option, {
+        cascade: ["insert"]
+    })
+    requirements: ShippingOptionRequirement[];
 
-  @DbAwareColumn({ type: "jsonb" })
-  data: Record<string, unknown>
+    @DbAwareColumn({ type: "jsonb" })
+    data: Record<string, unknown>;
 
-  @DbAwareColumn({ type: "jsonb", nullable: true })
-  metadata: Record<string, unknown>
+    @DbAwareColumn({ type: "jsonb", nullable: true })
+    metadata: Record<string, unknown>;
 
-  @BeforeInsert()
-  private beforeInsert(): void {
-    this.id = generateEntityId(this.id, "so")
-  }
+    @BeforeInsert()
+    private beforeInsert(): void {
+        this.id = generateEntityId(this.id, "so");
+    }
 }
 
 /**

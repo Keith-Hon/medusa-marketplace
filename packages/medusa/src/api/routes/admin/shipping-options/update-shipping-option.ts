@@ -1,16 +1,8 @@
-import { Type } from "class-transformer"
-import {
-  IsArray,
-  IsBoolean,
-  IsNumber,
-  IsObject,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from "class-validator"
-import { defaultFields, defaultRelations } from "."
-import { validator } from "../../../../utils/validator"
-import { EntityManager } from "typeorm"
+import { Type } from "class-transformer";
+import { IsArray, IsBoolean, IsNumber, IsObject, IsOptional, IsString, ValidateNested } from "class-validator";
+import { defaultFields, defaultRelations } from ".";
+import { validator } from "../../../../utils/validator";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /shipping-options/{id}
@@ -64,56 +56,54 @@ import { EntityManager } from "typeorm"
  *               $ref: "#/components/schemas/shipping_option"
  */
 export default async (req, res) => {
-  const { option_id } = req.params
+    const { option_id } = req.params;
 
-  const validated = await validator(AdminPostShippingOptionsOptionReq, req.body)
+    const validated = await validator(AdminPostShippingOptionsOptionReq, req.body);
 
-  const optionService = req.scope.resolve("shippingOptionService")
+    const optionService = req.scope.resolve("shippingOptionService");
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await optionService
-      .withTransaction(transactionManager)
-      .update(option_id, validated)
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await optionService.withTransaction(transactionManager).update(option_id, validated);
+    });
 
-  const data = await optionService.retrieve(option_id, {
-    select: defaultFields,
-    relations: defaultRelations,
-  })
+    const data = await optionService.retrieve(option_id, {
+        select: defaultFields,
+        relations: defaultRelations
+    });
 
-  res.status(200).json({ shipping_option: data })
-}
+    res.status(200).json({ shipping_option: data });
+};
 
 class OptionRequirement {
-  @IsString()
-  @IsOptional()
-  id: string
-  @IsString()
-  type: string
-  @IsNumber()
-  amount: number
+    @IsString()
+    @IsOptional()
+    id: string;
+    @IsString()
+    type: string;
+    @IsNumber()
+    amount: number;
 }
 
 export class AdminPostShippingOptionsOptionReq {
-  @IsString()
-  @IsOptional()
-  name: string
+    @IsString()
+    @IsOptional()
+    name: string;
 
-  @IsNumber()
-  @IsOptional()
-  amount?: number
+    @IsNumber()
+    @IsOptional()
+    amount?: number;
 
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => OptionRequirement)
-  requirements: OptionRequirement[]
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => OptionRequirement)
+    requirements: OptionRequirement[];
 
-  @IsBoolean()
-  @IsOptional()
-  admin_only?: boolean
+    @IsBoolean()
+    @IsOptional()
+    admin_only?: boolean;
 
-  @IsObject()
-  @IsOptional()
-  metadata?: object
+    @IsObject()
+    @IsOptional()
+    metadata?: object;
 }

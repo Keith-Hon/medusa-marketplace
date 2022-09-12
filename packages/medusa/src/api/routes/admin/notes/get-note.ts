@@ -1,4 +1,4 @@
-import NoteService from "../../../../services/note"
+import NoteService from "../../../../services/note";
 
 /**
  * @oas [get] /notes/{id}
@@ -21,10 +21,10 @@ import NoteService from "../../../../services/note"
  *               $ref: "#/components/schemas/note"
  */
 export default async (req, res) => {
-  const { id } = req.params
+    const { id } = req.params;
 
-  const noteService: NoteService = req.scope.resolve("noteService")
-  const note = await noteService.retrieve(id, { relations: ["author"] })
+    const noteService: NoteService = req.scope.resolve("noteService");
+    const note = await noteService.retrieve(id, { relations: ["author"] });
 
-  res.status(200).json({ note })
-}
+    res.status(200).json({ note });
+};

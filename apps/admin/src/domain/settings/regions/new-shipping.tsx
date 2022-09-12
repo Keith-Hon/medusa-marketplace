@@ -18,10 +18,8 @@ import fulfillmentProvidersMapper from "../../../utils/fulfillment-providers.map
 
 const NewShipping = ({ isReturn, region, onCreated, onClick }) => {
   const { register, setValue, handleSubmit } = useForm()
-  const {
-    shipping_profiles,
-    isLoading: isProfilesLoading,
-  } = useAdminShippingProfiles()
+  const { shipping_profiles, isLoading: isProfilesLoading } =
+    useAdminShippingProfiles()
   const { fulfillment_options } = useAdminRegionFulfillmentOptions(region.id)
   const [adminOnly, setAdminOnly] = useState(false)
   const [options, setOptions] = useState([])
@@ -59,9 +57,8 @@ const NewShipping = ({ isReturn, region, onCreated, onClick }) => {
       }
     })
 
-    const [providerIndex, optionIndex] = data.fulfillment_option.value.split(
-      "."
-    )
+    const [providerIndex, optionIndex] =
+      data.fulfillment_option.value.split(".")
     const { provider_id, options } = fOptions?.[providerIndex] || {}
 
     let reqs = []

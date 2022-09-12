@@ -1,5 +1,5 @@
-import { Request, Response } from "express"
-import { SalesChannelService } from "../../../../services"
+import { Request, Response } from "express";
+import { SalesChannelService } from "../../../../services";
 
 /**
  * @oas [get] /sales-channels/{id}
@@ -22,12 +22,10 @@ import { SalesChannelService } from "../../../../services"
  *               $ref: "#/components/schemas/sales_channel"
  */
 export default async (req: Request, res: Response): Promise<void> => {
-  const { id } = req.params
+    const { id } = req.params;
 
-  const salesChannelService: SalesChannelService = req.scope.resolve(
-    "salesChannelService"
-  )
+    const salesChannelService: SalesChannelService = req.scope.resolve("salesChannelService");
 
-  const salesChannel = await salesChannelService.retrieve(id)
-  res.status(200).json({ sales_channel: salesChannel })
-}
+    const salesChannel = await salesChannelService.retrieve(id);
+    res.status(200).json({ sales_channel: salesChannel });
+};

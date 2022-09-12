@@ -27,9 +27,8 @@ const DraftOrderTable: React.FC<RouteComponentProps> = () => {
   const [query, setQuery] = useState(filtersOnLoad?.query)
   const [numPages, setNumPages] = useState(0)
 
-  const { draft_orders, isLoading, isRefetching, count } = useAdminDraftOrders(
-    queryObject
-  )
+  const { draft_orders, isLoading, isRefetching, count } =
+    useAdminDraftOrders(queryObject)
 
   useEffect(() => {
     const controlledPageCount = Math.ceil(count! / queryObject.limit)

@@ -1,8 +1,8 @@
-import { IsEmail, IsEnum } from "class-validator"
-import { UserRoles } from "../../../../models/user"
-import InviteService from "../../../../services/invite"
-import { validator } from "../../../../utils/validator"
-import { EntityManager } from "typeorm"
+import { IsEmail, IsEnum } from "class-validator";
+import { UserRoles } from "../../../../models/user";
+import InviteService from "../../../../services/invite";
+import { validator } from "../../../../utils/validator";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /invites
@@ -31,23 +31,21 @@ import { EntityManager } from "typeorm"
  *     description: OK
  */
 export default async (req, res) => {
-  const validated = await validator(AdminPostInvitesReq, req.body)
+    const validated = await validator(AdminPostInvitesReq, req.body);
 
-  const inviteService: InviteService = req.scope.resolve("inviteService")
+    const inviteService: InviteService = req.scope.resolve("inviteService");
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await inviteService
-      .withTransaction(transactionManager)
-      .create(validated.user, validated.role)
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await inviteService.withTransaction(transactionManager).create(validated.user, validated.role);
+    });
 
-  res.sendStatus(200)
-}
+    res.sendStatus(200);
+};
 export class AdminPostInvitesReq {
-  @IsEmail()
-  user: string
+    @IsEmail()
+    user: string;
 
-  @IsEnum(UserRoles)
-  role: UserRoles
+    @IsEnum(UserRoles)
+    role: UserRoles;
 }

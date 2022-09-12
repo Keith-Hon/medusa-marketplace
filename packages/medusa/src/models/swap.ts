@@ -1,120 +1,111 @@
-import {
-  BeforeInsert,
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  OneToOne,
-} from "typeorm"
-import { DbAwareColumn, resolveDbType } from "../utils/db-aware-column"
+import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne, OneToMany, OneToOne } from "typeorm";
+import { DbAwareColumn, resolveDbType } from "../utils/db-aware-column";
 
-import { Order } from "./order"
-import { Fulfillment } from "./fulfillment"
-import { Address } from "./address"
-import { LineItem } from "./line-item"
-import { Return } from "./return"
-import { Cart } from "./cart"
-import { Payment } from "./payment"
-import { ShippingMethod } from "./shipping-method"
-import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity"
-import { generateEntityId } from "../utils/generate-entity-id"
+import { Order } from "./order";
+import { Fulfillment } from "./fulfillment";
+import { Address } from "./address";
+import { LineItem } from "./line-item";
+import { Return } from "./return";
+import { Cart } from "./cart";
+import { Payment } from "./payment";
+import { ShippingMethod } from "./shipping-method";
+import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity";
+import { generateEntityId } from "../utils/generate-entity-id";
 
 export enum SwapFulfillmentStatus {
-  NOT_FULFILLED = "not_fulfilled",
-  FULFILLED = "fulfilled",
-  SHIPPED = "shipped",
-  CANCELED = "canceled",
-  REQUIRES_ACTION = "requires_action",
+    NOT_FULFILLED = "not_fulfilled",
+    FULFILLED = "fulfilled",
+    SHIPPED = "shipped",
+    CANCELED = "canceled",
+    REQUIRES_ACTION = "requires_action"
 }
 
 export enum SwapPaymentStatus {
-  NOT_PAID = "not_paid",
-  AWAITING = "awaiting",
-  CAPTURED = "captured",
-  CONFIRMED = "confirmed",
-  CANCELED = "canceled",
-  DIFFERENCE_REFUNDED = "difference_refunded",
-  PARTIALLY_REFUNDED = "partially_refunded",
-  REFUNDED = "refunded",
-  REQUIRES_ACTION = "requires_action",
+    NOT_PAID = "not_paid",
+    AWAITING = "awaiting",
+    CAPTURED = "captured",
+    CONFIRMED = "confirmed",
+    CANCELED = "canceled",
+    DIFFERENCE_REFUNDED = "difference_refunded",
+    PARTIALLY_REFUNDED = "partially_refunded",
+    REFUNDED = "refunded",
+    REQUIRES_ACTION = "requires_action"
 }
 
 @Entity()
 export class Swap extends SoftDeletableEntity {
-  @DbAwareColumn({ type: "enum", enum: SwapFulfillmentStatus })
-  fulfillment_status: SwapFulfillmentStatus
+    @DbAwareColumn({ type: "enum", enum: SwapFulfillmentStatus })
+    fulfillment_status: SwapFulfillmentStatus;
 
-  @DbAwareColumn({ type: "enum", enum: SwapPaymentStatus })
-  payment_status: SwapPaymentStatus
+    @DbAwareColumn({ type: "enum", enum: SwapPaymentStatus })
+    payment_status: SwapPaymentStatus;
 
-  @Index()
-  @Column({ type: "string" })
-  order_id: string
+    @Index()
+    @Column({ type: "string" })
+    order_id: string;
 
-  @ManyToOne(() => Order, (o) => o.swaps)
-  @JoinColumn({ name: "order_id" })
-  order: Order
+    @ManyToOne(() => Order, (o) => o.swaps)
+    @JoinColumn({ name: "order_id" })
+    order: Order;
 
-  @OneToMany(() => LineItem, (item) => item.swap, { cascade: ["insert"] })
-  additional_items: LineItem[]
+    @OneToMany(() => LineItem, (item) => item.swap, { cascade: ["insert"] })
+    additional_items: LineItem[];
 
-  @OneToOne(() => Return, (ret) => ret.swap, { cascade: ["insert"] })
-  return_order: Return
+    @OneToOne(() => Return, (ret) => ret.swap, { cascade: ["insert"] })
+    return_order: Return;
 
-  @OneToMany(() => Fulfillment, (fulfillment) => fulfillment.swap, {
-    cascade: ["insert"],
-  })
-  fulfillments: Fulfillment[]
+    @OneToMany(() => Fulfillment, (fulfillment) => fulfillment.swap, {
+        cascade: ["insert"]
+    })
+    fulfillments: Fulfillment[];
 
-  @OneToOne(() => Payment, (p) => p.swap, { cascade: ["insert"] })
-  payment: Payment
+    @OneToOne(() => Payment, (p) => p.swap, { cascade: ["insert"] })
+    payment: Payment;
 
-  @Column({ type: "int", nullable: true })
-  difference_due: number
+    @Column({ type: "int", nullable: true })
+    difference_due: number;
 
-  @Column({ nullable: true })
-  shipping_address_id: string
+    @Column({ nullable: true })
+    shipping_address_id: string;
 
-  @ManyToOne(() => Address, { cascade: ["insert"] })
-  @JoinColumn({ name: "shipping_address_id" })
-  shipping_address: Address
+    @ManyToOne(() => Address, { cascade: ["insert"] })
+    @JoinColumn({ name: "shipping_address_id" })
+    shipping_address: Address;
 
-  @OneToMany(() => ShippingMethod, (method) => method.swap, {
-    cascade: ["insert"],
-  })
-  shipping_methods: ShippingMethod[]
+    @OneToMany(() => ShippingMethod, (method) => method.swap, {
+        cascade: ["insert"]
+    })
+    shipping_methods: ShippingMethod[];
 
-  @Column({ nullable: true })
-  cart_id: string
+    @Column({ nullable: true })
+    cart_id: string;
 
-  @OneToOne(() => Cart)
-  @JoinColumn({ name: "cart_id" })
-  cart: Cart
+    @OneToOne(() => Cart)
+    @JoinColumn({ name: "cart_id" })
+    cart: Cart;
 
-  @Column({ type: resolveDbType("timestamptz"), nullable: true })
-  confirmed_at: Date
+    @Column({ type: resolveDbType("timestamptz"), nullable: true })
+    confirmed_at: Date;
 
-  @Column({ type: resolveDbType("timestamptz"), nullable: true })
-  canceled_at: Date
+    @Column({ type: resolveDbType("timestamptz"), nullable: true })
+    canceled_at: Date;
 
-  @Column({ type: "boolean", nullable: true })
-  no_notification: boolean
+    @Column({ type: "boolean", nullable: true })
+    no_notification: boolean;
 
-  @Column({ type: "boolean", default: false })
-  allow_backorder: boolean
+    @Column({ type: "boolean", default: false })
+    allow_backorder: boolean;
 
-  @Column({ nullable: true })
-  idempotency_key: string
+    @Column({ nullable: true })
+    idempotency_key: string;
 
-  @DbAwareColumn({ type: "jsonb", nullable: true })
-  metadata: Record<string, unknown>
+    @DbAwareColumn({ type: "jsonb", nullable: true })
+    metadata: Record<string, unknown>;
 
-  @BeforeInsert()
-  private beforeInsert(): void {
-    this.id = generateEntityId(this.id, "swap")
-  }
+    @BeforeInsert()
+    private beforeInsert(): void {
+        this.id = generateEntityId(this.id, "swap");
+    }
 }
 
 /**

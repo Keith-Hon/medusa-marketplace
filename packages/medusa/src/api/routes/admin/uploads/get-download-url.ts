@@ -1,5 +1,5 @@
-import { IsString } from "class-validator"
-import { AbstractFileService } from "../../../../interfaces"
+import { IsString } from "class-validator";
+import { AbstractFileService } from "../../../../interfaces";
 
 /**
  * [post] /uploads/download-url
@@ -25,16 +25,16 @@ import { AbstractFileService } from "../../../../interfaces"
  *     description: OK
  */
 export default async (req, res) => {
-  const fileService: AbstractFileService<any> = req.scope.resolve("fileService")
+    const fileService: AbstractFileService<any> = req.scope.resolve("fileService");
 
-  const url = await fileService.getPresignedDownloadUrl({
-    fileKey: (req.validatedBody as AdminPostUploadsDownloadUrlReq).file_key,
-  })
+    const url = await fileService.getPresignedDownloadUrl({
+        fileKey: (req.validatedBody as AdminPostUploadsDownloadUrlReq).file_key
+    });
 
-  res.status(200).send({ download_url: url })
-}
+    res.status(200).send({ download_url: url });
+};
 
 export class AdminPostUploadsDownloadUrlReq {
-  @IsString()
-  file_key: string
+    @IsString()
+    file_key: string;
 }

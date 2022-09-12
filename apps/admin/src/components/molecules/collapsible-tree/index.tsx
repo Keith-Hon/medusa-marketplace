@@ -22,9 +22,8 @@ type TCollapsibleTreeContext = {
   toggle: () => void
 }
 
-const CollapsibleTreeContext = React.createContext<TCollapsibleTreeContext | null>(
-  null
-)
+const CollapsibleTreeContext =
+  React.createContext<TCollapsibleTreeContext | null>(null)
 
 export const CollapsibleTree: CollapsibleTreeType = ({ children }) => {
   const [open, setOpen] = React.useState(false)

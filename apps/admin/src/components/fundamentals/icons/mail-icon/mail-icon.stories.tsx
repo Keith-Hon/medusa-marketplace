@@ -15,7 +15,7 @@ export default {
   },
 } as ComponentMeta<typeof MailIcon>
 
-const Template = args => <MailIcon {...args} />
+const Template = (args) => <MailIcon {...args} />
 
 export const Icon = Template.bind({})
 Icon.args = {

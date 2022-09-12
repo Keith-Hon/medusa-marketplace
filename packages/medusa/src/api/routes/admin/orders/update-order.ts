@@ -1,19 +1,10 @@
-import { Type } from "class-transformer"
-import {
-  IsArray,
-  IsBoolean,
-  IsEmail,
-  IsInt,
-  IsObject,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from "class-validator"
-import { defaultAdminOrdersFields, defaultAdminOrdersRelations } from "."
-import { OrderService } from "../../../../services"
-import { AddressPayload } from "../../../../types/common"
-import { validator } from "../../../../utils/validator"
-import { EntityManager } from "typeorm"
+import { Type } from "class-transformer";
+import { IsArray, IsBoolean, IsEmail, IsInt, IsObject, IsOptional, IsString, ValidateNested } from "class-validator";
+import { defaultAdminOrdersFields, defaultAdminOrdersRelations } from ".";
+import { OrderService } from "../../../../services";
+import { AddressPayload } from "../../../../types/common";
+import { validator } from "../../../../utils/validator";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /orders/{id}
@@ -97,101 +88,99 @@ import { EntityManager } from "typeorm"
  */
 
 export default async (req, res) => {
-  const { id } = req.params
+    const { id } = req.params;
 
-  const value = await validator(AdminPostOrdersOrderReq, req.body)
+    const value = await validator(AdminPostOrdersOrderReq, req.body);
 
-  const orderService: OrderService = req.scope.resolve("orderService")
+    const orderService: OrderService = req.scope.resolve("orderService");
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await orderService
-      .withTransaction(transactionManager)
-      .update(id, value)
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await orderService.withTransaction(transactionManager).update(id, value);
+    });
 
-  const order = await orderService.retrieve(id, {
-    select: defaultAdminOrdersFields,
-    relations: defaultAdminOrdersRelations,
-  })
+    const order = await orderService.retrieve(id, {
+        select: defaultAdminOrdersFields,
+        relations: defaultAdminOrdersRelations
+    });
 
-  res.status(200).json({ order })
-}
+    res.status(200).json({ order });
+};
 
 export class AdminPostOrdersOrderReq {
-  @IsEmail()
-  @IsOptional()
-  email?: string
+    @IsEmail()
+    @IsOptional()
+    email?: string;
 
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => AddressPayload)
-  billing_address?: AddressPayload
+    @IsOptional()
+    @ValidateNested()
+    @Type(() => AddressPayload)
+    billing_address?: AddressPayload;
 
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => AddressPayload)
-  shipping_address?: AddressPayload
+    @IsOptional()
+    @ValidateNested()
+    @Type(() => AddressPayload)
+    shipping_address?: AddressPayload;
 
-  @IsArray()
-  @IsOptional()
-  items?: Record<string, unknown>[]
+    @IsArray()
+    @IsOptional()
+    items?: Record<string, unknown>[];
 
-  @IsString()
-  @IsOptional()
-  region?: string
+    @IsString()
+    @IsOptional()
+    region?: string;
 
-  @IsArray()
-  @IsOptional()
-  discounts?: Record<string, unknown>[]
+    @IsArray()
+    @IsOptional()
+    discounts?: Record<string, unknown>[];
 
-  @IsString()
-  @IsOptional()
-  customer_id?: string
+    @IsString()
+    @IsOptional()
+    customer_id?: string;
 
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => PaymentMethod)
-  payment_method?: PaymentMethod
+    @IsOptional()
+    @ValidateNested()
+    @Type(() => PaymentMethod)
+    payment_method?: PaymentMethod;
 
-  @IsOptional()
-  @ValidateNested({ each: true })
-  @Type(() => ShippingMethod)
-  shipping_method?: ShippingMethod[]
+    @IsOptional()
+    @ValidateNested({ each: true })
+    @Type(() => ShippingMethod)
+    shipping_method?: ShippingMethod[];
 
-  @IsBoolean()
-  @IsOptional()
-  no_notification?: boolean
+    @IsBoolean()
+    @IsOptional()
+    no_notification?: boolean;
 }
 
 class PaymentMethod {
-  @IsString()
-  @IsOptional()
-  provider_id?: string
+    @IsString()
+    @IsOptional()
+    provider_id?: string;
 
-  @IsObject()
-  @IsOptional()
-  data?: Record<string, unknown>
+    @IsObject()
+    @IsOptional()
+    data?: Record<string, unknown>;
 }
 
 class ShippingMethod {
-  @IsString()
-  @IsOptional()
-  provider_id?: string
+    @IsString()
+    @IsOptional()
+    provider_id?: string;
 
-  @IsString()
-  @IsOptional()
-  profile_id?: string
+    @IsString()
+    @IsOptional()
+    profile_id?: string;
 
-  @IsInt()
-  @IsOptional()
-  price?: number
+    @IsInt()
+    @IsOptional()
+    price?: number;
 
-  @IsObject()
-  @IsOptional()
-  data?: Record<string, unknown>
+    @IsObject()
+    @IsOptional()
+    data?: Record<string, unknown>;
 
-  @IsArray()
-  @IsOptional()
-  items?: Record<string, unknown>[]
+    @IsArray()
+    @IsOptional()
+    items?: Record<string, unknown>[];
 }

@@ -1,5 +1,5 @@
-import { ProductService } from "../../../../services"
-import { EntityManager } from "typeorm"
+import { ProductService } from "../../../../services";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [delete] /products/{id}
@@ -28,17 +28,17 @@ import { EntityManager } from "typeorm"
  *               type: boolean
  */
 export default async (req, res) => {
-  const { id } = req.params
+    const { id } = req.params;
 
-  const productService: ProductService = req.scope.resolve("productService")
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await productService.withTransaction(transactionManager).delete(id)
-  })
+    const productService: ProductService = req.scope.resolve("productService");
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await productService.withTransaction(transactionManager).delete(id);
+    });
 
-  res.json({
-    id,
-    object: "product",
-    deleted: true,
-  })
-}
+    res.json({
+        id,
+        object: "product",
+        deleted: true
+    });
+};

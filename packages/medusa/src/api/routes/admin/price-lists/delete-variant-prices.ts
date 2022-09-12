@@ -1,5 +1,5 @@
-import PriceListService from "../../../../services/price-list"
-import { EntityManager } from "typeorm"
+import PriceListService from "../../../../services/price-list";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [delete] /price-lists/{id}/variants/{variant_id}/prices
@@ -32,23 +32,18 @@ import { EntityManager } from "typeorm"
  *               type: boolean
  */
 export default async (req, res) => {
-  const { id, variant_id } = req.params
+    const { id, variant_id } = req.params;
 
-  const priceListService: PriceListService =
-    req.scope.resolve("priceListService")
+    const priceListService: PriceListService = req.scope.resolve("priceListService");
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  const [deletedPriceIds] = await manager.transaction(
-    async (transactionManager) => {
-      return await priceListService
-        .withTransaction(transactionManager)
-        .deleteVariantPrices(id, [variant_id])
-    }
-  )
+    const manager: EntityManager = req.scope.resolve("manager");
+    const [deletedPriceIds] = await manager.transaction(async (transactionManager) => {
+        return await priceListService.withTransaction(transactionManager).deleteVariantPrices(id, [variant_id]);
+    });
 
-  return res.json({
-    ids: deletedPriceIds,
-    object: "money-amount",
-    deleted: true,
-  })
-}
+    return res.json({
+        ids: deletedPriceIds,
+        object: "money-amount",
+        deleted: true
+    });
+};

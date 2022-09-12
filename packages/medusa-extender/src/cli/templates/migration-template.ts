@@ -1,4 +1,4 @@
-import * as dedent from 'dedent';
+import * as dedent from "dedent";
 
 /**
  * Provide a basic template for the migration component generation.
@@ -6,7 +6,7 @@ import * as dedent from 'dedent';
  * @param timestamp
  */
 export function getMigrationTemplate(migrationName: string, timestamp: string): string {
-	return dedent`
+    return dedent`
         import { MigrationInterface, QueryRunner } from 'typeorm';
         import { Migration } from 'medusa-extender';
         

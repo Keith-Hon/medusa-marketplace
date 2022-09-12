@@ -11,6 +11,6 @@
  *    description: OK
  */
 export default async (req, res) => {
-  req.session.destroy()
-  res.status(200).end()
-}
+    req.session.destroy();
+    res.status(200).end();
+};

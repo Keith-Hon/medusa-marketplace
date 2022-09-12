@@ -1,40 +1,33 @@
-import {
-  CreateDateColumn,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryColumn,
-  UpdateDateColumn,
-} from "typeorm"
-import { DbAwareColumn, resolveDbType } from "../utils/db-aware-column"
+import { CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
+import { DbAwareColumn, resolveDbType } from "../utils/db-aware-column";
 
-import { ProductType } from "./product-type"
-import { TaxRate } from "./tax-rate"
+import { ProductType } from "./product-type";
+import { TaxRate } from "./tax-rate";
 
 @Entity()
 export class ProductTypeTaxRate {
-  @PrimaryColumn()
-  product_type_id: string
+    @PrimaryColumn()
+    product_type_id: string;
 
-  @PrimaryColumn()
-  rate_id: string
+    @PrimaryColumn()
+    rate_id: string;
 
-  @ManyToOne(() => ProductType, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "product_type_id" })
-  product_type?: ProductType
+    @ManyToOne(() => ProductType, { onDelete: "CASCADE" })
+    @JoinColumn({ name: "product_type_id" })
+    product_type?: ProductType;
 
-  @ManyToOne(() => TaxRate, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "rate_id" })
-  tax_rate?: TaxRate
+    @ManyToOne(() => TaxRate, { onDelete: "CASCADE" })
+    @JoinColumn({ name: "rate_id" })
+    tax_rate?: TaxRate;
 
-  @CreateDateColumn({ type: resolveDbType("timestamptz") })
-  created_at: Date
+    @CreateDateColumn({ type: resolveDbType("timestamptz") })
+    created_at: Date;
 
-  @UpdateDateColumn({ type: resolveDbType("timestamptz") })
-  updated_at: Date
+    @UpdateDateColumn({ type: resolveDbType("timestamptz") })
+    updated_at: Date;
 
-  @DbAwareColumn({ type: "jsonb", nullable: true })
-  metadata: Record<string, unknown>
+    @DbAwareColumn({ type: "jsonb", nullable: true })
+    metadata: Record<string, unknown>;
 }
 
 /**

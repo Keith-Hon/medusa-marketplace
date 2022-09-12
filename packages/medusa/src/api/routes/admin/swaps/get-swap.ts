@@ -1,5 +1,5 @@
-import { defaultAdminSwapFields, defaultAdminSwapRelations } from "."
-import { SwapService } from "../../../../services"
+import { defaultAdminSwapFields, defaultAdminSwapRelations } from ".";
+import { SwapService } from "../../../../services";
 
 /**
  * @oas [get] /swaps/{id}
@@ -22,14 +22,14 @@ import { SwapService } from "../../../../services"
  *               $ref: "#/components/schemas/swap"
  */
 export default async (req, res) => {
-  const { id } = req.params
+    const { id } = req.params;
 
-  const swapService: SwapService = req.scope.resolve("swapService")
+    const swapService: SwapService = req.scope.resolve("swapService");
 
-  const swap = await swapService.retrieve(id, {
-    select: defaultAdminSwapFields,
-    relations: defaultAdminSwapRelations,
-  })
+    const swap = await swapService.retrieve(id, {
+        select: defaultAdminSwapFields,
+        relations: defaultAdminSwapRelations
+    });
 
-  res.json({ swap })
-}
+    res.json({ swap });
+};

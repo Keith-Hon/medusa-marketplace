@@ -1,5 +1,5 @@
-import _ from "lodash"
-import UserService from "../../../../services/user"
+import _ from "lodash";
+import UserService from "../../../../services/user";
 
 /**
  * @oas [get] /auth
@@ -20,13 +20,13 @@ import UserService from "../../../../services/user"
  *              $ref: "#/components/schemas/user"
  */
 export default async (req, res) => {
-  try {
-    const userService: UserService = req.scope.resolve("userService")
-    const user = await userService.retrieve(req.user.userId)
+    try {
+        const userService: UserService = req.scope.resolve("userService");
+        const user = await userService.retrieve(req.user.userId);
 
-    const cleanRes = _.omit(user, ["password_hash"])
-    res.status(200).json({ user: cleanRes })
-  } catch (err) {
-    res.sendStatus(400)
-  }
-}
+        const cleanRes = _.omit(user, ["password_hash"]);
+        res.status(200).json({ user: cleanRes });
+    } catch (err) {
+        res.sendStatus(400);
+    }
+};

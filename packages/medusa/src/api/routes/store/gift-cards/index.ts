@@ -1,32 +1,27 @@
-import { Router } from "express"
-import middlewares from "../../../middlewares"
-import { GiftCard } from "./../../../../"
+import { Router } from "express";
+import middlewares from "../../../middlewares";
+import { GiftCard } from "./../../../../";
 
-const route = Router()
+const route = Router();
 
 export default (app) => {
-  app.use("/gift-cards", route)
+    app.use("/gift-cards", route);
 
-  route.get("/:code", middlewares.wrap(require("./get-gift-card").default))
+    route.get("/:code", middlewares.wrap(require("./get-gift-card").default));
 
-  return app
-}
+    return app;
+};
 
-export const defaultStoreGiftCardRelations = ["region"]
+export const defaultStoreGiftCardRelations = ["region"];
 
-export const defaultStoreGiftCardFields: (keyof GiftCard)[] = [
-  "id",
-  "code",
-  "value",
-  "balance",
-]
+export const defaultStoreGiftCardFields: (keyof GiftCard)[] = ["id", "code", "value", "balance"];
 
-export const allowedStoreGiftCardRelations = ["region"]
+export const allowedStoreGiftCardRelations = ["region"];
 
-export const allowedStoreGiftCardFields = ["id", "code", "value", "balance"]
+export const allowedStoreGiftCardFields = ["id", "code", "value", "balance"];
 
 export type StoreGiftCardsRes = {
-  gift_card: GiftCard
-}
+    gift_card: GiftCard;
+};
 
-export * from "./get-gift-card"
+export * from "./get-gift-card";

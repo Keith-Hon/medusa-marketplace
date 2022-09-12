@@ -2,20 +2,38 @@ import { Cart } from "medusa";
 import { CartService as MedusaCartService } from "@medusajs/medusa/dist/services";
 import { FilterableCartProps } from "@medusajs/medusa/dist/types/cart";
 import { FindConfig } from "@medusajs/medusa/dist/types/common";
-import { Service } from 'medusa-extender';
+import { Service } from "medusa-extender";
 
 type InjectedDependencies = {
-    manager,
-    cartRepository, shippingMethodRepository, lineItemRepository, eventBusService,
-    paymentProviderService, productService, productVariantService, taxProviderService, regionService,
-    lineItemService, shippingOptionService, customerService, discountService, giftCardService, totalsService,
-    addressRepository, paymentSessionRepository, inventoryService, customShippingOptionService, lineItemAdjustmentService,
-    priceSelectionStrategy, salesChannelService, featureFlagRouter, storeService,
-}
+    manager;
+    cartRepository;
+    shippingMethodRepository;
+    lineItemRepository;
+    eventBusService;
+    paymentProviderService;
+    productService;
+    productVariantService;
+    taxProviderService;
+    regionService;
+    lineItemService;
+    shippingOptionService;
+    customerService;
+    discountService;
+    giftCardService;
+    totalsService;
+    addressRepository;
+    paymentSessionRepository;
+    inventoryService;
+    customShippingOptionService;
+    lineItemAdjustmentService;
+    priceSelectionStrategy;
+    salesChannelService;
+    featureFlagRouter;
+    storeService;
+};
 
-@Service({ scope: 'SCOPED', override: MedusaCartService })
+@Service({ scope: "SCOPED", override: MedusaCartService })
 export class CartService extends MedusaCartService {
-
     constructor(container: InjectedDependencies) {
         super(container);
     }

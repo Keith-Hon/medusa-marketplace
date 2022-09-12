@@ -1,14 +1,8 @@
-import { Type } from "class-transformer"
-import {
-  IsEmail,
-  IsNumber,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from "class-validator"
-import { defaultStoreOrdersFields, defaultStoreOrdersRelations } from "."
-import { OrderService } from "../../../../services"
-import { validator } from "../../../../utils/validator"
+import { Type } from "class-transformer";
+import { IsEmail, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator";
+import { defaultStoreOrdersFields, defaultStoreOrdersRelations } from ".";
+import { OrderService } from "../../../../services";
+import { validator } from "../../../../utils/validator";
 
 /**
  * @oas [get] /orders
@@ -31,47 +25,47 @@ import { validator } from "../../../../utils/validator"
  *               $ref: "#/components/schemas/order"
  */
 export default async (req, res) => {
-  const validated = await validator(StoreGetOrdersParams, req.query)
+    const validated = await validator(StoreGetOrdersParams, req.query);
 
-  const orderService: OrderService = req.scope.resolve("orderService")
+    const orderService: OrderService = req.scope.resolve("orderService");
 
-  const orders = await orderService.list(
-    {
-      display_id: validated.display_id,
-      email: validated.email,
-    },
-    {
-      select: defaultStoreOrdersFields,
-      relations: defaultStoreOrdersRelations,
+    const orders = await orderService.list(
+        {
+            display_id: validated.display_id,
+            email: validated.email
+        },
+        {
+            select: defaultStoreOrdersFields,
+            relations: defaultStoreOrdersRelations
+        }
+    );
+
+    if (orders.length !== 1) {
+        res.sendStatus(404);
+        return;
     }
-  )
 
-  if (orders.length !== 1) {
-    res.sendStatus(404)
-    return
-  }
+    const order = orders[0];
 
-  const order = orders[0]
-
-  res.json({ order })
-}
+    res.json({ order });
+};
 
 export class ShippingAddressPayload {
-  @IsOptional()
-  @IsString()
-  postal_code?: string
+    @IsOptional()
+    @IsString()
+    postal_code?: string;
 }
 
 export class StoreGetOrdersParams {
-  @IsNumber()
-  @Type(() => Number)
-  display_id: number
+    @IsNumber()
+    @Type(() => Number)
+    display_id: number;
 
-  @IsEmail()
-  email: string
+    @IsEmail()
+    email: string;
 
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => ShippingAddressPayload)
-  shipping_address?: ShippingAddressPayload
+    @IsOptional()
+    @ValidateNested()
+    @Type(() => ShippingAddressPayload)
+    shipping_address?: ShippingAddressPayload;
 }

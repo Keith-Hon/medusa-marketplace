@@ -1,8 +1,8 @@
-import { IsBoolean, IsObject, IsOptional, IsString } from "class-validator"
-import BatchJobService from "../../../../services/batch-job"
-import { validator } from "../../../../utils/validator"
-import { BatchJob } from "../../../../models"
-import { EntityManager } from "typeorm"
+import { IsBoolean, IsObject, IsOptional, IsString } from "class-validator";
+import BatchJobService from "../../../../services/batch-job";
+import { validator } from "../../../../utils/validator";
+import { BatchJob } from "../../../../models";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /batch-jobs
@@ -27,35 +27,32 @@ import { EntityManager } from "typeorm"
  *              $ref: "#/components/schemas/batch_job"
  */
 export default async (req, res) => {
-  const validated = await validator(AdminPostBatchesReq, req.body)
+    const validated = await validator(AdminPostBatchesReq, req.body);
 
-  const batchJobService: BatchJobService = req.scope.resolve("batchJobService")
-  const toCreate = await batchJobService.prepareBatchJobForProcessing(
-    validated,
-    req
-  )
+    const batchJobService: BatchJobService = req.scope.resolve("batchJobService");
+    const toCreate = await batchJobService.prepareBatchJobForProcessing(validated, req);
 
-  const userId = req.user.id ?? req.user.userId
+    const userId = req.user.id ?? req.user.userId;
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  const batch_job = await manager.transaction(async (transactionManager) => {
-    return await batchJobService.withTransaction(transactionManager).create({
-      ...toCreate,
-      created_by: userId,
-    })
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    const batch_job = await manager.transaction(async (transactionManager) => {
+        return await batchJobService.withTransaction(transactionManager).create({
+            ...toCreate,
+            created_by: userId
+        });
+    });
 
-  res.status(201).json({ batch_job })
-}
+    res.status(201).json({ batch_job });
+};
 
 export class AdminPostBatchesReq {
-  @IsString()
-  type: string
+    @IsString()
+    type: string;
 
-  @IsObject()
-  context: BatchJob["context"]
+    @IsObject()
+    context: BatchJob["context"];
 
-  @IsBoolean()
-  @IsOptional()
-  dry_run = false
+    @IsBoolean()
+    @IsOptional()
+    dry_run = false;
 }

@@ -1,21 +1,13 @@
-import { Type } from "class-transformer"
-import { IsNumber, IsOptional, IsString } from "class-validator"
-import { identity, omit, pickBy } from "lodash"
-import { MedusaError } from "medusa-core-utils"
-import {
-  allowedAdminProductTypeFields,
-  defaultAdminProductTypeFields,
-  defaultAdminProductTypeRelations,
-} from "."
-import { ProductType } from "../../../../models/product-type"
-import ProductTypeService from "../../../../services/product-type"
-import {
-  DateComparisonOperator,
-  FindConfig,
-  StringComparisonOperator,
-} from "../../../../types/common"
-import { validator } from "../../../../utils/validator"
-import { IsType } from "../../../../utils/validators/is-type"
+import { Type } from "class-transformer";
+import { IsNumber, IsOptional, IsString } from "class-validator";
+import { identity, omit, pickBy } from "lodash";
+import { MedusaError } from "medusa-core-utils";
+import { allowedAdminProductTypeFields, defaultAdminProductTypeFields, defaultAdminProductTypeRelations } from ".";
+import { ProductType } from "../../../../models/product-type";
+import ProductTypeService from "../../../../services/product-type";
+import { DateComparisonOperator, FindConfig, StringComparisonOperator } from "../../../../types/common";
+import { validator } from "../../../../utils/validator";
+import { IsType } from "../../../../utils/validators/is-type";
 
 /**
  * @oas [get] /product-types
@@ -43,85 +35,78 @@ import { IsType } from "../../../../utils/validators/is-type"
  *              $ref: "#/components/schemas/product_tag"
  */
 export default async (req, res) => {
-  const validated = await validator(AdminGetProductTypesParams, req.query)
+    const validated = await validator(AdminGetProductTypesParams, req.query);
 
-  const typeService: ProductTypeService =
-    req.scope.resolve("productTypeService")
+    const typeService: ProductTypeService = req.scope.resolve("productTypeService");
 
-  const listConfig: FindConfig<ProductType> = {
-    select: defaultAdminProductTypeFields as (keyof ProductType)[],
-    relations: defaultAdminProductTypeRelations,
-    skip: validated.offset,
-    take: validated.limit,
-  }
+    const listConfig: FindConfig<ProductType> = {
+        select: defaultAdminProductTypeFields as (keyof ProductType)[],
+        relations: defaultAdminProductTypeRelations,
+        skip: validated.offset,
+        take: validated.limit
+    };
 
-  if (typeof validated.order !== "undefined") {
-    let orderField = validated.order
-    if (validated.order.startsWith("-")) {
-      const [, field] = validated.order.split("-")
-      orderField = field
-      listConfig.order = { [field]: "DESC" }
-    } else {
-      listConfig.order = { [validated.order]: "ASC" }
+    if (typeof validated.order !== "undefined") {
+        let orderField = validated.order;
+        if (validated.order.startsWith("-")) {
+            const [, field] = validated.order.split("-");
+            orderField = field;
+            listConfig.order = { [field]: "DESC" };
+        } else {
+            listConfig.order = { [validated.order]: "ASC" };
+        }
+
+        if (!allowedAdminProductTypeFields.includes(orderField)) {
+            throw new MedusaError(MedusaError.Types.INVALID_DATA, "Order field must be a valid product type field");
+        }
     }
 
-    if (!allowedAdminProductTypeFields.includes(orderField)) {
-      throw new MedusaError(
-        MedusaError.Types.INVALID_DATA,
-        "Order field must be a valid product type field"
-      )
-    }
-  }
+    const filterableFields = omit(validated, ["limit", "offset"]);
 
-  const filterableFields = omit(validated, ["limit", "offset"])
+    const [types, count] = await typeService.listAndCount(pickBy(filterableFields, identity), listConfig);
 
-  const [types, count] = await typeService.listAndCount(
-    pickBy(filterableFields, identity),
-    listConfig
-  )
-
-  res.status(200).json({
-    product_types: types,
-    count,
-    offset: validated.offset,
-    limit: validated.limit,
-  })
-}
+    res.status(200).json({
+        product_types: types,
+        count,
+        offset: validated.offset,
+        limit: validated.limit
+    });
+};
 
 export class AdminGetProductTypesPaginationParams {
-  @IsNumber()
-  @IsOptional()
-  @Type(() => Number)
-  limit? = 10
+    @IsNumber()
+    @IsOptional()
+    @Type(() => Number)
+    limit? = 10;
 
-  @IsNumber()
-  @IsOptional()
-  @Type(() => Number)
-  offset? = 0
+    @IsNumber()
+    @IsOptional()
+    @Type(() => Number)
+    offset? = 0;
 }
 
 export class AdminGetProductTypesParams extends AdminGetProductTypesPaginationParams {
-  @IsType([String, [String], StringComparisonOperator])
-  @IsOptional()
-  id?: string | string[] | StringComparisonOperator
+    @IsType([String, [String], StringComparisonOperator])
+    @IsOptional()
+    id?: string | string[] | StringComparisonOperator;
 
-  @IsString()
-  @IsOptional()
-  q?: string
+    @IsString()
+    @IsOptional()
+    q?: string;
 
-  @IsType([String, [String], StringComparisonOperator])
-  @IsOptional()
-  value?: string | string[] | StringComparisonOperator
+    @IsType([String, [String], StringComparisonOperator])
+    @IsOptional()
+    value?: string | string[] | StringComparisonOperator;
 
-  @IsType([DateComparisonOperator])
-  @IsOptional()
-  created_at?: DateComparisonOperator
+    @IsType([DateComparisonOperator])
+    @IsOptional()
+    created_at?: DateComparisonOperator;
 
-  @IsType([DateComparisonOperator])
-  @IsOptional()
-  updated_at?: DateComparisonOperator
+    @IsType([DateComparisonOperator])
+    @IsOptional()
+    updated_at?: DateComparisonOperator;
 
-  @IsString()
-  @IsOptional()
-  order?: string
+    @IsString()
+    @IsOptional()
+    order?: string;
 }

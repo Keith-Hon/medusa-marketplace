@@ -1,11 +1,11 @@
-import { IsObject, IsOptional, IsString } from "class-validator"
-import { defaultAdminCustomerGroupsRelations } from "."
+import { IsObject, IsOptional, IsString } from "class-validator";
+import { defaultAdminCustomerGroupsRelations } from ".";
 
-import { CustomerGroupService } from "../../../../services"
-import { FindParams } from "../../../../types/common"
-import { validator } from "../../../../utils/validator"
-import { Request, Response } from "express"
-import { EntityManager } from "typeorm"
+import { CustomerGroupService } from "../../../../services";
+import { FindParams } from "../../../../types/common";
+import { validator } from "../../../../utils/validator";
+import { Request, Response } from "express";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /customer-groups/{id}
@@ -31,47 +31,38 @@ import { EntityManager } from "typeorm"
  */
 
 export default async (req: Request, res: Response) => {
-  const { id } = req.params
+    const { id } = req.params;
 
-  const validatedBody = await validator(
-    AdminPostCustomerGroupsGroupReq,
-    req.body
-  )
-  const validatedQuery = await validator(FindParams, req.query)
+    const validatedBody = await validator(AdminPostCustomerGroupsGroupReq, req.body);
+    const validatedQuery = await validator(FindParams, req.query);
 
-  const customerGroupService: CustomerGroupService = req.scope.resolve(
-    "customerGroupService"
-  )
+    const customerGroupService: CustomerGroupService = req.scope.resolve("customerGroupService");
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await customerGroupService
-      .withTransaction(transactionManager)
-      .update(id, validatedBody)
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await customerGroupService.withTransaction(transactionManager).update(id, validatedBody);
+    });
 
-  let expandFields: string[] = []
-  if (validatedQuery.expand) {
-    expandFields = validatedQuery.expand.split(",")
-  }
+    let expandFields: string[] = [];
+    if (validatedQuery.expand) {
+        expandFields = validatedQuery.expand.split(",");
+    }
 
-  const findConfig = {
-    relations: expandFields.length
-      ? expandFields
-      : defaultAdminCustomerGroupsRelations,
-  }
+    const findConfig = {
+        relations: expandFields.length ? expandFields : defaultAdminCustomerGroupsRelations
+    };
 
-  const customerGroup = await customerGroupService.retrieve(id, findConfig)
+    const customerGroup = await customerGroupService.retrieve(id, findConfig);
 
-  res.json({ customer_group: customerGroup })
-}
+    res.json({ customer_group: customerGroup });
+};
 
 export class AdminPostCustomerGroupsGroupReq {
-  @IsString()
-  @IsOptional()
-  name?: string
+    @IsString()
+    @IsOptional()
+    name?: string;
 
-  @IsObject()
-  @IsOptional()
-  metadata?: object
+    @IsObject()
+    @IsOptional()
+    metadata?: object;
 }

@@ -7,7 +7,7 @@ export default {
   component: NotificationBell,
 } as ComponentMeta<typeof NotificationBell>
 
-const Template = args => <NotificationBell {...args} />
+const Template = (args) => <NotificationBell {...args} />
 
 export const HasNotifications = Template.bind({})
 HasNotifications.args = {

@@ -5,5 +5,4 @@ import { User } from "../entities/user.entity";
 
 @MedusaRepository({ override: MedusaUserRepository })
 @EntityRepository(User)
-export default class UserRepository extends Utils.repositoryMixin<User, MedusaUserRepository>(MedusaUserRepository) {
-}
+export default class UserRepository extends Utils.repositoryMixin<User, MedusaUserRepository>(MedusaUserRepository) {}

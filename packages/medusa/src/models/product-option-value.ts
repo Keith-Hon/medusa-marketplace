@@ -1,47 +1,40 @@
-import {
-  BeforeInsert,
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-} from "typeorm"
-import { ProductOption } from "./product-option"
-import { ProductVariant } from "./product-variant"
-import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity"
-import { DbAwareColumn } from "../utils/db-aware-column"
-import { generateEntityId } from "../utils/generate-entity-id"
+import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
+import { ProductOption } from "./product-option";
+import { ProductVariant } from "./product-variant";
+import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity";
+import { DbAwareColumn } from "../utils/db-aware-column";
+import { generateEntityId } from "../utils/generate-entity-id";
 
 @Entity()
 export class ProductOptionValue extends SoftDeletableEntity {
-  @Column()
-  value: string
+    @Column()
+    value: string;
 
-  @Index()
-  @Column()
-  option_id: string
+    @Index()
+    @Column()
+    option_id: string;
 
-  @ManyToOne(() => ProductOption, (option) => option.values)
-  @JoinColumn({ name: "option_id" })
-  option: ProductOption
+    @ManyToOne(() => ProductOption, (option) => option.values)
+    @JoinColumn({ name: "option_id" })
+    option: ProductOption;
 
-  @Index()
-  @Column()
-  variant_id: string
+    @Index()
+    @Column()
+    variant_id: string;
 
-  @ManyToOne(() => ProductVariant, (variant) => variant.options, {
-    onDelete: "CASCADE",
-  })
-  @JoinColumn({ name: "variant_id" })
-  variant: ProductVariant
+    @ManyToOne(() => ProductVariant, (variant) => variant.options, {
+        onDelete: "CASCADE"
+    })
+    @JoinColumn({ name: "variant_id" })
+    variant: ProductVariant;
 
-  @DbAwareColumn({ type: "jsonb", nullable: true })
-  metadata: Record<string, unknown>
+    @DbAwareColumn({ type: "jsonb", nullable: true })
+    metadata: Record<string, unknown>;
 
-  @BeforeInsert()
-  private beforeInsert(): void {
-    this.id = generateEntityId(this.id, "optval")
-  }
+    @BeforeInsert()
+    private beforeInsert(): void {
+        this.id = generateEntityId(this.id, "optval");
+    }
 }
 
 /**

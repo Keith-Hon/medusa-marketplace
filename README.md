@@ -2,12 +2,12 @@
 
 Project status
 
-- [x] Assigned store_id to Order, Product to make them store specific
-- [ ] Seeded with multiple vendors and their respective products (This step requires changing medusa original source codes)
-- [ ] Allow each merchant to register with their stripe/ paypal account
-- [ ] Create and process payment for an order with multiple merchants
+-   [x] Assigned store_id to Order, Product to make them store specific
+-   [ ] Seeded with multiple vendors and their respective products (This step requires changing medusa original source codes)
+-   [ ] Allow each merchant to register with their stripe/ paypal account
+-   [ ] Create and process payment for an order with multiple merchants
 
-----
+---
 
 Instructions:
 
@@ -19,7 +19,8 @@ Instructions:
 
 3. No step 3 :)
 
-----
+---
+
 Introduction
 
 1. The gitpod image runs a postges database locally. Do "NOT" inside browser as urls are configured using localhost
@@ -37,7 +38,7 @@ password: supersecret
 username: user3@example.com
 password: supersecret
 
-----
+---
 
 If the above commands run successfully,
 
@@ -49,13 +50,13 @@ Storefront will be running at port 3000
 
 Postgres database is accessible via localhost:5432
 
-username	 gitpod
+username gitpod
 
-password	 gitpod
+password gitpod
 
-database	 postgres
+database postgres
 
-----
+---
 
 # Reference
 
@@ -70,6 +71,3 @@ Part 3: https://medusajs.com/blog/online-marketplace-tutorial-part-3-implement-u
 https://medusajs.com/
 
 https://github.com/medusajs/medusa
-
-
-

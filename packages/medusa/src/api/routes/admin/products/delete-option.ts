@@ -1,6 +1,6 @@
-import { defaultAdminProductFields, defaultAdminProductRelations } from "."
-import { ProductService } from "../../../../services"
-import { EntityManager } from "typeorm"
+import { defaultAdminProductFields, defaultAdminProductRelations } from ".";
+import { ProductService } from "../../../../services";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [delete] /products/{id}/options/{option_id}
@@ -32,26 +32,24 @@ import { EntityManager } from "typeorm"
  *               $ref: "#/components/schemas/product"
  */
 export default async (req, res) => {
-  const { id, option_id } = req.params
+    const { id, option_id } = req.params;
 
-  const productService: ProductService = req.scope.resolve("productService")
+    const productService: ProductService = req.scope.resolve("productService");
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await productService
-      .withTransaction(transactionManager)
-      .deleteOption(id, option_id)
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await productService.withTransaction(transactionManager).deleteOption(id, option_id);
+    });
 
-  const data = await productService.retrieve(id, {
-    select: defaultAdminProductFields,
-    relations: defaultAdminProductRelations,
-  })
+    const data = await productService.retrieve(id, {
+        select: defaultAdminProductFields,
+        relations: defaultAdminProductRelations
+    });
 
-  res.json({
-    option_id,
-    object: "option",
-    deleted: true,
-    product: data,
-  })
-}
+    res.json({
+        option_id,
+        object: "option",
+        deleted: true,
+        product: data
+    });
+};

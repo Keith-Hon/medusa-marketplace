@@ -1,5 +1,5 @@
-import { defaultStoreGiftCardFields, defaultStoreGiftCardRelations } from "."
-import GiftCardService from "../../../../services/gift-card"
+import { defaultStoreGiftCardFields, defaultStoreGiftCardRelations } from ".";
+import GiftCardService from "../../../../services/gift-card";
 
 /**
  * @oas [get] /gift-cards/{code}
@@ -29,19 +29,18 @@ import GiftCardService from "../../../../services/gift-card"
  *               $ref: "#/components/schemas/region"
  */
 export default async (req, res) => {
-  const { code } = req.params
+    const { code } = req.params;
 
-  try {
-    const giftCardService: GiftCardService =
-      req.scope.resolve("giftCardService")
-    const giftCard = await giftCardService.retrieveByCode(code, {
-      select: defaultStoreGiftCardFields,
-      relations: defaultStoreGiftCardRelations,
-    })
+    try {
+        const giftCardService: GiftCardService = req.scope.resolve("giftCardService");
+        const giftCard = await giftCardService.retrieveByCode(code, {
+            select: defaultStoreGiftCardFields,
+            relations: defaultStoreGiftCardRelations
+        });
 
-    res.json({ gift_card: giftCard })
-  } catch (error) {
-    console.log(error)
-    throw error
-  }
-}
+        res.json({ gift_card: giftCard });
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};

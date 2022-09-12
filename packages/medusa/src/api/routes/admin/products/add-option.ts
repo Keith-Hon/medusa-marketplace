@@ -1,8 +1,8 @@
-import { IsString } from "class-validator"
-import { defaultAdminProductFields, defaultAdminProductRelations } from "."
-import { ProductService, PricingService } from "../../../../services"
-import { validator } from "../../../../utils/validator"
-import { EntityManager } from "typeorm"
+import { IsString } from "class-validator";
+import { defaultAdminProductFields, defaultAdminProductRelations } from ".";
+import { ProductService, PricingService } from "../../../../services";
+import { validator } from "../../../../utils/validator";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /products/{id}/options
@@ -35,34 +35,29 @@ import { EntityManager } from "typeorm"
  *               $ref: "#/components/schemas/product"
  */
 export default async (req, res) => {
-  const { id } = req.params
+    const { id } = req.params;
 
-  const validated = await validator(
-    AdminPostProductsProductOptionsReq,
-    req.body
-  )
+    const validated = await validator(AdminPostProductsProductOptionsReq, req.body);
 
-  const productService: ProductService = req.scope.resolve("productService")
-  const pricingService: PricingService = req.scope.resolve("pricingService")
+    const productService: ProductService = req.scope.resolve("productService");
+    const pricingService: PricingService = req.scope.resolve("pricingService");
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await productService
-      .withTransaction(transactionManager)
-      .addOption(id, validated.title)
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await productService.withTransaction(transactionManager).addOption(id, validated.title);
+    });
 
-  const rawProduct = await productService.retrieve(id, {
-    select: defaultAdminProductFields,
-    relations: defaultAdminProductRelations,
-  })
+    const rawProduct = await productService.retrieve(id, {
+        select: defaultAdminProductFields,
+        relations: defaultAdminProductRelations
+    });
 
-  const [product] = await pricingService.setProductPrices([rawProduct])
+    const [product] = await pricingService.setProductPrices([rawProduct]);
 
-  res.json({ product })
-}
+    res.json({ product });
+};
 
 export class AdminPostProductsProductOptionsReq {
-  @IsString()
-  title: string
+    @IsString()
+    title: string;
 }

@@ -1,8 +1,8 @@
-import { IsBoolean, IsObject, IsOptional } from "class-validator"
-import { EntityManager } from "typeorm"
-import { defaultAdminOrdersRelations, defaultAdminOrdersFields } from "."
-import { OrderService, SwapService } from "../../../../services"
-import { validator } from "../../../../utils/validator"
+import { IsBoolean, IsObject, IsOptional } from "class-validator";
+import { EntityManager } from "typeorm";
+import { defaultAdminOrdersRelations, defaultAdminOrdersFields } from ".";
+import { OrderService, SwapService } from "../../../../services";
+import { validator } from "../../../../utils/validator";
 /**
  * @oas [post] /orders/{id}/swaps/{swap_id}/fulfillments
  * operationId: "PostOrdersOrderSwapsSwapFulfillments"
@@ -36,38 +36,35 @@ import { validator } from "../../../../utils/validator"
  *               $ref: "#/components/schemas/order"
  */
 export default async (req, res) => {
-  const { id, swap_id } = req.params
+    const { id, swap_id } = req.params;
 
-  const validated = await validator(
-    AdminPostOrdersOrderSwapsSwapFulfillmentsReq,
-    req.body
-  )
+    const validated = await validator(AdminPostOrdersOrderSwapsSwapFulfillmentsReq, req.body);
 
-  const orderService: OrderService = req.scope.resolve("orderService")
-  const swapService: SwapService = req.scope.resolve("swapService")
-  const entityManager: EntityManager = req.scope.resolve("manager")
+    const orderService: OrderService = req.scope.resolve("orderService");
+    const swapService: SwapService = req.scope.resolve("swapService");
+    const entityManager: EntityManager = req.scope.resolve("manager");
 
-  await entityManager.transaction(async (manager) => {
-    await swapService.withTransaction(manager).createFulfillment(swap_id, {
-      metadata: validated.metadata,
-      no_notification: validated.no_notification,
-    })
-  })
+    await entityManager.transaction(async (manager) => {
+        await swapService.withTransaction(manager).createFulfillment(swap_id, {
+            metadata: validated.metadata,
+            no_notification: validated.no_notification
+        });
+    });
 
-  const order = await orderService.retrieve(id, {
-    select: defaultAdminOrdersFields,
-    relations: defaultAdminOrdersRelations,
-  })
+    const order = await orderService.retrieve(id, {
+        select: defaultAdminOrdersFields,
+        relations: defaultAdminOrdersRelations
+    });
 
-  res.status(200).json({ order })
-}
+    res.status(200).json({ order });
+};
 
 export class AdminPostOrdersOrderSwapsSwapFulfillmentsReq {
-  @IsObject()
-  @IsOptional()
-  metadata?: object
+    @IsObject()
+    @IsOptional()
+    metadata?: object;
 
-  @IsBoolean()
-  @IsOptional()
-  no_notification?: boolean
+    @IsBoolean()
+    @IsOptional()
+    no_notification?: boolean;
 }

@@ -1,7 +1,7 @@
-import { MedusaError } from "medusa-core-utils"
-import { defaultAdminOrdersRelations, defaultAdminOrdersFields } from "."
-import { FulfillmentService, OrderService } from "../../../../services"
-import { EntityManager } from "typeorm"
+import { MedusaError } from "medusa-core-utils";
+import { defaultAdminOrdersRelations, defaultAdminOrdersFields } from ".";
+import { FulfillmentService, OrderService } from "../../../../services";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /orders/{id}/fulfillments/{fulfillment_id}/cancel
@@ -25,32 +25,26 @@ import { EntityManager } from "typeorm"
  *               $ref: "#/components/schemas/fulfillment"
  */
 export default async (req, res) => {
-  const { id, fulfillment_id } = req.params
+    const { id, fulfillment_id } = req.params;
 
-  const orderService: OrderService = req.scope.resolve("orderService")
-  const fulfillmentService: FulfillmentService =
-    req.scope.resolve("fulfillmentService")
+    const orderService: OrderService = req.scope.resolve("orderService");
+    const fulfillmentService: FulfillmentService = req.scope.resolve("fulfillmentService");
 
-  const fulfillment = await fulfillmentService.retrieve(fulfillment_id)
+    const fulfillment = await fulfillmentService.retrieve(fulfillment_id);
 
-  if (fulfillment.order_id !== id) {
-    throw new MedusaError(
-      MedusaError.Types.NOT_FOUND,
-      `no fulfillment was found with the id: ${fulfillment_id} related to order: ${id}`
-    )
-  }
+    if (fulfillment.order_id !== id) {
+        throw new MedusaError(MedusaError.Types.NOT_FOUND, `no fulfillment was found with the id: ${fulfillment_id} related to order: ${id}`);
+    }
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await orderService
-      .withTransaction(transactionManager)
-      .cancelFulfillment(fulfillment_id)
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await orderService.withTransaction(transactionManager).cancelFulfillment(fulfillment_id);
+    });
 
-  const order = await orderService.retrieve(id, {
-    select: defaultAdminOrdersFields,
-    relations: defaultAdminOrdersRelations,
-  })
+    const order = await orderService.retrieve(id, {
+        select: defaultAdminOrdersFields,
+        relations: defaultAdminOrdersRelations
+    });
 
-  res.json({ order })
-}
+    res.json({ order });
+};

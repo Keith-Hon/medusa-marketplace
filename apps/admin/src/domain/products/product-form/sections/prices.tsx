@@ -10,23 +10,19 @@ import usePricesFieldArray from "../form/usePricesFieldArray"
 
 const Prices = ({ currencyCodes, defaultCurrencyCode, defaultAmount }) => {
   const { register, control } = useProductForm()
-  const {
-    fields,
-    appendPrice,
-    deletePrice,
-    availableCurrencies,
-  } = usePricesFieldArray(
-    currencyCodes,
-    {
-      control,
-      name: "prices",
-      keyName: "indexId",
-    },
-    {
-      defaultAmount,
-      defaultCurrencyCode,
-    }
-  )
+  const { fields, appendPrice, deletePrice, availableCurrencies } =
+    usePricesFieldArray(
+      currencyCodes,
+      {
+        control,
+        name: "prices",
+        keyName: "indexId",
+      },
+      {
+        defaultAmount,
+        defaultCurrencyCode,
+      }
+    )
 
   return (
     <BodyCard

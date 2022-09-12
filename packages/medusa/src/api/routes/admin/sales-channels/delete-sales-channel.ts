@@ -1,6 +1,6 @@
-import { Request, Response } from "express"
-import { SalesChannelService } from "../../../../services/"
-import { EntityManager } from "typeorm"
+import { Request, Response } from "express";
+import { SalesChannelService } from "../../../../services/";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [delete] /sales-channels/{id}
@@ -29,21 +29,17 @@ import { EntityManager } from "typeorm"
  *               type: boolean
  */
 export default async (req: Request, res: Response): Promise<void> => {
-  const { id } = req.params
+    const { id } = req.params;
 
-  const salesChannelService: SalesChannelService = req.scope.resolve(
-    "salesChannelService"
-  )
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await salesChannelService
-      .withTransaction(transactionManager)
-      .delete(id)
-  })
+    const salesChannelService: SalesChannelService = req.scope.resolve("salesChannelService");
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await salesChannelService.withTransaction(transactionManager).delete(id);
+    });
 
-  res.json({
-    id,
-    object: "sales-channel",
-    deleted: true,
-  })
-}
+    res.json({
+        id,
+        object: "sales-channel",
+        deleted: true
+    });
+};

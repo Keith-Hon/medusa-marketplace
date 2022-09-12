@@ -1,8 +1,8 @@
-import { IsBoolean, IsObject, IsOptional } from "class-validator"
-import { EntityManager } from "typeorm"
-import { defaultAdminOrdersRelations, defaultAdminOrdersFields } from "."
-import { ClaimService, OrderService } from "../../../../services"
-import { validator } from "../../../../utils/validator"
+import { IsBoolean, IsObject, IsOptional } from "class-validator";
+import { EntityManager } from "typeorm";
+import { defaultAdminOrdersRelations, defaultAdminOrdersFields } from ".";
+import { ClaimService, OrderService } from "../../../../services";
+import { validator } from "../../../../utils/validator";
 /**
  * @oas [post] /orders/{id}/claims/{claim_id}/fulfillments
  * operationId: "PostOrdersOrderClaimsClaimFulfillments"
@@ -36,38 +36,35 @@ import { validator } from "../../../../utils/validator"
  *               $ref: "#/components/schemas/order"
  */
 export default async (req, res) => {
-  const { id, claim_id } = req.params
+    const { id, claim_id } = req.params;
 
-  const validated = await validator(
-    AdminPostOrdersOrderClaimsClaimFulfillmentsReq,
-    req.body
-  )
+    const validated = await validator(AdminPostOrdersOrderClaimsClaimFulfillmentsReq, req.body);
 
-  const orderService: OrderService = req.scope.resolve("orderService")
-  const claimService: ClaimService = req.scope.resolve("claimService")
-  const entityManager: EntityManager = req.scope.resolve("manager")
+    const orderService: OrderService = req.scope.resolve("orderService");
+    const claimService: ClaimService = req.scope.resolve("claimService");
+    const entityManager: EntityManager = req.scope.resolve("manager");
 
-  await entityManager.transaction(async (manager) => {
-    await claimService.withTransaction(manager).createFulfillment(claim_id, {
-      metadata: validated.metadata,
-      no_notification: validated.no_notification,
-    })
-  })
+    await entityManager.transaction(async (manager) => {
+        await claimService.withTransaction(manager).createFulfillment(claim_id, {
+            metadata: validated.metadata,
+            no_notification: validated.no_notification
+        });
+    });
 
-  const order = await orderService.retrieve(id, {
-    select: defaultAdminOrdersFields,
-    relations: defaultAdminOrdersRelations,
-  })
+    const order = await orderService.retrieve(id, {
+        select: defaultAdminOrdersFields,
+        relations: defaultAdminOrdersRelations
+    });
 
-  res.status(200).json({ order })
-}
+    res.status(200).json({ order });
+};
 
 export class AdminPostOrdersOrderClaimsClaimFulfillmentsReq {
-  @IsObject()
-  @IsOptional()
-  metadata?: Record<string, unknown>
+    @IsObject()
+    @IsOptional()
+    metadata?: Record<string, unknown>;
 
-  @IsBoolean()
-  @IsOptional()
-  no_notification?: boolean
+    @IsBoolean()
+    @IsOptional()
+    no_notification?: boolean;
 }

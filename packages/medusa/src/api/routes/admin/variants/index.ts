@@ -1,75 +1,71 @@
-import { Router } from "express"
+import { Router } from "express";
 
-import { PaginatedResponse } from "../../../../types/common"
-import { ProductVariant } from "../../../../models/product-variant"
-import middlewares from "../../../middlewares"
+import { PaginatedResponse } from "../../../../types/common";
+import { ProductVariant } from "../../../../models/product-variant";
+import middlewares from "../../../middlewares";
 
-const route = Router()
+const route = Router();
 
 export default (app) => {
-  app.use("/variants", route)
+    app.use("/variants", route);
 
-  route.get("/", middlewares.wrap(require("./list-variants").default))
+    route.get("/", middlewares.wrap(require("./list-variants").default));
 
-  return app
-}
+    return app;
+};
 
-export const defaultAdminVariantRelations = ["product", "prices", "options"]
+export const defaultAdminVariantRelations = ["product", "prices", "options"];
 
 export const defaultAdminVariantFields: (keyof ProductVariant)[] = [
-  "id",
-  "title",
-  "product_id",
-  "sku",
-  "barcode",
-  "ean",
-  "upc",
-  "inventory_quantity",
-  "allow_backorder",
-  "weight",
-  "length",
-  "height",
-  "width",
-  "hs_code",
-  "origin_country",
-  "mid_code",
-  "material",
-  "created_at",
-  "updated_at",
-  "metadata",
-]
+    "id",
+    "title",
+    "product_id",
+    "sku",
+    "barcode",
+    "ean",
+    "upc",
+    "inventory_quantity",
+    "allow_backorder",
+    "weight",
+    "length",
+    "height",
+    "width",
+    "hs_code",
+    "origin_country",
+    "mid_code",
+    "material",
+    "created_at",
+    "updated_at",
+    "metadata"
+];
 
 export const allowedAdminVariantFields = [
-  "id",
-  "title",
-  "product_id",
-  "sku",
-  "barcode",
-  "ean",
-  "upc",
-  "inventory_quantity",
-  "allow_backorder",
-  "weight",
-  "length",
-  "height",
-  "width",
-  "hs_code",
-  "origin_country",
-  "mid_code",
-  "material",
-  "created_at",
-  "updated_at",
-  "metadata",
-]
+    "id",
+    "title",
+    "product_id",
+    "sku",
+    "barcode",
+    "ean",
+    "upc",
+    "inventory_quantity",
+    "allow_backorder",
+    "weight",
+    "length",
+    "height",
+    "width",
+    "hs_code",
+    "origin_country",
+    "mid_code",
+    "material",
+    "created_at",
+    "updated_at",
+    "metadata"
+];
 
-export const allowedAdminVariantRelations: (keyof ProductVariant)[] = [
-  "product",
-  "prices",
-  "options",
-]
+export const allowedAdminVariantRelations: (keyof ProductVariant)[] = ["product", "prices", "options"];
 
 export type AdminVariantsListRes = PaginatedResponse & {
-  variants: ProductVariant[]
-}
+    variants: ProductVariant[];
+};
 
-export * from "./list-variants"
+export * from "./list-variants";

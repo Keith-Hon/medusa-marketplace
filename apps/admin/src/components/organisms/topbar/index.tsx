@@ -21,9 +21,8 @@ const Topbar: React.FC = () => {
     close: activityDrawerClose,
   } = useToggleState(false)
 
-  const { first_name, last_name, email, handleLogout } = useContext(
-    AccountContext
-  )
+  const { first_name, last_name, email, handleLogout } =
+    useContext(AccountContext)
   const { batchJobs } = useContext(PollingContext)
 
   const [showSupportform, setShowSupportForm] = useState(false)

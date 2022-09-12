@@ -44,10 +44,8 @@ export const RegionTaxForm = ({ region }) => {
     })
   }, [region])
 
-  const {
-    isLoading: isProvidersLoading,
-    tax_providers,
-  } = useAdminStoreTaxProviders()
+  const { isLoading: isProvidersLoading, tax_providers } =
+    useAdminStoreTaxProviders()
 
   const updateRegion = useAdminUpdateRegion(region.id)
 

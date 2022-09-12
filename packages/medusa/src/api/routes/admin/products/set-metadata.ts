@@ -1,7 +1,7 @@
-import { IsString } from "class-validator"
-import { defaultAdminProductFields, defaultAdminProductRelations } from "."
-import { validator } from "../../../../utils/validator"
-import { EntityManager } from "typeorm"
+import { IsString } from "class-validator";
+import { defaultAdminProductFields, defaultAdminProductRelations } from ".";
+import { validator } from "../../../../utils/validator";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /products/{id}/metadata
@@ -38,33 +38,30 @@ import { EntityManager } from "typeorm"
  *               $ref: "#/components/schemas/product"
  */
 export default async (req, res) => {
-  const { id } = req.params
+    const { id } = req.params;
 
-  const validated = await validator(
-    AdminPostProductsProductMetadataReq,
-    req.body
-  )
+    const validated = await validator(AdminPostProductsProductMetadataReq, req.body);
 
-  const productService = req.scope.resolve("productService")
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await productService.withTransaction(transactionManager).update(id, {
-      metadata: { [validated.key]: validated.value },
-    })
-  })
+    const productService = req.scope.resolve("productService");
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await productService.withTransaction(transactionManager).update(id, {
+            metadata: { [validated.key]: validated.value }
+        });
+    });
 
-  const product = await productService.retrieve(id, {
-    select: defaultAdminProductFields,
-    relations: defaultAdminProductRelations,
-  })
+    const product = await productService.retrieve(id, {
+        select: defaultAdminProductFields,
+        relations: defaultAdminProductRelations
+    });
 
-  res.status(200).json({ product })
-}
+    res.status(200).json({ product });
+};
 
 export class AdminPostProductsProductMetadataReq {
-  @IsString()
-  key: string
+    @IsString()
+    key: string;
 
-  @IsString()
-  value: string
+    @IsString()
+    value: string;
 }

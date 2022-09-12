@@ -1,7 +1,7 @@
-import {MigrationInterface, QueryRunner} from "typeorm";
+import { MigrationInterface, QueryRunner } from "typeorm";
 
 export class noNotification1623231564533 implements MigrationInterface {
-    name = 'noNotification1623231564533'
+    name = "noNotification1623231564533";
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`ALTER TABLE "return" ADD "no_notification" boolean`);
@@ -19,7 +19,5 @@ export class noNotification1623231564533 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE "swap" DROP COLUMN "no_notification"`);
         await queryRunner.query(`ALTER TABLE "claim_order" DROP COLUMN "no_notification"`);
         await queryRunner.query(`ALTER TABLE "return" DROP COLUMN "no_notification"`);
-        
     }
-
 }

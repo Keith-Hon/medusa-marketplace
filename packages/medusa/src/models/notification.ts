@@ -1,67 +1,59 @@
-import {
-  BeforeInsert,
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-} from "typeorm"
-import { BaseEntity } from "../interfaces/models/base-entity"
-import { DbAwareColumn } from "../utils/db-aware-column"
+import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne, OneToMany } from "typeorm";
+import { BaseEntity } from "../interfaces/models/base-entity";
+import { DbAwareColumn } from "../utils/db-aware-column";
 
-import { Customer } from "./customer"
-import { NotificationProvider } from "./notification-provider"
-import { generateEntityId } from "../utils/generate-entity-id"
+import { Customer } from "./customer";
+import { NotificationProvider } from "./notification-provider";
+import { generateEntityId } from "../utils/generate-entity-id";
 
 @Entity()
 export class Notification extends BaseEntity {
-  @Column({ nullable: true })
-  event_name: string
+    @Column({ nullable: true })
+    event_name: string;
 
-  @Index()
-  @Column()
-  resource_type: string
+    @Index()
+    @Column()
+    resource_type: string;
 
-  @Index()
-  @Column()
-  resource_id: string
+    @Index()
+    @Column()
+    resource_id: string;
 
-  @Index()
-  @Column({ nullable: true })
-  customer_id: string | null
+    @Index()
+    @Column({ nullable: true })
+    customer_id: string | null;
 
-  @ManyToOne(() => Customer)
-  @JoinColumn({ name: "customer_id" })
-  customer: Customer
+    @ManyToOne(() => Customer)
+    @JoinColumn({ name: "customer_id" })
+    customer: Customer;
 
-  @Column()
-  to: string
+    @Column()
+    to: string;
 
-  @DbAwareColumn({ type: "jsonb" })
-  data: Record<string, unknown>
+    @DbAwareColumn({ type: "jsonb" })
+    data: Record<string, unknown>;
 
-  @Column({ nullable: true })
-  parent_id: string
+    @Column({ nullable: true })
+    parent_id: string;
 
-  @ManyToOne(() => Notification)
-  @JoinColumn({ name: "parent_id" })
-  parent_notification: Notification
+    @ManyToOne(() => Notification)
+    @JoinColumn({ name: "parent_id" })
+    parent_notification: Notification;
 
-  @OneToMany(() => Notification, (noti) => noti.parent_notification)
-  resends: Notification[]
+    @OneToMany(() => Notification, (noti) => noti.parent_notification)
+    resends: Notification[];
 
-  @Column({ nullable: true })
-  provider_id: string
+    @Column({ nullable: true })
+    provider_id: string;
 
-  @ManyToOne(() => NotificationProvider)
-  @JoinColumn({ name: "provider_id" })
-  provider: NotificationProvider
+    @ManyToOne(() => NotificationProvider)
+    @JoinColumn({ name: "provider_id" })
+    provider: NotificationProvider;
 
-  @BeforeInsert()
-  private beforeInsert(): void {
-    this.id = generateEntityId(this.id, "noti")
-  }
+    @BeforeInsert()
+    private beforeInsert(): void {
+        this.id = generateEntityId(this.id, "noti");
+    }
 }
 
 /**

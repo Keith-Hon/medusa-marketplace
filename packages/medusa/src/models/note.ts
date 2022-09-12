@@ -1,43 +1,36 @@
-import {
-  BeforeInsert,
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-} from "typeorm"
-import { User } from "./user"
-import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity"
-import { DbAwareColumn } from "../utils/db-aware-column"
-import { generateEntityId } from "../utils/generate-entity-id"
+import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
+import { User } from "./user";
+import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity";
+import { DbAwareColumn } from "../utils/db-aware-column";
+import { generateEntityId } from "../utils/generate-entity-id";
 
 @Entity()
 export class Note extends SoftDeletableEntity {
-  @Column()
-  value: string
+    @Column()
+    value: string;
 
-  @Index()
-  @Column()
-  resource_type: string
+    @Index()
+    @Column()
+    resource_type: string;
 
-  @Index()
-  @Column()
-  resource_id: string
+    @Index()
+    @Column()
+    resource_id: string;
 
-  @Column({ nullable: true })
-  author_id: string
+    @Column({ nullable: true })
+    author_id: string;
 
-  @ManyToOne(() => User)
-  @JoinColumn({ name: "author_id" })
-  author: User
+    @ManyToOne(() => User)
+    @JoinColumn({ name: "author_id" })
+    author: User;
 
-  @DbAwareColumn({ type: "jsonb", nullable: true })
-  metadata: Record<string, unknown>
+    @DbAwareColumn({ type: "jsonb", nullable: true })
+    metadata: Record<string, unknown>;
 
-  @BeforeInsert()
-  private beforeInsert(): void {
-    this.id = generateEntityId(this.id, "note")
-  }
+    @BeforeInsert()
+    private beforeInsert(): void {
+        this.id = generateEntityId(this.id, "note");
+    }
 }
 
 /**

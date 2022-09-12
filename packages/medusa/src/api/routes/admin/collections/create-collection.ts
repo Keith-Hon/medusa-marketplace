@@ -1,6 +1,6 @@
-import { IsNotEmpty, IsObject, IsOptional, IsString } from "class-validator"
-import ProductCollectionService from "../../../../services/product-collection"
-import { Request, Response } from "express"
+import { IsNotEmpty, IsObject, IsOptional, IsString } from "class-validator";
+import ProductCollectionService from "../../../../services/product-collection";
+import { Request, Response } from "express";
 import { EntityManager } from "typeorm";
 
 /**
@@ -38,32 +38,30 @@ import { EntityManager } from "typeorm";
  *              $ref: "#/components/schemas/product_collection"
  */
 export default async (req: Request, res: Response) => {
-  const { validatedBody } = req
+    const { validatedBody } = req;
 
-  const productCollectionService: ProductCollectionService = req.scope.resolve(
-    "productCollectionService"
-  )
+    const productCollectionService: ProductCollectionService = req.scope.resolve("productCollectionService");
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  const created = await manager.transaction(async (transactionManager) => {
-    return await productCollectionService.withTransaction(transactionManager).create(validatedBody)
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    const created = await manager.transaction(async (transactionManager) => {
+        return await productCollectionService.withTransaction(transactionManager).create(validatedBody);
+    });
 
-  const collection = await productCollectionService.retrieve(created.id)
+    const collection = await productCollectionService.retrieve(created.id);
 
-  res.status(200).json({ collection })
-}
+    res.status(200).json({ collection });
+};
 
 export class AdminPostCollectionsReq {
-  @IsString()
-  @IsNotEmpty()
-  title: string
+    @IsString()
+    @IsNotEmpty()
+    title: string;
 
-  @IsString()
-  @IsOptional()
-  handle?: string
+    @IsString()
+    @IsOptional()
+    handle?: string;
 
-  @IsObject()
-  @IsOptional()
-  metadata?: object
+    @IsObject()
+    @IsOptional()
+    metadata?: object;
 }

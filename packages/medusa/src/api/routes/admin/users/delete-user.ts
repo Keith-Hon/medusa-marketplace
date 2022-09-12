@@ -1,5 +1,5 @@
-import UserService from "../../../../services/user"
-import { EntityManager } from "typeorm"
+import UserService from "../../../../services/user";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [delete] /users/{user_id}
@@ -28,17 +28,17 @@ import { EntityManager } from "typeorm"
  *               type: boolean
  */
 export default async (req, res) => {
-  const { user_id } = req.params
+    const { user_id } = req.params;
 
-  const userService: UserService = req.scope.resolve("userService")
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await userService.withTransaction(transactionManager).delete(user_id)
-  })
+    const userService: UserService = req.scope.resolve("userService");
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await userService.withTransaction(transactionManager).delete(user_id);
+    });
 
-  res.status(200).send({
-    id: user_id,
-    object: "user",
-    deleted: true,
-  })
-}
+    res.status(200).send({
+        id: user_id,
+        object: "user",
+        deleted: true
+    });
+};

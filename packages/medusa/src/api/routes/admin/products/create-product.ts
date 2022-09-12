@@ -1,35 +1,14 @@
-import { Type } from "class-transformer"
-import {
-  IsArray,
-  IsBoolean,
-  IsEnum,
-  IsNumber,
-  IsObject,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from "class-validator"
-import { EntityManager } from "typeorm"
-import { defaultAdminProductFields, defaultAdminProductRelations } from "."
-import SalesChannelFeatureFlag from "../../../../loaders/feature-flags/sales-channels"
-import { ProductStatus } from "../../../../models"
-import {
-  PricingService,
-  ProductService,
-  ProductVariantService,
-  ShippingProfileService,
-} from "../../../../services"
-import {
-  ProductSalesChannelReq,
-  ProductTagReq,
-  ProductTypeReq,
-} from "../../../../types/product"
-import { FeatureFlagDecorators } from "../../../../utils/feature-flag-decorators"
-import {
-  CreateProductVariantInput,
-  ProductVariantPricesCreateReq,
-} from "../../../../types/product-variant"
-import { validator } from "../../../../utils/validator"
+import { Type } from "class-transformer";
+import { IsArray, IsBoolean, IsEnum, IsNumber, IsObject, IsOptional, IsString, ValidateNested } from "class-validator";
+import { EntityManager } from "typeorm";
+import { defaultAdminProductFields, defaultAdminProductRelations } from ".";
+import SalesChannelFeatureFlag from "../../../../loaders/feature-flags/sales-channels";
+import { ProductStatus } from "../../../../models";
+import { PricingService, ProductService, ProductVariantService, ShippingProfileService } from "../../../../services";
+import { ProductSalesChannelReq, ProductTagReq, ProductTypeReq } from "../../../../types/product";
+import { FeatureFlagDecorators } from "../../../../utils/feature-flag-decorators";
+import { CreateProductVariantInput, ProductVariantPricesCreateReq } from "../../../../types/product-variant";
+import { validator } from "../../../../utils/validator";
 
 /**
  * @oas [post] /products
@@ -227,276 +206,256 @@ import { validator } from "../../../../utils/validator"
  *               $ref: "#/components/schemas/product"
  */
 export default async (req, res) => {
-  const validated = await validator(AdminPostProductsReq, req.body)
+    const validated = await validator(AdminPostProductsReq, req.body);
 
-  const productService: ProductService = req.scope.resolve("productService")
-  const pricingService: PricingService = req.scope.resolve("pricingService")
-  const productVariantService: ProductVariantService = req.scope.resolve(
-    "productVariantService"
-  )
-  const shippingProfileService: ShippingProfileService = req.scope.resolve(
-    "shippingProfileService"
-  )
+    const productService: ProductService = req.scope.resolve("productService");
+    const pricingService: PricingService = req.scope.resolve("pricingService");
+    const productVariantService: ProductVariantService = req.scope.resolve("productVariantService");
+    const shippingProfileService: ShippingProfileService = req.scope.resolve("shippingProfileService");
 
-  const entityManager: EntityManager = req.scope.resolve("manager")
+    const entityManager: EntityManager = req.scope.resolve("manager");
 
-  const newProduct = await entityManager.transaction(async (manager) => {
-    const { variants } = validated
-    delete validated.variants
+    const newProduct = await entityManager.transaction(async (manager) => {
+        const { variants } = validated;
+        delete validated.variants;
 
-    if (!validated.thumbnail && validated.images && validated.images.length) {
-      validated.thumbnail = validated.images[0]
-    }
+        if (!validated.thumbnail && validated.images && validated.images.length) {
+            validated.thumbnail = validated.images[0];
+        }
 
-    let shippingProfile
-    // Get default shipping profile
-    if (validated.is_giftcard) {
-      shippingProfile = await shippingProfileService
-        .withTransaction(manager)
-        .retrieveGiftCardDefault()
-    } else {
-      shippingProfile = await shippingProfileService
-        .withTransaction(manager)
-        .retrieveDefault()
-    }
+        let shippingProfile;
+        // Get default shipping profile
+        if (validated.is_giftcard) {
+            shippingProfile = await shippingProfileService.withTransaction(manager).retrieveGiftCardDefault();
+        } else {
+            shippingProfile = await shippingProfileService.withTransaction(manager).retrieveDefault();
+        }
 
-    const newProduct = await productService
-      .withTransaction(manager)
-      .create({ ...validated, profile_id: shippingProfile.id })
+        const newProduct = await productService.withTransaction(manager).create({ ...validated, profile_id: shippingProfile.id });
 
-    if (variants) {
-      for (const [i, variant] of variants.entries()) {
-        variant["variant_rank"] = i
-      }
+        if (variants) {
+            for (const [i, variant] of variants.entries()) {
+                variant["variant_rank"] = i;
+            }
 
-      const optionIds =
-        validated?.options?.map(
-          (o) => newProduct.options.find((newO) => newO.title === o.title)?.id
-        ) || []
+            const optionIds = validated?.options?.map((o) => newProduct.options.find((newO) => newO.title === o.title)?.id) || [];
 
-      await Promise.all(
-        variants.map(async (v) => {
-          const variant = {
-            ...v,
-            options:
-              v?.options?.map((o, index) => ({
-                ...o,
-                option_id: optionIds[index],
-              })) || [],
-          }
+            await Promise.all(
+                variants.map(async (v) => {
+                    const variant = {
+                        ...v,
+                        options:
+                            v?.options?.map((o, index) => ({
+                                ...o,
+                                option_id: optionIds[index]
+                            })) || []
+                    };
 
-          await productVariantService
-            .withTransaction(manager)
-            .create(newProduct.id, variant as CreateProductVariantInput)
-        })
-      )
-    }
+                    await productVariantService.withTransaction(manager).create(newProduct.id, variant as CreateProductVariantInput);
+                })
+            );
+        }
 
-    return newProduct
-  })
+        return newProduct;
+    });
 
-  const rawProduct = await productService.retrieve(newProduct.id, {
-    select: defaultAdminProductFields,
-    relations: defaultAdminProductRelations,
-  })
+    const rawProduct = await productService.retrieve(newProduct.id, {
+        select: defaultAdminProductFields,
+        relations: defaultAdminProductRelations
+    });
 
-  const [product] = await pricingService.setProductPrices([rawProduct])
+    const [product] = await pricingService.setProductPrices([rawProduct]);
 
-  res.json({ product })
-}
+    res.json({ product });
+};
 
 class ProductVariantOptionReq {
-  @IsString()
-  value: string
+    @IsString()
+    value: string;
 }
 
 class ProductOptionReq {
-  @IsString()
-  title: string
+    @IsString()
+    title: string;
 }
 
 class ProductVariantReq {
-  @IsString()
-  title: string
+    @IsString()
+    title: string;
 
-  @IsString()
-  @IsOptional()
-  sku?: string
+    @IsString()
+    @IsOptional()
+    sku?: string;
 
-  @IsString()
-  @IsOptional()
-  ean?: string
+    @IsString()
+    @IsOptional()
+    ean?: string;
 
-  @IsString()
-  @IsOptional()
-  upc?: string
+    @IsString()
+    @IsOptional()
+    upc?: string;
 
-  @IsString()
-  @IsOptional()
-  barcode?: string
+    @IsString()
+    @IsOptional()
+    barcode?: string;
 
-  @IsString()
-  @IsOptional()
-  hs_code?: string
+    @IsString()
+    @IsOptional()
+    hs_code?: string;
 
-  @IsNumber()
-  @IsOptional()
-  inventory_quantity = 0
+    @IsNumber()
+    @IsOptional()
+    inventory_quantity = 0;
 
-  @IsBoolean()
-  @IsOptional()
-  allow_backorder?: boolean
+    @IsBoolean()
+    @IsOptional()
+    allow_backorder?: boolean;
 
-  @IsBoolean()
-  @IsOptional()
-  manage_inventory?: boolean
+    @IsBoolean()
+    @IsOptional()
+    manage_inventory?: boolean;
 
-  @IsNumber()
-  @IsOptional()
-  weight?: number
+    @IsNumber()
+    @IsOptional()
+    weight?: number;
 
-  @IsNumber()
-  @IsOptional()
-  length?: number
+    @IsNumber()
+    @IsOptional()
+    length?: number;
 
-  @IsNumber()
-  @IsOptional()
-  height?: number
+    @IsNumber()
+    @IsOptional()
+    height?: number;
 
-  @IsNumber()
-  @IsOptional()
-  width?: number
+    @IsNumber()
+    @IsOptional()
+    width?: number;
 
-  @IsString()
-  @IsOptional()
-  origin_country?: string
+    @IsString()
+    @IsOptional()
+    origin_country?: string;
 
-  @IsString()
-  @IsOptional()
-  mid_code?: string
+    @IsString()
+    @IsOptional()
+    mid_code?: string;
 
-  @IsString()
-  @IsOptional()
-  material?: string
+    @IsString()
+    @IsOptional()
+    material?: string;
 
-  @IsObject()
-  @IsOptional()
-  metadata?: Record<string, unknown>
+    @IsObject()
+    @IsOptional()
+    metadata?: Record<string, unknown>;
 
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => ProductVariantPricesCreateReq)
-  prices: ProductVariantPricesCreateReq[]
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => ProductVariantPricesCreateReq)
+    prices: ProductVariantPricesCreateReq[];
 
-  @IsOptional()
-  @Type(() => ProductVariantOptionReq)
-  @ValidateNested({ each: true })
-  @IsArray()
-  options?: ProductVariantOptionReq[] = []
+    @IsOptional()
+    @Type(() => ProductVariantOptionReq)
+    @ValidateNested({ each: true })
+    @IsArray()
+    options?: ProductVariantOptionReq[] = [];
 }
 
 export class AdminPostProductsReq {
-  @IsString()
-  title: string
+    @IsString()
+    title: string;
 
-  @IsString()
-  @IsOptional()
-  subtitle?: string
+    @IsString()
+    @IsOptional()
+    subtitle?: string;
 
-  @IsString()
-  @IsOptional()
-  description?: string
+    @IsString()
+    @IsOptional()
+    description?: string;
 
-  @IsBoolean()
-  is_giftcard = false
+    @IsBoolean()
+    is_giftcard = false;
 
-  @IsBoolean()
-  discountable = true
+    @IsBoolean()
+    discountable = true;
 
-  @IsArray()
-  @IsOptional()
-  images?: string[]
+    @IsArray()
+    @IsOptional()
+    images?: string[];
 
-  @IsString()
-  @IsOptional()
-  thumbnail?: string
+    @IsString()
+    @IsOptional()
+    thumbnail?: string;
 
-  @IsString()
-  @IsOptional()
-  handle?: string
+    @IsString()
+    @IsOptional()
+    handle?: string;
 
-  @IsOptional()
-  @IsEnum(ProductStatus)
-  status?: ProductStatus = ProductStatus.DRAFT
+    @IsOptional()
+    @IsEnum(ProductStatus)
+    status?: ProductStatus = ProductStatus.DRAFT;
 
-  @IsOptional()
-  @Type(() => ProductTypeReq)
-  @ValidateNested()
-  type?: ProductTypeReq
+    @IsOptional()
+    @Type(() => ProductTypeReq)
+    @ValidateNested()
+    type?: ProductTypeReq;
 
-  @IsOptional()
-  @IsString()
-  collection_id?: string
+    @IsOptional()
+    @IsString()
+    collection_id?: string;
 
-  @IsOptional()
-  @Type(() => ProductTagReq)
-  @ValidateNested({ each: true })
-  @IsArray()
-  tags?: ProductTagReq[]
+    @IsOptional()
+    @Type(() => ProductTagReq)
+    @ValidateNested({ each: true })
+    @IsArray()
+    tags?: ProductTagReq[];
 
-  @FeatureFlagDecorators(SalesChannelFeatureFlag.key, [
-    IsOptional(),
-    Type(() => ProductSalesChannelReq),
-    ValidateNested({ each: true }),
-    IsArray(),
-  ])
-  sales_channels?: ProductSalesChannelReq[]
+    @FeatureFlagDecorators(SalesChannelFeatureFlag.key, [IsOptional(), Type(() => ProductSalesChannelReq), ValidateNested({ each: true }), IsArray()])
+    sales_channels?: ProductSalesChannelReq[];
 
-  @IsOptional()
-  @Type(() => ProductOptionReq)
-  @ValidateNested({ each: true })
-  @IsArray()
-  options?: ProductOptionReq[]
+    @IsOptional()
+    @Type(() => ProductOptionReq)
+    @ValidateNested({ each: true })
+    @IsArray()
+    options?: ProductOptionReq[];
 
-  @IsOptional()
-  @Type(() => ProductVariantReq)
-  @ValidateNested({ each: true })
-  @IsArray()
-  variants?: ProductVariantReq[]
+    @IsOptional()
+    @Type(() => ProductVariantReq)
+    @ValidateNested({ each: true })
+    @IsArray()
+    variants?: ProductVariantReq[];
 
-  @IsNumber()
-  @IsOptional()
-  weight?: number
+    @IsNumber()
+    @IsOptional()
+    weight?: number;
 
-  @IsNumber()
-  @IsOptional()
-  length?: number
+    @IsNumber()
+    @IsOptional()
+    length?: number;
 
-  @IsNumber()
-  @IsOptional()
-  height?: number
+    @IsNumber()
+    @IsOptional()
+    height?: number;
 
-  @IsNumber()
-  @IsOptional()
-  width?: number
+    @IsNumber()
+    @IsOptional()
+    width?: number;
 
-  @IsString()
-  @IsOptional()
-  hs_code?: string
+    @IsString()
+    @IsOptional()
+    hs_code?: string;
 
-  @IsString()
-  @IsOptional()
-  origin_country?: string
+    @IsString()
+    @IsOptional()
+    origin_country?: string;
 
-  @IsString()
-  @IsOptional()
-  mid_code?: string
+    @IsString()
+    @IsOptional()
+    mid_code?: string;
 
-  @IsString()
-  @IsOptional()
-  material?: string
+    @IsString()
+    @IsOptional()
+    material?: string;
 
-  @IsObject()
-  @IsOptional()
-  metadata?: Record<string, unknown>
+    @IsObject()
+    @IsOptional()
+    metadata?: Record<string, unknown>;
 }

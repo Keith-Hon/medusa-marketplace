@@ -1,11 +1,11 @@
-import * as dedent from 'dedent';
+import * as dedent from "dedent";
 
 /**
  * Provide a basic template for the middleware component generation.
  * @param middlewareName
  */
 export function getMiddlewareTemplate(middlewareName: string): string {
-	return dedent`
+    return dedent`
         import { 
             Middleware,
             MedusaMiddleware,

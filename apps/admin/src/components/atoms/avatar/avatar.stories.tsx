@@ -7,7 +7,7 @@ export default {
   component: Avatar,
 } as ComponentMeta<typeof Avatar>
 
-const Template = args => (
+const Template = (args) => (
   <div className="h-large w-large">
     <Avatar {...args} />
   </div>

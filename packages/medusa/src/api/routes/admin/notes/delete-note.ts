@@ -1,5 +1,5 @@
-import NoteService from "../../../../services/note"
-import { EntityManager } from "typeorm"
+import NoteService from "../../../../services/note";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [delete] /notes/{id}
@@ -26,13 +26,13 @@ import { EntityManager } from "typeorm"
  *               description: Whether or not the Note was deleted.
  */
 export default async (req, res) => {
-  const { id } = req.params
+    const { id } = req.params;
 
-  const noteService: NoteService = req.scope.resolve("noteService")
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await noteService.withTransaction(transactionManager).delete(id)
-  })
+    const noteService: NoteService = req.scope.resolve("noteService");
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await noteService.withTransaction(transactionManager).delete(id);
+    });
 
-  res.status(200).json({ id, object: "note", deleted: true })
-}
+    res.status(200).json({ id, object: "note", deleted: true });
+};

@@ -1,7 +1,7 @@
-import { IsNotEmpty, IsString } from "class-validator"
-import NoteService from "../../../../services/note"
-import { validator } from "../../../../utils/validator"
-import { EntityManager } from "typeorm"
+import { IsNotEmpty, IsString } from "class-validator";
+import NoteService from "../../../../services/note";
+import { validator } from "../../../../utils/validator";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /notes
@@ -37,35 +37,35 @@ import { EntityManager } from "typeorm"
  *
  */
 export default async (req, res) => {
-  const validated = await validator(AdminPostNotesReq, req.body)
+    const validated = await validator(AdminPostNotesReq, req.body);
 
-  const userId: string = req.user.id || req.user.userId
+    const userId: string = req.user.id || req.user.userId;
 
-  const noteService: NoteService = req.scope.resolve("noteService")
+    const noteService: NoteService = req.scope.resolve("noteService");
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  const result = await manager.transaction(async (transactionManager) => {
-    return await noteService.withTransaction(transactionManager).create({
-      resource_id: validated.resource_id,
-      resource_type: validated.resource_type,
-      value: validated.value,
-      author_id: userId,
-    })
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    const result = await manager.transaction(async (transactionManager) => {
+        return await noteService.withTransaction(transactionManager).create({
+            resource_id: validated.resource_id,
+            resource_type: validated.resource_type,
+            value: validated.value,
+            author_id: userId
+        });
+    });
 
-  res.status(200).json({ note: result })
-}
+    res.status(200).json({ note: result });
+};
 
 export class AdminPostNotesReq {
-  @IsString()
-  @IsNotEmpty()
-  resource_id: string
+    @IsString()
+    @IsNotEmpty()
+    resource_id: string;
 
-  @IsString()
-  @IsNotEmpty()
-  resource_type: string
+    @IsString()
+    @IsNotEmpty()
+    resource_type: string;
 
-  @IsString()
-  @IsNotEmpty()
-  value: string
+    @IsString()
+    @IsNotEmpty()
+    value: string;
 }

@@ -1,175 +1,165 @@
-import _ from "lodash"
-import {
-  BeforeInsert,
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  JoinTable,
-  ManyToMany,
-  ManyToOne,
-  OneToMany,
-} from "typeorm"
-import { DbAwareColumn } from "../utils/db-aware-column"
-import { Image } from "./image"
-import { ProductCollection } from "./product-collection"
-import { ProductOption } from "./product-option"
-import { ProductTag } from "./product-tag"
-import { ProductType } from "./product-type"
-import { ProductVariant } from "./product-variant"
-import { ShippingProfile } from "./shipping-profile"
-import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity"
-import { generateEntityId } from "../utils/generate-entity-id"
-import { FeatureFlagDecorators } from "../utils/feature-flag-decorators"
-import { SalesChannel } from "./sales-channel"
+import _ from "lodash";
+import { BeforeInsert, Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany } from "typeorm";
+import { DbAwareColumn } from "../utils/db-aware-column";
+import { Image } from "./image";
+import { ProductCollection } from "./product-collection";
+import { ProductOption } from "./product-option";
+import { ProductTag } from "./product-tag";
+import { ProductType } from "./product-type";
+import { ProductVariant } from "./product-variant";
+import { ShippingProfile } from "./shipping-profile";
+import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity";
+import { generateEntityId } from "../utils/generate-entity-id";
+import { FeatureFlagDecorators } from "../utils/feature-flag-decorators";
+import { SalesChannel } from "./sales-channel";
 
 export enum ProductStatus {
-  DRAFT = "draft",
-  PROPOSED = "proposed",
-  PUBLISHED = "published",
-  REJECTED = "rejected",
+    DRAFT = "draft",
+    PROPOSED = "proposed",
+    PUBLISHED = "published",
+    REJECTED = "rejected"
 }
 
 @Entity()
 export class Product extends SoftDeletableEntity {
-  @Column()
-  title: string
+    @Column()
+    title: string;
 
-  @Column({ type: "text", nullable: true })
-  subtitle: string | null
+    @Column({ type: "text", nullable: true })
+    subtitle: string | null;
 
-  @Column({ type: "text", nullable: true })
-  description: string | null
+    @Column({ type: "text", nullable: true })
+    description: string | null;
 
-  @Index({ unique: true, where: "deleted_at IS NULL" })
-  @Column({ type: "text", nullable: true })
-  handle: string | null
+    @Index({ unique: true, where: "deleted_at IS NULL" })
+    @Column({ type: "text", nullable: true })
+    handle: string | null;
 
-  @Column({ default: false })
-  is_giftcard: boolean
+    @Column({ default: false })
+    is_giftcard: boolean;
 
-  @DbAwareColumn({ type: "enum", enum: ProductStatus, default: "draft" })
-  status: ProductStatus
+    @DbAwareColumn({ type: "enum", enum: ProductStatus, default: "draft" })
+    status: ProductStatus;
 
-  @ManyToMany(() => Image, { cascade: ["insert"] })
-  @JoinTable({
-    name: "product_images",
-    joinColumn: {
-      name: "product_id",
-      referencedColumnName: "id",
-    },
-    inverseJoinColumn: {
-      name: "image_id",
-      referencedColumnName: "id",
-    },
-  })
-  images: Image[]
+    @ManyToMany(() => Image, { cascade: ["insert"] })
+    @JoinTable({
+        name: "product_images",
+        joinColumn: {
+            name: "product_id",
+            referencedColumnName: "id"
+        },
+        inverseJoinColumn: {
+            name: "image_id",
+            referencedColumnName: "id"
+        }
+    })
+    images: Image[];
 
-  @Column({ type: "text", nullable: true })
-  thumbnail: string | null
+    @Column({ type: "text", nullable: true })
+    thumbnail: string | null;
 
-  @OneToMany(() => ProductOption, (productOption) => productOption.product)
-  options: ProductOption[]
+    @OneToMany(() => ProductOption, (productOption) => productOption.product)
+    options: ProductOption[];
 
-  @OneToMany(() => ProductVariant, (variant) => variant.product, {
-    cascade: true,
-  })
-  variants: ProductVariant[]
+    @OneToMany(() => ProductVariant, (variant) => variant.product, {
+        cascade: true
+    })
+    variants: ProductVariant[];
 
-  @Index()
-  @Column()
-  profile_id: string
+    @Index()
+    @Column()
+    profile_id: string;
 
-  @ManyToOne(() => ShippingProfile)
-  @JoinColumn({ name: "profile_id" })
-  profile: ShippingProfile
+    @ManyToOne(() => ShippingProfile)
+    @JoinColumn({ name: "profile_id" })
+    profile: ShippingProfile;
 
-  @Column({ type: "int", nullable: true })
-  weight: number | null
+    @Column({ type: "int", nullable: true })
+    weight: number | null;
 
-  @Column({ type: "int", nullable: true })
-  length: number | null
+    @Column({ type: "int", nullable: true })
+    length: number | null;
 
-  @Column({ type: "int", nullable: true })
-  height: number | null
+    @Column({ type: "int", nullable: true })
+    height: number | null;
 
-  @Column({ type: "int", nullable: true })
-  width: number | null
+    @Column({ type: "int", nullable: true })
+    width: number | null;
 
-  @Column({ type: "text", nullable: true })
-  hs_code: string | null
+    @Column({ type: "text", nullable: true })
+    hs_code: string | null;
 
-  @Column({ type: "text", nullable: true })
-  origin_country: string | null
+    @Column({ type: "text", nullable: true })
+    origin_country: string | null;
 
-  @Column({ type: "text", nullable: true })
-  mid_code: string | null
+    @Column({ type: "text", nullable: true })
+    mid_code: string | null;
 
-  @Column({ type: "text", nullable: true })
-  material: string | null
+    @Column({ type: "text", nullable: true })
+    material: string | null;
 
-  @Column({ type: "text", nullable: true })
-  collection_id: string | null
+    @Column({ type: "text", nullable: true })
+    collection_id: string | null;
 
-  @ManyToOne(() => ProductCollection)
-  @JoinColumn({ name: "collection_id" })
-  collection: ProductCollection
+    @ManyToOne(() => ProductCollection)
+    @JoinColumn({ name: "collection_id" })
+    collection: ProductCollection;
 
-  @Column({ type: "text", nullable: true })
-  type_id: string | null
+    @Column({ type: "text", nullable: true })
+    type_id: string | null;
 
-  @ManyToOne(() => ProductType)
-  @JoinColumn({ name: "type_id" })
-  type: ProductType
+    @ManyToOne(() => ProductType)
+    @JoinColumn({ name: "type_id" })
+    type: ProductType;
 
-  @ManyToMany(() => ProductTag)
-  @JoinTable({
-    name: "product_tags",
-    joinColumn: {
-      name: "product_id",
-      referencedColumnName: "id",
-    },
-    inverseJoinColumn: {
-      name: "product_tag_id",
-      referencedColumnName: "id",
-    },
-  })
-  tags: ProductTag[]
+    @ManyToMany(() => ProductTag)
+    @JoinTable({
+        name: "product_tags",
+        joinColumn: {
+            name: "product_id",
+            referencedColumnName: "id"
+        },
+        inverseJoinColumn: {
+            name: "product_tag_id",
+            referencedColumnName: "id"
+        }
+    })
+    tags: ProductTag[];
 
-  @Column({ default: true })
-  discountable: boolean
+    @Column({ default: true })
+    discountable: boolean;
 
-  @Column({ type: "text", nullable: true })
-  external_id: string | null
+    @Column({ type: "text", nullable: true })
+    external_id: string | null;
 
-  @DbAwareColumn({ type: "jsonb", nullable: true })
-  metadata: Record<string, unknown> | null
+    @DbAwareColumn({ type: "jsonb", nullable: true })
+    metadata: Record<string, unknown> | null;
 
-  @FeatureFlagDecorators("sales_channels", [
-    ManyToMany(() => SalesChannel, { cascade: ["remove", "soft-remove"] }),
-    JoinTable({
-      name: "product_sales_channel",
-      joinColumn: {
-        name: "product_id",
-        referencedColumnName: "id",
-      },
-      inverseJoinColumn: {
-        name: "sales_channel_id",
-        referencedColumnName: "id",
-      },
-    }),
-  ])
-  sales_channels: SalesChannel[]
+    @FeatureFlagDecorators("sales_channels", [
+        ManyToMany(() => SalesChannel, { cascade: ["remove", "soft-remove"] }),
+        JoinTable({
+            name: "product_sales_channel",
+            joinColumn: {
+                name: "product_id",
+                referencedColumnName: "id"
+            },
+            inverseJoinColumn: {
+                name: "sales_channel_id",
+                referencedColumnName: "id"
+            }
+        })
+    ])
+    sales_channels: SalesChannel[];
 
-  @BeforeInsert()
-  private beforeInsert(): void {
-    if (this.id) return
+    @BeforeInsert()
+    private beforeInsert(): void {
+        if (this.id) return;
 
-    this.id = generateEntityId(this.id, "prod")
-    if (!this.handle) {
-      this.handle = _.kebabCase(this.title)
+        this.id = generateEntityId(this.id, "prod");
+        if (!this.handle) {
+            this.handle = _.kebabCase(this.title);
+        }
     }
-  }
 }
 
 /**

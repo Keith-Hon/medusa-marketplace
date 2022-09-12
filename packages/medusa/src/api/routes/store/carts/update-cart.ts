@@ -1,16 +1,10 @@
-import { Type } from "class-transformer"
-import {
-  IsArray,
-  IsEmail,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from "class-validator"
-import { defaultStoreCartFields, defaultStoreCartRelations } from "."
-import { CartService } from "../../../../services"
-import { AddressPayload } from "../../../../types/common"
-import { IsType } from "../../../../utils/validators/is-type"
-import { decorateLineItemsWithTotals } from "./decorate-line-items-with-totals"
+import { Type } from "class-transformer";
+import { IsArray, IsEmail, IsOptional, IsString, ValidateNested } from "class-validator";
+import { defaultStoreCartFields, defaultStoreCartRelations } from ".";
+import { CartService } from "../../../../services";
+import { AddressPayload } from "../../../../types/common";
+import { IsType } from "../../../../utils/validators/is-type";
+import { decorateLineItemsWithTotals } from "./decorate-line-items-with-totals";
 import { EntityManager } from "typeorm";
 import { FeatureFlagDecorators } from "../../../../utils/feature-flag-decorators";
 import SalesChannelFeatureFlag from "../../../../loaders/feature-flags/sales-channels";
@@ -86,86 +80,83 @@ import SalesChannelFeatureFlag from "../../../../loaders/feature-flags/sales-cha
  *               $ref: "#/components/schemas/cart"
  */
 export default async (req, res) => {
-  const { id } = req.params
-  const validated = req.validatedBody as StorePostCartsCartReq
+    const { id } = req.params;
+    const validated = req.validatedBody as StorePostCartsCartReq;
 
-  const cartService: CartService = req.scope.resolve("cartService")
-  const manager: EntityManager = req.scope.resolve("manager")
+    const cartService: CartService = req.scope.resolve("cartService");
+    const manager: EntityManager = req.scope.resolve("manager");
 
-  await manager.transaction(async (transactionManager) => {
-    await cartService.withTransaction(transactionManager).update(id, validated)
+    await manager.transaction(async (transactionManager) => {
+        await cartService.withTransaction(transactionManager).update(id, validated);
 
-    const updated = await cartService.withTransaction(transactionManager).retrieve(id, {
-      relations: ["payment_sessions", "shipping_methods"],
-    })
+        const updated = await cartService.withTransaction(transactionManager).retrieve(id, {
+            relations: ["payment_sessions", "shipping_methods"]
+        });
 
-    if (updated.payment_sessions?.length && !validated.region_id) {
-      await cartService.withTransaction(transactionManager).setPaymentSessions(id)
-    }
-  })
+        if (updated.payment_sessions?.length && !validated.region_id) {
+            await cartService.withTransaction(transactionManager).setPaymentSessions(id);
+        }
+    });
 
-  const cart = await cartService.retrieve(id, {
-    select: defaultStoreCartFields,
-    relations: defaultStoreCartRelations,
-  })
-  const data = await decorateLineItemsWithTotals(cart, req)
+    const cart = await cartService.retrieve(id, {
+        select: defaultStoreCartFields,
+        relations: defaultStoreCartRelations
+    });
+    const data = await decorateLineItemsWithTotals(cart, req);
 
-  res.json({ cart: data })
-}
+    res.json({ cart: data });
+};
 
 class GiftCard {
-  @IsString()
-  code: string
+    @IsString()
+    code: string;
 }
 
 class Discount {
-  @IsString()
-  code: string
+    @IsString()
+    code: string;
 }
 
 export class StorePostCartsCartReq {
-  @IsOptional()
-  @IsString()
-  region_id?: string
+    @IsOptional()
+    @IsString()
+    region_id?: string;
 
-  @IsOptional()
-  @IsString()
-  country_code?: string
+    @IsOptional()
+    @IsString()
+    country_code?: string;
 
-  @IsEmail()
-  @IsOptional()
-  email?: string
+    @IsEmail()
+    @IsOptional()
+    email?: string;
 
-  @IsOptional()
-  @IsType([AddressPayload, String])
-  billing_address?: AddressPayload | string
+    @IsOptional()
+    @IsType([AddressPayload, String])
+    billing_address?: AddressPayload | string;
 
-  @IsOptional()
-  @IsType([AddressPayload, String])
-  shipping_address?: AddressPayload | string
+    @IsOptional()
+    @IsType([AddressPayload, String])
+    shipping_address?: AddressPayload | string;
 
-  @IsOptional()
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => GiftCard)
-  gift_cards?: GiftCard[]
+    @IsOptional()
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => GiftCard)
+    gift_cards?: GiftCard[];
 
-  @IsOptional()
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => Discount)
-  discounts?: Discount[]
+    @IsOptional()
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => Discount)
+    discounts?: Discount[];
 
-  @IsString()
-  @IsOptional()
-  customer_id?: string
+    @IsString()
+    @IsOptional()
+    customer_id?: string;
 
-  @IsOptional()
-  context?: object
+    @IsOptional()
+    context?: object;
 
-  @FeatureFlagDecorators(SalesChannelFeatureFlag.key, [
-    IsString(),
-    IsOptional(),
-  ])
-  sales_channel_id?: string
+    @FeatureFlagDecorators(SalesChannelFeatureFlag.key, [IsString(), IsOptional()])
+    sales_channel_id?: string;
 }

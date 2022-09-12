@@ -1,10 +1,10 @@
-import { MigrationInterface, QueryRunner } from 'typeorm';
-import { Migration } from 'medusa-extender';
-import { TableForeignKey } from 'typeorm';
+import { MigrationInterface, QueryRunner } from "typeorm";
+import { Migration } from "medusa-extender";
+import { TableForeignKey } from "typeorm";
 
 @Migration()
 export class RoleMigration1661407989236 implements MigrationInterface {
-    name = 'RoleMigration1661407989236';
+    name = "RoleMigration1661407989236";
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         const query = `
@@ -14,14 +14,17 @@ export class RoleMigration1661407989236 implements MigrationInterface {
         `;
         await queryRunner.query(query);
 
-        await queryRunner.createPrimaryKey("role", ["id"])
-        await queryRunner.createForeignKey("role", new TableForeignKey({
-            columnNames: ["store_id"],
-            referencedColumnNames: ["id"],
-            referencedTableName: "store",
-            onDelete: "CASCADE",
-            onUpdate: "CASCADE"
-        }))
+        await queryRunner.createPrimaryKey("role", ["id"]);
+        await queryRunner.createForeignKey(
+            "role",
+            new TableForeignKey({
+                columnNames: ["store_id"],
+                referencedColumnNames: ["id"],
+                referencedTableName: "store",
+                onDelete: "CASCADE",
+                onUpdate: "CASCADE"
+            })
+        );
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {

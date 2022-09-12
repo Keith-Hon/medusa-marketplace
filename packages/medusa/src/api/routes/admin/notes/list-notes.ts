@@ -1,8 +1,8 @@
-import { IsNumber, IsOptional, IsString } from "class-validator"
-import NoteService from "../../../../services/note"
-import { validator } from "../../../../utils/validator"
-import { selector } from "../../../../types/note"
-import { Type } from "class-transformer"
+import { IsNumber, IsOptional, IsString } from "class-validator";
+import NoteService from "../../../../services/note";
+import { validator } from "../../../../utils/validator";
+import { selector } from "../../../../types/note";
+import { Type } from "class-transformer";
 /**
  * @oas [get] /notes
  * operationId: "GetNotes"
@@ -28,41 +28,41 @@ import { Type } from "class-transformer"
  *                 $ref: "#/components/schemas/note"
  */
 export default async (req, res) => {
-  const validated = await validator(AdminGetNotesParams, req.query)
+    const validated = await validator(AdminGetNotesParams, req.query);
 
-  const selector: selector = {}
+    const selector: selector = {};
 
-  if (validated.resource_id) {
-    selector.resource_id = validated.resource_id
-  }
+    if (validated.resource_id) {
+        selector.resource_id = validated.resource_id;
+    }
 
-  const noteService: NoteService = req.scope.resolve("noteService")
-  const notes = await noteService.list(selector, {
-    take: validated.limit,
-    skip: validated.offset,
-    relations: ["author"],
-  })
+    const noteService: NoteService = req.scope.resolve("noteService");
+    const notes = await noteService.list(selector, {
+        take: validated.limit,
+        skip: validated.offset,
+        relations: ["author"]
+    });
 
-  res.status(200).json({
-    notes,
-    count: notes.length,
-    offset: validated.offset,
-    limit: validated.limit,
-  })
-}
+    res.status(200).json({
+        notes,
+        count: notes.length,
+        offset: validated.offset,
+        limit: validated.limit
+    });
+};
 
 export class AdminGetNotesParams {
-  @IsString()
-  @IsOptional()
-  resource_id?: string
+    @IsString()
+    @IsOptional()
+    resource_id?: string;
 
-  @IsNumber()
-  @IsOptional()
-  @Type(() => Number)
-  limit = 50
+    @IsNumber()
+    @IsOptional()
+    @Type(() => Number)
+    limit = 50;
 
-  @IsNumber()
-  @IsOptional()
-  @Type(() => Number)
-  offset = 0
+    @IsNumber()
+    @IsOptional()
+    @Type(() => Number)
+    offset = 0;
 }

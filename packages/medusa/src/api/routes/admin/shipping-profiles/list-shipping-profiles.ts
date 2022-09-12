@@ -1,4 +1,4 @@
-import { ShippingProfileService } from "../../../../services"
+import { ShippingProfileService } from "../../../../services";
 
 /**
  * @oas [get] /shipping-profiles
@@ -21,11 +21,9 @@ import { ShippingProfileService } from "../../../../services"
  *                 $ref: "#/components/schemas/shipping_profile"
  */
 export default async (req, res) => {
-  const profileService: ShippingProfileService = req.scope.resolve(
-    "shippingProfileService"
-  )
+    const profileService: ShippingProfileService = req.scope.resolve("shippingProfileService");
 
-  const data = await profileService.list()
+    const data = await profileService.list();
 
-  res.status(200).json({ shipping_profiles: data })
-}
+    res.status(200).json({ shipping_profiles: data });
+};

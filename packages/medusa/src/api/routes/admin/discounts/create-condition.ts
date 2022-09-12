@@ -1,12 +1,12 @@
-import { IsOptional, IsString } from "class-validator"
-import { defaultAdminDiscountsFields, defaultAdminDiscountsRelations } from "."
-import { Discount, DiscountConditionOperator } from "../../../../models"
-import { DiscountService } from "../../../../services"
-import DiscountConditionService from "../../../../services/discount-condition"
-import { AdminUpsertConditionsReq } from "../../../../types/discount"
-import { getRetrieveConfig } from "../../../../utils/get-query-config"
-import { validator } from "../../../../utils/validator"
-import { EntityManager } from "typeorm"
+import { IsOptional, IsString } from "class-validator";
+import { defaultAdminDiscountsFields, defaultAdminDiscountsRelations } from ".";
+import { Discount, DiscountConditionOperator } from "../../../../models";
+import { DiscountService } from "../../../../services";
+import DiscountConditionService from "../../../../services/discount-condition";
+import { AdminUpsertConditionsReq } from "../../../../types/discount";
+import { getRetrieveConfig } from "../../../../utils/get-query-config";
+import { validator } from "../../../../utils/validator";
+import { EntityManager } from "typeorm";
 /**
  * @oas [post] /discounts/{discount_id}/conditions
  * operationId: "PostDiscountsDiscountConditions"
@@ -55,58 +55,48 @@ import { EntityManager } from "typeorm"
  *               $ref: "#/components/schemas/discount"
  */
 export default async (req, res) => {
-  const { discount_id } = req.params
+    const { discount_id } = req.params;
 
-  const validatedCondition = await validator(
-    AdminPostDiscountsDiscountConditions,
-    req.body
-  )
+    const validatedCondition = await validator(AdminPostDiscountsDiscountConditions, req.body);
 
-  const validatedParams = await validator(
-    AdminPostDiscountsDiscountConditionsParams,
-    req.query
-  )
+    const validatedParams = await validator(AdminPostDiscountsDiscountConditionsParams, req.query);
 
-  const conditionService: DiscountConditionService = req.scope.resolve(
-    "discountConditionService"
-  )
-  const discountService: DiscountService = req.scope.resolve("discountService")
+    const conditionService: DiscountConditionService = req.scope.resolve("discountConditionService");
+    const discountService: DiscountService = req.scope.resolve("discountService");
 
-  let discount = await discountService.retrieve(discount_id)
+    let discount = await discountService.retrieve(discount_id);
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await conditionService
-      .withTransaction(transactionManager)
-      .upsertCondition({
-        ...validatedCondition,
-        rule_id: discount.rule_id,
-      })
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await conditionService.withTransaction(transactionManager).upsertCondition({
+            ...validatedCondition,
+            rule_id: discount.rule_id
+        });
+    });
 
-  const config = getRetrieveConfig<Discount>(
-    defaultAdminDiscountsFields,
-    defaultAdminDiscountsRelations,
-    validatedParams?.fields?.split(",") as (keyof Discount)[],
-    validatedParams?.expand?.split(",")
-  )
+    const config = getRetrieveConfig<Discount>(
+        defaultAdminDiscountsFields,
+        defaultAdminDiscountsRelations,
+        validatedParams?.fields?.split(",") as (keyof Discount)[],
+        validatedParams?.expand?.split(",")
+    );
 
-  discount = await discountService.retrieve(discount.id, config)
+    discount = await discountService.retrieve(discount.id, config);
 
-  res.status(200).json({ discount })
-}
+    res.status(200).json({ discount });
+};
 
 export class AdminPostDiscountsDiscountConditions extends AdminUpsertConditionsReq {
-  @IsString()
-  operator: DiscountConditionOperator
+    @IsString()
+    operator: DiscountConditionOperator;
 }
 
 export class AdminPostDiscountsDiscountConditionsParams {
-  @IsString()
-  @IsOptional()
-  expand?: string
+    @IsString()
+    @IsOptional()
+    expand?: string;
 
-  @IsString()
-  @IsOptional()
-  fields?: string
+    @IsString()
+    @IsOptional()
+    fields?: string;
 }

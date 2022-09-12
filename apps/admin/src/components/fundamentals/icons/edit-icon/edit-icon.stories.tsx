@@ -15,7 +15,7 @@ export default {
   },
 } as ComponentMeta<typeof EditIcon>
 
-const Template = args => <EditIcon {...args} />
+const Template = (args) => <EditIcon {...args} />
 
 export const Icon = Template.bind({})
 Icon.args = {

@@ -1,14 +1,11 @@
-import {
-  defaultAdminDraftOrdersFields,
-  defaultAdminDraftOrdersRelations,
-} from "."
-import { DraftOrderService } from "../../../../services"
-import { IsNumber, IsOptional, IsString } from "class-validator"
-import { validator } from "../../../../utils/validator"
-import { Type } from "class-transformer"
-import { DraftOrderListSelector } from "../../../../types/draft-orders"
-import { FindConfig } from "../../../../types/common"
-import { DraftOrder } from "../../../../models"
+import { defaultAdminDraftOrdersFields, defaultAdminDraftOrdersRelations } from ".";
+import { DraftOrderService } from "../../../../services";
+import { IsNumber, IsOptional, IsString } from "class-validator";
+import { validator } from "../../../../utils/validator";
+import { Type } from "class-transformer";
+import { DraftOrderListSelector } from "../../../../types/draft-orders";
+import { FindConfig } from "../../../../types/common";
+import { DraftOrder } from "../../../../models";
 /**
  * @oas [get] /draft-orders
  * operationId: "GetDraftOrders"
@@ -29,50 +26,46 @@ import { DraftOrder } from "../../../../models"
  */
 
 export default async (req, res) => {
-  const draftOrderService: DraftOrderService =
-    req.scope.resolve("draftOrderService")
+    const draftOrderService: DraftOrderService = req.scope.resolve("draftOrderService");
 
-  const validated = await validator(AdminGetDraftOrdersParams, req.query)
+    const validated = await validator(AdminGetDraftOrdersParams, req.query);
 
-  const selector: DraftOrderListSelector = {}
+    const selector: DraftOrderListSelector = {};
 
-  if (validated.q) {
-    selector.q = validated.q
-  }
+    if (validated.q) {
+        selector.q = validated.q;
+    }
 
-  const listConfig: FindConfig<DraftOrder> = {
-    select: defaultAdminDraftOrdersFields,
-    relations: defaultAdminDraftOrdersRelations,
-    skip: validated.offset ?? 0,
-    take: validated.limit ?? 50,
-    order: { created_at: "DESC" },
-  }
+    const listConfig: FindConfig<DraftOrder> = {
+        select: defaultAdminDraftOrdersFields,
+        relations: defaultAdminDraftOrdersRelations,
+        skip: validated.offset ?? 0,
+        take: validated.limit ?? 50,
+        order: { created_at: "DESC" }
+    };
 
-  const [draftOrders, count] = await draftOrderService.listAndCount(
-    selector,
-    listConfig
-  )
+    const [draftOrders, count] = await draftOrderService.listAndCount(selector, listConfig);
 
-  res.json({
-    draft_orders: draftOrders,
-    count,
-    offset: validated.offset,
-    limit: validated.limit,
-  })
-}
+    res.json({
+        draft_orders: draftOrders,
+        count,
+        offset: validated.offset,
+        limit: validated.limit
+    });
+};
 
 export class AdminGetDraftOrdersParams {
-  @IsString()
-  @IsOptional()
-  q?: string
+    @IsString()
+    @IsOptional()
+    q?: string;
 
-  @IsNumber()
-  @IsOptional()
-  @Type(() => Number)
-  limit?: number = 50
+    @IsNumber()
+    @IsOptional()
+    @Type(() => Number)
+    limit?: number = 50;
 
-  @IsNumber()
-  @IsOptional()
-  @Type(() => Number)
-  offset?: number = 0
+    @IsNumber()
+    @IsOptional()
+    @Type(() => Number)
+    offset?: number = 0;
 }

@@ -1,5 +1,5 @@
-import { OrderService } from "../../../../services"
-import { EntityManager } from "typeorm"
+import { OrderService } from "../../../../services";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /orders/{id}/archive
@@ -22,18 +22,18 @@ import { EntityManager } from "typeorm"
  *               $ref: "#/components/schemas/order"
  */
 export default async (req, res) => {
-  const { id } = req.params
+    const { id } = req.params;
 
-  const orderService: OrderService = req.scope.resolve("orderService")
+    const orderService: OrderService = req.scope.resolve("orderService");
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await orderService.withTransaction(transactionManager).archive(id)
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await orderService.withTransaction(transactionManager).archive(id);
+    });
 
-  const order = await orderService.retrieve(id, {
-    relations: ["region", "customer", "swaps"],
-  })
+    const order = await orderService.retrieve(id, {
+        relations: ["region", "customer", "swaps"]
+    });
 
-  res.json({ order })
-}
+    res.json({ order });
+};

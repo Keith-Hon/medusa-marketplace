@@ -28,13 +28,8 @@ import {
 } from "../form/product-form-context"
 
 const General = ({ showViewOptions = true, isEdit = false, product }) => {
-  const {
-    register,
-    control,
-    setViewType,
-    viewType,
-    setValue,
-  } = useProductForm()
+  const { register, control, setViewType, viewType, setValue } =
+    useProductForm()
   const { product_types } = useAdminProductTypes(undefined, { cacheTime: 0 })
   const { collections } = useAdminCollections()
 

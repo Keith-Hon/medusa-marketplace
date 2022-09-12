@@ -104,13 +104,8 @@ const ManageGiftCard: React.FC<RouteComponentProps> = () => {
 const TOAST_ID = "edit-gc-dirty"
 
 const UpdateNotification = ({ isLoading = false }) => {
-  const {
-    formState,
-    onSubmit,
-    handleSubmit,
-    resetForm,
-    additionalDirtyState,
-  } = useGiftCardForm()
+  const { formState, onSubmit, handleSubmit, resetForm, additionalDirtyState } =
+    useGiftCardForm()
   const [visible, setVisible] = useState(false)
   const [blocking, setBlocking] = useState(true)
 

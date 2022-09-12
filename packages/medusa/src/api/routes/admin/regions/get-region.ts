@@ -1,5 +1,5 @@
-import RegionService from "../../../../services/region"
-import { defaultAdminRegionRelations, defaultAdminRegionFields } from "."
+import RegionService from "../../../../services/region";
+import { defaultAdminRegionRelations, defaultAdminRegionFields } from ".";
 
 /**
  * @oas [get] /regions/{id}
@@ -22,12 +22,12 @@ import { defaultAdminRegionRelations, defaultAdminRegionFields } from "."
  *               $ref: "#/components/schemas/region"
  */
 export default async (req, res) => {
-  const { region_id } = req.params
-  const regionService: RegionService = req.scope.resolve("regionService")
-  const region = await regionService.retrieve(region_id, {
-    select: defaultAdminRegionFields,
-    relations: defaultAdminRegionRelations,
-  })
+    const { region_id } = req.params;
+    const regionService: RegionService = req.scope.resolve("regionService");
+    const region = await regionService.retrieve(region_id, {
+        select: defaultAdminRegionFields,
+        relations: defaultAdminRegionRelations
+    });
 
-  res.status(200).json({ region })
-}
+    res.status(200).json({ region });
+};

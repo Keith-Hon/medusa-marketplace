@@ -1,9 +1,9 @@
-import _ from "lodash"
-import jwt from "jsonwebtoken"
-import { validator } from "../../../../utils/validator"
-import { IsEmail, IsNotEmpty, IsString } from "class-validator"
-import AuthService from "../../../../services/auth"
-import { MedusaError } from "medusa-core-utils"
+import _ from "lodash";
+import jwt from "jsonwebtoken";
+import { validator } from "../../../../utils/validator";
+import { IsEmail, IsNotEmpty, IsString } from "class-validator";
+import AuthService from "../../../../services/auth";
+import { MedusaError } from "medusa-core-utils";
 import { EntityManager } from "typeorm";
 
 /**
@@ -28,44 +28,40 @@ import { EntityManager } from "typeorm";
  *              $ref: "#/components/schemas/user"
  */
 export default async (req, res) => {
-  const { projectConfig: { jwt_secret } } = req.scope.resolve('configModule')
-  if (!jwt_secret) {
-    throw new MedusaError(
-      MedusaError.Types.NOT_FOUND,
-      "Please configure jwt_secret in your environment"
-    )
-  }
-  const validated = await validator(AdminPostAuthReq, req.body)
+    const {
+        projectConfig: { jwt_secret }
+    } = req.scope.resolve("configModule");
+    if (!jwt_secret) {
+        throw new MedusaError(MedusaError.Types.NOT_FOUND, "Please configure jwt_secret in your environment");
+    }
+    const validated = await validator(AdminPostAuthReq, req.body);
 
-  const authService: AuthService = req.scope.resolve("authService")
-  const manager: EntityManager = req.scope.resolve("manager")
-  const result = await manager.transaction(async (transactionManager) => {
-     return await authService.withTransaction(transactionManager).authenticate(
-      validated.email,
-      validated.password
-    )
-  })
+    const authService: AuthService = req.scope.resolve("authService");
+    const manager: EntityManager = req.scope.resolve("manager");
+    const result = await manager.transaction(async (transactionManager) => {
+        return await authService.withTransaction(transactionManager).authenticate(validated.email, validated.password);
+    });
 
-  if (result.success && result.user) {
-    // Add JWT to cookie
-    req.session.jwt = jwt.sign({ userId: result.user.id }, jwt_secret, {
-      expiresIn: "24h",
-    })
+    if (result.success && result.user) {
+        // Add JWT to cookie
+        req.session.jwt = jwt.sign({ userId: result.user.id }, jwt_secret, {
+            expiresIn: "24h"
+        });
 
-    const cleanRes = _.omit(result.user, ["password_hash"])
+        const cleanRes = _.omit(result.user, ["password_hash"]);
 
-    res.json({ user: cleanRes })
-  } else {
-    res.sendStatus(401)
-  }
-}
+        res.json({ user: cleanRes });
+    } else {
+        res.sendStatus(401);
+    }
+};
 
 export class AdminPostAuthReq {
-  @IsEmail()
-  @IsNotEmpty()
-  email: string
+    @IsEmail()
+    @IsNotEmpty()
+    email: string;
 
-  @IsString()
-  @IsNotEmpty()
-  password: string
+    @IsString()
+    @IsNotEmpty()
+    password: string;
 }

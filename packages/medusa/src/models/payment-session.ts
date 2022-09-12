@@ -1,56 +1,48 @@
-import {
-  BeforeInsert,
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  Unique,
-} from "typeorm"
-import { BaseEntity } from "../interfaces"
-import { DbAwareColumn } from "../utils/db-aware-column"
-import { Cart } from "./cart"
-import { generateEntityId } from "../utils"
+import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne, Unique } from "typeorm";
+import { BaseEntity } from "../interfaces";
+import { DbAwareColumn } from "../utils/db-aware-column";
+import { Cart } from "./cart";
+import { generateEntityId } from "../utils";
 
 export enum PaymentSessionStatus {
-  AUTHORIZED = "authorized",
-  PENDING = "pending",
-  REQUIRES_MORE = "requires_more",
-  ERROR = "error",
-  CANCELED = "canceled",
+    AUTHORIZED = "authorized",
+    PENDING = "pending",
+    REQUIRES_MORE = "requires_more",
+    ERROR = "error",
+    CANCELED = "canceled"
 }
 
 @Unique("OneSelected", ["cart_id", "is_selected"])
 @Entity()
 export class PaymentSession extends BaseEntity {
-  @Index()
-  @Column()
-  cart_id: string
+    @Index()
+    @Column()
+    cart_id: string;
 
-  @ManyToOne(() => Cart, (cart) => cart.payment_sessions)
-  @JoinColumn({ name: "cart_id" })
-  cart: Cart
+    @ManyToOne(() => Cart, (cart) => cart.payment_sessions)
+    @JoinColumn({ name: "cart_id" })
+    cart: Cart;
 
-  @Index()
-  @Column()
-  provider_id: string
+    @Index()
+    @Column()
+    provider_id: string;
 
-  @Column({ type: "boolean", nullable: true })
-  is_selected: boolean | null
+    @Column({ type: "boolean", nullable: true })
+    is_selected: boolean | null;
 
-  @DbAwareColumn({ type: "enum", enum: PaymentSessionStatus })
-  status: string
+    @DbAwareColumn({ type: "enum", enum: PaymentSessionStatus })
+    status: string;
 
-  @DbAwareColumn({ type: "jsonb" })
-  data: Record<string, unknown>
+    @DbAwareColumn({ type: "jsonb" })
+    data: Record<string, unknown>;
 
-  @Column({ nullable: true })
-  idempotency_key: string
+    @Column({ nullable: true })
+    idempotency_key: string;
 
-  @BeforeInsert()
-  private beforeInsert(): void {
-    this.id = generateEntityId(this.id, "ps")
-  }
+    @BeforeInsert()
+    private beforeInsert(): void {
+        this.id = generateEntityId(this.id, "ps");
+    }
 }
 
 /**

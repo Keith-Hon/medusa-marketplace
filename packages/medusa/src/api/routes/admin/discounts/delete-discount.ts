@@ -1,5 +1,5 @@
-import DiscountService from "../../../../services/discount"
-import { EntityManager } from "typeorm"
+import DiscountService from "../../../../services/discount";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [delete] /discounts/{id}
@@ -28,19 +28,17 @@ import { EntityManager } from "typeorm"
  *               type: boolean
  */
 export default async (req, res) => {
-  const { discount_id } = req.params
+    const { discount_id } = req.params;
 
-  const discountService: DiscountService = req.scope.resolve("discountService")
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await discountService
-      .withTransaction(transactionManager)
-      .delete(discount_id)
-  })
+    const discountService: DiscountService = req.scope.resolve("discountService");
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await discountService.withTransaction(transactionManager).delete(discount_id);
+    });
 
-  res.json({
-    id: discount_id,
-    object: "discount",
-    deleted: true,
-  })
-}
+    res.json({
+        id: discount_id,
+        object: "discount",
+        deleted: true
+    });
+};

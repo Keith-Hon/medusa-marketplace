@@ -1,21 +1,11 @@
-import { Type } from "class-transformer"
-import { pickBy } from "lodash"
-import {
-  IsArray,
-  IsBoolean,
-  IsEnum,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from "class-validator"
-import { ProductStatus } from "../../../../models"
-import {
-  DateComparisonOperator,
-  extendedFindParamsMixin,
-} from "../../../../types/common"
-import { FilterableProductProps } from "../../../../types/product"
-import PriceListService from "../../../../services/price-list"
-import { Request } from "express"
+import { Type } from "class-transformer";
+import { pickBy } from "lodash";
+import { IsArray, IsBoolean, IsEnum, IsOptional, IsString, ValidateNested } from "class-validator";
+import { ProductStatus } from "../../../../models";
+import { DateComparisonOperator, extendedFindParamsMixin } from "../../../../types/common";
+import { FilterableProductProps } from "../../../../types/product";
+import PriceListService from "../../../../services/price-list";
+import { Request } from "express";
 
 /**
  * @oas [get] /price-lists/:id/products
@@ -66,91 +56,88 @@ import { Request } from "express"
  *                 $ref: "#/components/schemas/product"
  */
 export default async (req: Request, res) => {
-  const { id } = req.params
-  const { offset, limit } = req.validatedQuery
+    const { id } = req.params;
+    const { offset, limit } = req.validatedQuery;
 
-  const priceListService: PriceListService =
-    req.scope.resolve("priceListService")
+    const priceListService: PriceListService = req.scope.resolve("priceListService");
 
-  const filterableFields: FilterableProductProps = {
-    ...req.filterableFields,
-    price_list_id: [id],
-  }
+    const filterableFields: FilterableProductProps = {
+        ...req.filterableFields,
+        price_list_id: [id]
+    };
 
-  const [products, count] = await priceListService.listProducts(
-    id,
-    pickBy(filterableFields, (val) => typeof val !== "undefined"),
-    req.listConfig
-  )
+    const [products, count] = await priceListService.listProducts(
+        id,
+        pickBy(filterableFields, (val) => typeof val !== "undefined"),
+        req.listConfig
+    );
 
-  res.json({
-    products,
-    count,
-    offset,
-    limit,
-  })
-}
+    res.json({
+        products,
+        count,
+        offset,
+        limit
+    });
+};
 
-export class AdminGetPriceListsPriceListProductsParams extends extendedFindParamsMixin(
-  { limit: 50 }
-) {
-  @IsString()
-  @IsOptional()
-  id?: string
+export class AdminGetPriceListsPriceListProductsParams extends extendedFindParamsMixin({ limit: 50 }) {
+    @IsString()
+    @IsOptional()
+    id?: string;
 
-  @IsString()
-  @IsOptional()
-  q?: string
+    @IsString()
+    @IsOptional()
+    q?: string;
 
-  @IsOptional()
-  @IsEnum(ProductStatus, { each: true })
-  status?: ProductStatus[]
+    @IsOptional()
+    @IsEnum(ProductStatus, { each: true })
+    status?: ProductStatus[];
 
-  @IsArray()
-  @IsOptional()
-  collection_id?: string[]
+    @IsArray()
+    @IsOptional()
+    collection_id?: string[];
 
-  @IsArray()
-  @IsOptional()
-  tags?: string[]
+    @IsArray()
+    @IsOptional()
+    tags?: string[];
 
-  @IsString()
-  @IsOptional()
-  title?: string
+    @IsString()
+    @IsOptional()
+    title?: string;
 
-  @IsString()
-  @IsOptional()
-  description?: string
+    @IsString()
+    @IsOptional()
+    description?: string;
 
-  @IsString()
-  @IsOptional()
-  handle?: string
+    @IsString()
+    @IsOptional()
+    handle?: string;
 
-  @IsBoolean()
-  @IsOptional()
-  @Type(() => Boolean)
-  is_giftcard?: string
+    @IsBoolean()
+    @IsOptional()
+    @Type(() => Boolean)
+    is_giftcard?: string;
 
-  @IsString()
-  @IsOptional()
-  type?: string
+    @IsString()
+    @IsOptional()
+    type?: string;
 
-  @IsString()
-  @IsOptional()
-  order?: string
+    @IsString()
+    @IsOptional()
+    order?: string;
 
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => DateComparisonOperator)
-  created_at?: DateComparisonOperator
+    @IsOptional()
+    @ValidateNested()
+    @Type(() => DateComparisonOperator)
+    created_at?: DateComparisonOperator;
 
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => DateComparisonOperator)
-  updated_at?: DateComparisonOperator
+    @IsOptional()
+    @ValidateNested()
+    @Type(() => DateComparisonOperator)
+    updated_at?: DateComparisonOperator;
 
-  @ValidateNested()
-  @IsOptional()
-  @Type(() => DateComparisonOperator)
-  deleted_at?: DateComparisonOperator
+    @ValidateNested()
+    @IsOptional()
+    @Type(() => DateComparisonOperator)
+    deleted_at?: DateComparisonOperator;
 }

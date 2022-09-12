@@ -1,6 +1,6 @@
-import { IsNotEmpty, IsString } from "class-validator"
-import { OauthService } from "../../../../services"
-import { validator } from "../../../../utils/validator"
+import { IsNotEmpty, IsString } from "class-validator";
+import { OauthService } from "../../../../services";
+import { validator } from "../../../../utils/validator";
 /**
  * @oas [post] /apps
  * operationId: "PostApps"
@@ -38,26 +38,22 @@ import { validator } from "../../../../utils/validator"
  *              $ref: "#/components/schemas/OAuth"
  */
 export default async (req, res) => {
-  const validated = await validator(AdminPostAppsReq, req.body)
-  const oauthService: OauthService = req.scope.resolve("oauthService")
-  const data = await oauthService.generateToken(
-    validated.application_name,
-    validated.code,
-    validated.state
-  )
-  res.status(200).json({ apps: data })
-}
+    const validated = await validator(AdminPostAppsReq, req.body);
+    const oauthService: OauthService = req.scope.resolve("oauthService");
+    const data = await oauthService.generateToken(validated.application_name, validated.code, validated.state);
+    res.status(200).json({ apps: data });
+};
 
 export class AdminPostAppsReq {
-  @IsString()
-  @IsNotEmpty()
-  application_name: string
+    @IsString()
+    @IsNotEmpty()
+    application_name: string;
 
-  @IsString()
-  @IsNotEmpty()
-  state: string
+    @IsString()
+    @IsNotEmpty()
+    state: string;
 
-  @IsString()
-  @IsNotEmpty()
-  code: string
+    @IsString()
+    @IsNotEmpty()
+    code: string;
 }

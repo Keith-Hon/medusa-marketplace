@@ -15,7 +15,7 @@ export default {
   },
 } as ComponentMeta<typeof SidedMouthFaceIcon>
 
-const Template = args => <SidedMouthFaceIcon {...args} />
+const Template = (args) => <SidedMouthFaceIcon {...args} />
 
 export const Icon = Template.bind({})
 Icon.args = {

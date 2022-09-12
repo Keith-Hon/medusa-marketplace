@@ -7,7 +7,7 @@ export default {
   component: TextInput,
 } as ComponentMeta<typeof TextInput>
 
-const Template = args => <TextInput {...args} />
+const Template = (args) => <TextInput {...args} />
 
 export const Primary = Template.bind({})
 Primary.args = {

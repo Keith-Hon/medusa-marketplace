@@ -1,6 +1,6 @@
-import { Connection, EntitySubscriberInterface, EventSubscriber, InsertEvent } from 'typeorm';
-import { OnMedusaEntityEvent, Utils, eventEmitter } from 'medusa-extender';
-import { Product } from '../entities/product.entity';
+import { Connection, EntitySubscriberInterface, EventSubscriber, InsertEvent } from "typeorm";
+import { OnMedusaEntityEvent, Utils, eventEmitter } from "medusa-extender";
+import { Product } from "../entities/product.entity";
 
 @EventSubscriber()
 export default class ProductSubscriber implements EntitySubscriberInterface<Product> {
@@ -15,7 +15,7 @@ export default class ProductSubscriber implements EntitySubscriberInterface<Prod
     public async beforeInsert(event: InsertEvent<Product>): Promise<void> {
         return await eventEmitter.emitAsync(OnMedusaEntityEvent.Before.InsertEvent(Product), {
             event,
-            transactionalEntityManager: event.manager,
+            transactionalEntityManager: event.manager
         });
     }
 }

@@ -1,5 +1,5 @@
-import RegionService from "../../../../services/region"
-import { EntityManager } from "typeorm"
+import RegionService from "../../../../services/region";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [delete] /regions/{id}
@@ -28,20 +28,18 @@ import { EntityManager } from "typeorm"
  *               type: boolean
  */
 export default async (req, res) => {
-  const { region_id } = req.params
+    const { region_id } = req.params;
 
-  const regionService: RegionService = req.scope.resolve("regionService")
+    const regionService: RegionService = req.scope.resolve("regionService");
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await regionService
-      .withTransaction(transactionManager)
-      .delete(region_id)
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await regionService.withTransaction(transactionManager).delete(region_id);
+    });
 
-  res.status(200).json({
-    id: region_id,
-    object: "region",
-    deleted: true,
-  })
-}
+    res.status(200).json({
+        id: region_id,
+        object: "region",
+        deleted: true
+    });
+};

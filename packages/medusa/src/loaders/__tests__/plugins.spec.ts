@@ -1,36 +1,26 @@
-import {
-  createContainer,
-  asValue,
-  Resolver,
-  ClassOrFunctionReturning,
-  asFunction,
-  AwilixContainer,
-} from "awilix"
-import { mkdirSync, rmSync, writeFileSync } from "fs"
-import { resolve } from "path"
-import Logger from "../logger"
-import { registerServices, registerStrategies } from "../plugins"
-import { MedusaContainer } from "../../types/global"
+import { createContainer, asValue, Resolver, ClassOrFunctionReturning, asFunction, AwilixContainer } from "awilix";
+import { mkdirSync, rmSync, writeFileSync } from "fs";
+import { resolve } from "path";
+import Logger from "../logger";
+import { registerServices, registerStrategies } from "../plugins";
+import { MedusaContainer } from "../../types/global";
 
 // ***** TEMPLATES *****
 const buildServiceTemplate = (name: string): string => {
-  return `
+    return `
     import { BaseService } from "medusa-interfaces"
     export default class ${name}Service extends BaseService {}
-  `
-}
+  `;
+};
 const buildTransactionBaseServiceServiceTemplate = (name: string) => {
-  return `
-    import { TransactionBaseService } from "${resolve(
-      __dirname,
-      "../../interfaces"
-    )}"
+    return `
+    import { TransactionBaseService } from "${resolve(__dirname, "../../interfaces")}"
     export default class ${name}Service extends TransactionBaseService {}
-  `
-}
+  `;
+};
 
 const buildBatchJobStrategyTemplate = (name: string, type: string): string => {
-  return `
+    return `
   import { AbstractBatchJobStrategy } from "../../../../interfaces/batch-job-strategy"
 
   class ${name}BatchStrategy extends AbstractBatchJobStrategy{
@@ -58,11 +48,11 @@ const buildBatchJobStrategyTemplate = (name: string, type: string): string => {
   }
   
   export default  ${name}BatchStrategy
-  `
-}
+  `;
+};
 
 const buildPriceSelectionStrategyTemplate = (name: string): string => {
-  return `
+    return `
   import { AbstractPriceSelectionStrategy } from "../../../../interfaces/price-selection-strategy"
   
   class ${name}PriceSelectionStrategy extends AbstractPriceSelectionStrategy {
@@ -75,11 +65,11 @@ const buildPriceSelectionStrategyTemplate = (name: string): string => {
   }
   
   export default ${name}PriceSelectionStrategy
-  `
-}
+  `;
+};
 
 const buildTaxCalcStrategyTemplate = (name: string): string => {
-  return `
+    return `
   class ${name}TaxCalculationStrategy {
     calculate(items, taxLines, calculationContext) {
       throw new Error("Method not implemented.")
@@ -87,230 +77,163 @@ const buildTaxCalcStrategyTemplate = (name: string): string => {
   }
 
   export default ${name}TaxCalculationStrategy
-  `
-}
+  `;
+};
 
 // ***** UTILS *****
 
-const distTestTargetDirectorPath = resolve(__dirname, "__pluginsLoaderTest__")
+const distTestTargetDirectorPath = resolve(__dirname, "__pluginsLoaderTest__");
 
 const getFolderTestTargetDirectoryPath = (folderName: string): string => {
-  return resolve(distTestTargetDirectorPath, folderName)
-}
+    return resolve(distTestTargetDirectorPath, folderName);
+};
 
-function asArray(
-  resolvers: (ClassOrFunctionReturning<unknown> | Resolver<unknown>)[]
-): { resolve: (container: AwilixContainer) => unknown[] } {
-  return {
-    resolve: (container: AwilixContainer): unknown[] =>
-      resolvers.map((resolver) => container.build(resolver)),
-  }
+function asArray(resolvers: (ClassOrFunctionReturning<unknown> | Resolver<unknown>)[]): { resolve: (container: AwilixContainer) => unknown[] } {
+    return {
+        resolve: (container: AwilixContainer): unknown[] => resolvers.map((resolver) => container.build(resolver))
+    };
 }
 
 // ***** TESTS *****
 
 describe("plugins loader", () => {
-  const container = createContainer() as MedusaContainer
-  container.registerAdd = function (
-    this: MedusaContainer,
-    name: string,
-    registration: typeof asFunction | typeof asValue
-  ): MedusaContainer {
-    const storeKey = name + "_STORE"
+    const container = createContainer() as MedusaContainer;
+    container.registerAdd = function (this: MedusaContainer, name: string, registration: typeof asFunction | typeof asValue): MedusaContainer {
+        const storeKey = name + "_STORE";
 
-    if (this.registrations[storeKey] === undefined) {
-      this.register(storeKey, asValue([] as Resolver<unknown>[]))
-    }
-    const store = this.resolve(storeKey) as (
-      | ClassOrFunctionReturning<unknown>
-      | Resolver<unknown>
-    )[]
+        if (this.registrations[storeKey] === undefined) {
+            this.register(storeKey, asValue([] as Resolver<unknown>[]));
+        }
+        const store = this.resolve(storeKey) as (ClassOrFunctionReturning<unknown> | Resolver<unknown>)[];
 
-    if (this.registrations[name] === undefined) {
-      this.register(name, asArray(store))
-    }
-    store.unshift(registration)
+        if (this.registrations[name] === undefined) {
+            this.register(name, asArray(store));
+        }
+        store.unshift(registration);
 
-    return this
-  }.bind(container)
+        return this;
+    }.bind(container);
 
-  container.register("logger", asValue(Logger))
-  const pluginsDetails = {
-    resolve: resolve(__dirname, "__pluginsLoaderTest__"),
-    name: `project-plugin`,
-    id: "fakeId",
-    options: {},
-    version: '"fakeVersion',
-  }
-  let err
-
-  afterAll(() => {
-    rmSync(distTestTargetDirectorPath, { recursive: true, force: true })
-    jest.clearAllMocks()
-  })
-
-  describe("registerStrategies", function () {
-    beforeAll(async () => {
-      mkdirSync(getFolderTestTargetDirectoryPath("strategies"), {
-        mode: "777",
-        recursive: true,
-      })
-      writeFileSync(
-        resolve(
-          getFolderTestTargetDirectoryPath("strategies"),
-          "test-batch-1.js"
-        ),
-        buildBatchJobStrategyTemplate("testBatch1", "type-1")
-      )
-      writeFileSync(
-        resolve(
-          getFolderTestTargetDirectoryPath("strategies"),
-          "test-price-selection.js"
-        ),
-        buildPriceSelectionStrategyTemplate("test")
-      )
-      writeFileSync(
-        resolve(
-          getFolderTestTargetDirectoryPath("strategies"),
-          "test-batch-2.js"
-        ),
-        buildBatchJobStrategyTemplate("testBatch2", "type-1")
-      )
-      writeFileSync(
-        resolve(
-          getFolderTestTargetDirectoryPath("strategies"),
-          "test-batch-3.js"
-        ),
-        buildBatchJobStrategyTemplate("testBatch3", "type-2")
-      )
-      writeFileSync(
-        resolve(getFolderTestTargetDirectoryPath("strategies"), "test-tax.js"),
-        buildTaxCalcStrategyTemplate("test")
-      )
-
-      try {
-        await registerStrategies(pluginsDetails, container)
-      } catch (e) {
-        err = e
-      }
-    })
+    container.register("logger", asValue(Logger));
+    const pluginsDetails = {
+        resolve: resolve(__dirname, "__pluginsLoaderTest__"),
+        name: `project-plugin`,
+        id: "fakeId",
+        options: {},
+        version: '"fakeVersion'
+    };
+    let err;
 
     afterAll(() => {
-      jest.clearAllMocks()
-    })
+        rmSync(distTestTargetDirectorPath, { recursive: true, force: true });
+        jest.clearAllMocks();
+    });
 
-    it("err should be falsy", () => {
-      expect(err).toBeFalsy()
-    })
+    describe("registerStrategies", function () {
+        beforeAll(async () => {
+            mkdirSync(getFolderTestTargetDirectoryPath("strategies"), {
+                mode: "777",
+                recursive: true
+            });
+            writeFileSync(resolve(getFolderTestTargetDirectoryPath("strategies"), "test-batch-1.js"), buildBatchJobStrategyTemplate("testBatch1", "type-1"));
+            writeFileSync(resolve(getFolderTestTargetDirectoryPath("strategies"), "test-price-selection.js"), buildPriceSelectionStrategyTemplate("test"));
+            writeFileSync(resolve(getFolderTestTargetDirectoryPath("strategies"), "test-batch-2.js"), buildBatchJobStrategyTemplate("testBatch2", "type-1"));
+            writeFileSync(resolve(getFolderTestTargetDirectoryPath("strategies"), "test-batch-3.js"), buildBatchJobStrategyTemplate("testBatch3", "type-2"));
+            writeFileSync(resolve(getFolderTestTargetDirectoryPath("strategies"), "test-tax.js"), buildTaxCalcStrategyTemplate("test"));
 
-    it("registers price selection strategy", () => {
-      const priceSelectionStrategy =
-        container.resolve("priceSelectionStrategy") as (...args: unknown[]) => any
+            try {
+                await registerStrategies(pluginsDetails, container);
+            } catch (e) {
+                err = e;
+            }
+        });
 
-      expect(priceSelectionStrategy).toBeTruthy()
-      expect(priceSelectionStrategy.constructor.name).toBe(
-        "testPriceSelectionStrategy"
-      )
-    })
+        afterAll(() => {
+            jest.clearAllMocks();
+        });
 
-    it("registers tax calculation strategy", () => {
-      const taxCalculationStrategy =
-        container.resolve("taxCalculationStrategy") as (...args: unknown[]) => any
+        it("err should be falsy", () => {
+            expect(err).toBeFalsy();
+        });
 
-      expect(taxCalculationStrategy).toBeTruthy()
-      expect(taxCalculationStrategy.constructor.name).toBe(
-        "testTaxCalculationStrategy"
-      )
-    })
+        it("registers price selection strategy", () => {
+            const priceSelectionStrategy = container.resolve("priceSelectionStrategy") as (...args: unknown[]) => any;
 
-    it("registers batch job strategies as single array", () => {
-      const batchJobStrategies =
-        container.resolve("batchJobStrategies") as (...args: unknown[]) => any
+            expect(priceSelectionStrategy).toBeTruthy();
+            expect(priceSelectionStrategy.constructor.name).toBe("testPriceSelectionStrategy");
+        });
 
-      expect(batchJobStrategies).toBeTruthy()
-      expect(Array.isArray(batchJobStrategies)).toBeTruthy()
-      expect(batchJobStrategies.length).toBe(3)
-    })
+        it("registers tax calculation strategy", () => {
+            const taxCalculationStrategy = container.resolve("taxCalculationStrategy") as (...args: unknown[]) => any;
 
-    it("registers batch job strategies by type and only keep the last", () => {
-      const batchJobStrategy =
-        container.resolve("batchType_type-1") as (...args: unknown[]) => any
+            expect(taxCalculationStrategy).toBeTruthy();
+            expect(taxCalculationStrategy.constructor.name).toBe("testTaxCalculationStrategy");
+        });
 
-      expect(batchJobStrategy).toBeTruthy()
-      expect(batchJobStrategy.constructor.name).toBe("testBatch2BatchStrategy")
-      expect((batchJobStrategy.constructor as any).batchType).toBe("type-1")
-      expect((batchJobStrategy.constructor as any).identifier).toBe(
-        "testBatch2-identifier"
-      )
-    })
+        it("registers batch job strategies as single array", () => {
+            const batchJobStrategies = container.resolve("batchJobStrategies") as (...args: unknown[]) => any;
 
-    it("registers batch job strategies by identifier", () => {
-      const batchJobStrategy = container.resolve(
-        "batch_testBatch3-identifier"
-      ) as (...args: unknown[]) => any
+            expect(batchJobStrategies).toBeTruthy();
+            expect(Array.isArray(batchJobStrategies)).toBeTruthy();
+            expect(batchJobStrategies.length).toBe(3);
+        });
 
-      expect(batchJobStrategy).toBeTruthy()
-      expect(Array.isArray(batchJobStrategy)).toBeFalsy()
-      expect(batchJobStrategy.constructor.name).toBe("testBatch3BatchStrategy")
-    })
-  })
+        it("registers batch job strategies by type and only keep the last", () => {
+            const batchJobStrategy = container.resolve("batchType_type-1") as (...args: unknown[]) => any;
 
-  describe("registerServices", function () {
-    beforeAll(() => {
-      container.register("logger", asValue(Logger))
-      mkdirSync(getFolderTestTargetDirectoryPath("services"), {
-        mode: "777",
-        recursive: true,
-      })
-      writeFileSync(
-        resolve(getFolderTestTargetDirectoryPath("services"), "test.js"),
-        buildServiceTemplate("test")
-      )
-      writeFileSync(
-        resolve(getFolderTestTargetDirectoryPath("services"), "test2.js"),
-        buildServiceTemplate("test2")
-      )
-      writeFileSync(
-        resolve(getFolderTestTargetDirectoryPath("services"), "test3.js"),
-        buildTransactionBaseServiceServiceTemplate("test3")
-      )
-      writeFileSync(
-        resolve(getFolderTestTargetDirectoryPath("services"), "test2.js.map"),
-        "map:file"
-      )
-      writeFileSync(
-        resolve(getFolderTestTargetDirectoryPath("services"), "test2.d.ts"),
-        "export interface Test {}"
-      )
-    })
+            expect(batchJobStrategy).toBeTruthy();
+            expect(batchJobStrategy.constructor.name).toBe("testBatch2BatchStrategy");
+            expect((batchJobStrategy.constructor as any).batchType).toBe("type-1");
+            expect((batchJobStrategy.constructor as any).identifier).toBe("testBatch2-identifier");
+        });
 
-    afterAll(() => {
-      jest.clearAllMocks()
-    })
+        it("registers batch job strategies by identifier", () => {
+            const batchJobStrategy = container.resolve("batch_testBatch3-identifier") as (...args: unknown[]) => any;
 
-    it("should load the services from the services directory but only js files", async () => {
-      let err
-      try {
-        await registerServices(pluginsDetails, container)
-      } catch (e) {
-        err = e
-      }
+            expect(batchJobStrategy).toBeTruthy();
+            expect(Array.isArray(batchJobStrategy)).toBeFalsy();
+            expect(batchJobStrategy.constructor.name).toBe("testBatch3BatchStrategy");
+        });
+    });
 
-      expect(err).toBeFalsy()
+    describe("registerServices", function () {
+        beforeAll(() => {
+            container.register("logger", asValue(Logger));
+            mkdirSync(getFolderTestTargetDirectoryPath("services"), {
+                mode: "777",
+                recursive: true
+            });
+            writeFileSync(resolve(getFolderTestTargetDirectoryPath("services"), "test.js"), buildServiceTemplate("test"));
+            writeFileSync(resolve(getFolderTestTargetDirectoryPath("services"), "test2.js"), buildServiceTemplate("test2"));
+            writeFileSync(resolve(getFolderTestTargetDirectoryPath("services"), "test3.js"), buildTransactionBaseServiceServiceTemplate("test3"));
+            writeFileSync(resolve(getFolderTestTargetDirectoryPath("services"), "test2.js.map"), "map:file");
+            writeFileSync(resolve(getFolderTestTargetDirectoryPath("services"), "test2.d.ts"), "export interface Test {}");
+        });
 
-      const testService: (...args: unknown[]) => any =
-        container.resolve("testService")
-      const test2Service: (...args: unknown[]) => any =
-        container.resolve("test2Service")
-      const test3Service: (...args: unknown[]) => any =
-        container.resolve("test3Service")
+        afterAll(() => {
+            jest.clearAllMocks();
+        });
 
-      expect(testService).toBeTruthy()
-      expect(testService.constructor.name).toBe("testService")
-      expect(test2Service).toBeTruthy()
-      expect(test2Service.constructor.name).toBe("test2Service")
-      expect(test3Service).toBeTruthy()
-      expect(test3Service.constructor.name).toBe("test3Service")
-    })
-  })
-})
+        it("should load the services from the services directory but only js files", async () => {
+            let err;
+            try {
+                await registerServices(pluginsDetails, container);
+            } catch (e) {
+                err = e;
+            }
+
+            expect(err).toBeFalsy();
+
+            const testService: (...args: unknown[]) => any = container.resolve("testService");
+            const test2Service: (...args: unknown[]) => any = container.resolve("test2Service");
+            const test3Service: (...args: unknown[]) => any = container.resolve("test3Service");
+
+            expect(testService).toBeTruthy();
+            expect(testService.constructor.name).toBe("testService");
+            expect(test2Service).toBeTruthy();
+            expect(test2Service.constructor.name).toBe("test2Service");
+            expect(test3Service).toBeTruthy();
+            expect(test3Service.constructor.name).toBe("test3Service");
+        });
+    });
+});

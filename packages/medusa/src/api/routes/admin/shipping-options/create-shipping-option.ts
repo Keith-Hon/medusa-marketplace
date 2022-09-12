@@ -1,15 +1,8 @@
-import { Type } from "class-transformer"
-import {
-  IsArray,
-  IsNumber,
-  IsObject,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from "class-validator"
-import { defaultFields, defaultRelations } from "."
-import { validator } from "../../../../utils/validator"
-import { EntityManager } from "typeorm"
+import { Type } from "class-transformer";
+import { IsArray, IsNumber, IsObject, IsOptional, IsString, ValidateNested } from "class-validator";
+import { defaultFields, defaultRelations } from ".";
+import { validator } from "../../../../utils/validator";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /shipping-options
@@ -82,78 +75,76 @@ import { EntityManager } from "typeorm"
  *               $ref: "#/components/schemas/shipping_option"
  */
 export default async (req, res) => {
-  const validated = await validator(AdminPostShippingOptionsReq, req.body)
+    const validated = await validator(AdminPostShippingOptionsReq, req.body);
 
-  const optionService = req.scope.resolve("shippingOptionService")
-  const shippingProfileService = req.scope.resolve("shippingProfileService")
+    const optionService = req.scope.resolve("shippingOptionService");
+    const shippingProfileService = req.scope.resolve("shippingProfileService");
 
-  // Add to default shipping profile
-  if (!validated.profile_id) {
-    const { id } = await shippingProfileService.retrieveDefault()
-    validated.profile_id = id
-  }
+    // Add to default shipping profile
+    if (!validated.profile_id) {
+        const { id } = await shippingProfileService.retrieveDefault();
+        validated.profile_id = id;
+    }
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  const result = await manager.transaction(async (transactionManager) => {
-    return await optionService
-      .withTransaction(transactionManager)
-      .create(validated)
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    const result = await manager.transaction(async (transactionManager) => {
+        return await optionService.withTransaction(transactionManager).create(validated);
+    });
 
-  const data = await optionService.retrieve(result.id, {
-    select: defaultFields,
-    relations: defaultRelations,
-  })
+    const data = await optionService.retrieve(result.id, {
+        select: defaultFields,
+        relations: defaultRelations
+    });
 
-  res.status(200).json({ shipping_option: data })
-}
+    res.status(200).json({ shipping_option: data });
+};
 
 class OptionRequirement {
-  @IsString()
-  type: string
-  @IsNumber()
-  amount: number
+    @IsString()
+    type: string;
+    @IsNumber()
+    amount: number;
 }
 
 export class AdminPostShippingOptionsReq {
-  @IsString()
-  name: string
+    @IsString()
+    name: string;
 
-  @IsString()
-  region_id: string
+    @IsString()
+    region_id: string;
 
-  @IsString()
-  provider_id: string
+    @IsString()
+    provider_id: string;
 
-  @IsOptional()
-  @IsString()
-  profile_id?: string
+    @IsOptional()
+    @IsString()
+    profile_id?: string;
 
-  @IsObject()
-  data: object
+    @IsObject()
+    data: object;
 
-  @IsString()
-  price_type: string
+    @IsString()
+    price_type: string;
 
-  @IsOptional()
-  @IsNumber()
-  amount?: number
+    @IsOptional()
+    @IsNumber()
+    amount?: number;
 
-  @IsArray()
-  @IsOptional()
-  @ValidateNested({ each: true })
-  @Type(() => OptionRequirement)
-  requirements?: OptionRequirement[]
+    @IsArray()
+    @IsOptional()
+    @ValidateNested({ each: true })
+    @Type(() => OptionRequirement)
+    requirements?: OptionRequirement[];
 
-  @IsOptional()
-  @Type(() => Boolean)
-  admin_only?: boolean = false
+    @IsOptional()
+    @Type(() => Boolean)
+    admin_only?: boolean = false;
 
-  @IsOptional()
-  @Type(() => Boolean)
-  is_return?: boolean = false
+    @IsOptional()
+    @Type(() => Boolean)
+    is_return?: boolean = false;
 
-  @IsObject()
-  @IsOptional()
-  metadata?: object
+    @IsObject()
+    @IsOptional()
+    metadata?: object;
 }

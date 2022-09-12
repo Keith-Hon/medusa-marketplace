@@ -1,6 +1,6 @@
-import { IsObject, IsOptional, IsString } from "class-validator"
-import ProductCollectionService from "../../../../services/product-collection"
-import { Request, Response } from "express"
+import { IsObject, IsOptional, IsString } from "class-validator";
+import ProductCollectionService from "../../../../services/product-collection";
+import { Request, Response } from "express";
 import { EntityManager } from "typeorm";
 /**
  * @oas [post] /collections/{id}
@@ -37,33 +37,31 @@ import { EntityManager } from "typeorm";
  *              $ref: "#/components/schemas/product_collection"
  */
 export default async (req: Request, res: Response) => {
-  const { id } = req.params
-  const { validatedBody } = req
+    const { id } = req.params;
+    const { validatedBody } = req;
 
-  const productCollectionService: ProductCollectionService = req.scope.resolve(
-    "productCollectionService"
-  )
+    const productCollectionService: ProductCollectionService = req.scope.resolve("productCollectionService");
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  const updated = await manager.transaction(async (transactionManager) => {
-    return await productCollectionService.withTransaction(transactionManager).update(id, validatedBody)
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    const updated = await manager.transaction(async (transactionManager) => {
+        return await productCollectionService.withTransaction(transactionManager).update(id, validatedBody);
+    });
 
-  const collection = await productCollectionService.retrieve(updated.id)
+    const collection = await productCollectionService.retrieve(updated.id);
 
-  res.status(200).json({ collection })
-}
+    res.status(200).json({ collection });
+};
 
 export class AdminPostCollectionsCollectionReq {
-  @IsString()
-  @IsOptional()
-  title?: string
+    @IsString()
+    @IsOptional()
+    title?: string;
 
-  @IsString()
-  @IsOptional()
-  handle?: string
+    @IsString()
+    @IsOptional()
+    handle?: string;
 
-  @IsObject()
-  @IsOptional()
-  metadata?: object
+    @IsObject()
+    @IsOptional()
+    metadata?: object;
 }

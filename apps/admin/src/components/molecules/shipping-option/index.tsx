@@ -45,7 +45,7 @@ const ShippingOption: React.FC<ShippingOptionProps> = ({
           {option.amount !== undefined &&
             `${option.amount / 100} ${currency_code.toUpperCase()}`}
           {option.requirements.length
-            ? option.requirements.map(r => {
+            ? option.requirements.map((r) => {
                 const type =
                   r.type === "max_subtotal" ? "Max. subtotal" : "Min. subtotal"
                 return ` - ${type}: ${

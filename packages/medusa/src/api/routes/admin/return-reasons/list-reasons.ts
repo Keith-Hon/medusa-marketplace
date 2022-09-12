@@ -1,10 +1,7 @@
-import {
-  defaultAdminReturnReasonsFields,
-  defaultAdminReturnReasonsRelations,
-} from "."
-import { ReturnReason } from "../../../../models"
-import { ReturnReasonService } from "../../../../services"
-import { FindConfig, Selector } from "../../../../types/common"
+import { defaultAdminReturnReasonsFields, defaultAdminReturnReasonsRelations } from ".";
+import { ReturnReason } from "../../../../models";
+import { ReturnReasonService } from "../../../../services";
+import { FindConfig, Selector } from "../../../../types/common";
 
 /**
  * @oas [get] /return-reasons
@@ -27,15 +24,13 @@ import { FindConfig, Selector } from "../../../../types/common"
  *                 $ref: "#/components/schemas/return_reason"
  */
 export default async (req, res) => {
-  const returnReasonService: ReturnReasonService = req.scope.resolve(
-    "returnReasonService"
-  )
+    const returnReasonService: ReturnReasonService = req.scope.resolve("returnReasonService");
 
-  const query: Selector<ReturnReason> = { parent_return_reason_id: null }
-  const data = await returnReasonService.list(query, {
-    select: defaultAdminReturnReasonsFields,
-    relations: defaultAdminReturnReasonsRelations,
-  })
+    const query: Selector<ReturnReason> = { parent_return_reason_id: null };
+    const data = await returnReasonService.list(query, {
+        select: defaultAdminReturnReasonsFields,
+        relations: defaultAdminReturnReasonsRelations
+    });
 
-  res.status(200).json({ return_reasons: data })
-}
+    res.status(200).json({ return_reasons: data });
+};

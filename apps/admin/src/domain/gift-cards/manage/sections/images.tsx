@@ -54,13 +54,8 @@ const columns = [
 ]
 
 const Images = () => {
-  const {
-    images,
-    setImages,
-    appendImage,
-    removeImage,
-    control,
-  } = useGiftCardForm()
+  const { images, setImages, appendImage, removeImage, control } =
+    useGiftCardForm()
 
   return (
     <BodyCard title="Images" subtitle="Add up to 10 images to your Gift Card">

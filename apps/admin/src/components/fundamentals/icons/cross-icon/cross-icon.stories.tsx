@@ -15,7 +15,7 @@ export default {
   },
 } as ComponentMeta<typeof CrossIcon>
 
-const Template = args => <CrossIcon {...args} />
+const Template = (args) => <CrossIcon {...args} />
 
 export const Icon = Template.bind({})
 Icon.args = {

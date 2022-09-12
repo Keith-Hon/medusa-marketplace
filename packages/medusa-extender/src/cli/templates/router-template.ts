@@ -1,4 +1,4 @@
-import * as dedent from 'dedent';
+import * as dedent from "dedent";
 
 /**
  * Provide a basic template for the router component generation.

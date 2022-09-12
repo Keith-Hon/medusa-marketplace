@@ -1,6 +1,6 @@
-import { ArrayNotEmpty, IsString } from "class-validator"
-import ProductCollectionService from "../../../../services/product-collection"
-import { Request, Response } from "express"
+import { ArrayNotEmpty, IsString } from "class-validator";
+import ProductCollectionService from "../../../../services/product-collection";
+import { Request, Response } from "express";
 import { EntityManager } from "typeorm";
 
 /**
@@ -31,27 +31,25 @@ import { EntityManager } from "typeorm";
  *    description: OK
  */
 export default async (req: Request, res: Response) => {
-  const { id } = req.params
-  const { validatedBody } = req as { validatedBody: AdminDeleteProductsFromCollectionReq }
+    const { id } = req.params;
+    const { validatedBody } = req as { validatedBody: AdminDeleteProductsFromCollectionReq };
 
-  const productCollectionService: ProductCollectionService = req.scope.resolve(
-    "productCollectionService"
-  )
+    const productCollectionService: ProductCollectionService = req.scope.resolve("productCollectionService");
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await productCollectionService.withTransaction(transactionManager).removeProducts(id, validatedBody.product_ids)
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await productCollectionService.withTransaction(transactionManager).removeProducts(id, validatedBody.product_ids);
+    });
 
-  res.json({
-    id,
-    object: "product-collection",
-    removed_products: validatedBody.product_ids,
-  })
-}
+    res.json({
+        id,
+        object: "product-collection",
+        removed_products: validatedBody.product_ids
+    });
+};
 
 export class AdminDeleteProductsFromCollectionReq {
-  @ArrayNotEmpty()
-  @IsString({ each: true })
-  product_ids: string[]
+    @ArrayNotEmpty()
+    @IsString({ each: true })
+    product_ids: string[];
 }

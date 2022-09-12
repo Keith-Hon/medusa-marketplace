@@ -1,40 +1,33 @@
-import {
-  BeforeInsert,
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-} from "typeorm"
+import { BeforeInsert, Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
 
-import { Product } from "./product"
-import { ProductOptionValue } from "./product-option-value"
-import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity"
-import { DbAwareColumn } from "../utils/db-aware-column"
-import { generateEntityId } from "../utils/generate-entity-id"
+import { Product } from "./product";
+import { ProductOptionValue } from "./product-option-value";
+import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity";
+import { DbAwareColumn } from "../utils/db-aware-column";
+import { generateEntityId } from "../utils/generate-entity-id";
 
 @Entity()
 export class ProductOption extends SoftDeletableEntity {
-  @Column()
-  title: string
+    @Column()
+    title: string;
 
-  @OneToMany(() => ProductOptionValue, (value) => value.option)
-  values: ProductOptionValue[]
+    @OneToMany(() => ProductOptionValue, (value) => value.option)
+    values: ProductOptionValue[];
 
-  @Column()
-  product_id: string
+    @Column()
+    product_id: string;
 
-  @ManyToOne(() => Product, (product) => product.options)
-  @JoinColumn({ name: "product_id" })
-  product: Product
+    @ManyToOne(() => Product, (product) => product.options)
+    @JoinColumn({ name: "product_id" })
+    product: Product;
 
-  @DbAwareColumn({ type: "jsonb", nullable: true })
-  metadata: Record<string, unknown>
+    @DbAwareColumn({ type: "jsonb", nullable: true })
+    metadata: Record<string, unknown>;
 
-  @BeforeInsert()
-  private beforeInsert(): void {
-    this.id = generateEntityId(this.id, "opt")
-  }
+    @BeforeInsert()
+    private beforeInsert(): void {
+        this.id = generateEntityId(this.id, "opt");
+    }
 }
 
 /**

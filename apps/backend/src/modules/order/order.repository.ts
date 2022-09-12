@@ -6,4 +6,4 @@ import { Order } from "./order.entity";
 
 @MedusaRepository({ override: MedusaOrderRepository })
 @EntityRepository(Order)
-export class OrderRepository extends Utils.repositoryMixin<Order, MedusaOrderRepository>(MedusaOrderRepository) { }
+export class OrderRepository extends Utils.repositoryMixin<Order, MedusaOrderRepository>(MedusaOrderRepository) {}

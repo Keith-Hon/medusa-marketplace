@@ -19,9 +19,9 @@
  *               $ref: "#/components/schemas/shipping_option"
  */
 export default async (req, res) => {
-  const { option_id } = req.params
-  const optionService = req.scope.resolve("shippingOptionService")
-  const data = await optionService.retrieve(option_id)
+    const { option_id } = req.params;
+    const optionService = req.scope.resolve("shippingOptionService");
+    const data = await optionService.retrieve(option_id);
 
-  res.status(200).json({ shipping_option: data })
-}
+    res.status(200).json({ shipping_option: data });
+};

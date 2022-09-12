@@ -1,9 +1,9 @@
-import { MigrationInterface, QueryRunner } from 'typeorm';
-import { Migration } from 'medusa-extender';
+import { MigrationInterface, QueryRunner } from "typeorm";
+import { Migration } from "medusa-extender";
 
 @Migration()
 export class OrderMigration1661401588606 implements MigrationInterface {
-    name = 'OrderMigration1661401588606';
+    name = "OrderMigration1661401588606";
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         const query = `

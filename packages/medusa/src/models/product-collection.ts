@@ -1,35 +1,35 @@
-import { BeforeInsert, Column, Entity, Index, OneToMany } from "typeorm"
-import _ from "lodash"
+import { BeforeInsert, Column, Entity, Index, OneToMany } from "typeorm";
+import _ from "lodash";
 
-import { Product } from "./product"
-import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity"
-import { DbAwareColumn } from "../utils/db-aware-column"
-import { generateEntityId } from "../utils/generate-entity-id"
+import { Product } from "./product";
+import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity";
+import { DbAwareColumn } from "../utils/db-aware-column";
+import { generateEntityId } from "../utils/generate-entity-id";
 
 @Entity()
 export class ProductCollection extends SoftDeletableEntity {
-  @Column()
-  title: string
+    @Column()
+    title: string;
 
-  @Index({ unique: true, where: "deleted_at IS NULL" })
-  @Column({ nullable: true })
-  handle: string
+    @Index({ unique: true, where: "deleted_at IS NULL" })
+    @Column({ nullable: true })
+    handle: string;
 
-  @OneToMany(() => Product, (product) => product.collection)
-  products: Product[]
+    @OneToMany(() => Product, (product) => product.collection)
+    products: Product[];
 
-  @DbAwareColumn({ type: "jsonb", nullable: true })
-  metadata: Record<string, unknown>
+    @DbAwareColumn({ type: "jsonb", nullable: true })
+    metadata: Record<string, unknown>;
 
-  @BeforeInsert()
-  private createHandleIfNotProvided(): void {
-    if (this.id) return
+    @BeforeInsert()
+    private createHandleIfNotProvided(): void {
+        if (this.id) return;
 
-    this.id = generateEntityId(this.id, "pcol")
-    if (!this.handle) {
-      this.handle = _.kebabCase(this.title)
+        this.id = generateEntityId(this.id, "pcol");
+        if (!this.handle) {
+            this.handle = _.kebabCase(this.title);
+        }
     }
-  }
 }
 
 /**

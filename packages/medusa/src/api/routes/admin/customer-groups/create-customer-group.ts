@@ -1,8 +1,8 @@
-import { IsObject, IsOptional, IsString } from "class-validator"
-import { CustomerGroupService } from "../../../../services"
-import { validator } from "../../../../utils/validator"
-import { Request, Response } from "express"
-import { EntityManager } from "typeorm"
+import { IsObject, IsOptional, IsString } from "class-validator";
+import { CustomerGroupService } from "../../../../services";
+import { validator } from "../../../../utils/validator";
+import { Request, Response } from "express";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /customer-groups
@@ -27,29 +27,23 @@ import { EntityManager } from "typeorm"
  */
 
 export default async (req: Request, res: Response) => {
-  const validated = await validator(AdminPostCustomerGroupsReq, req.body)
+    const validated = await validator(AdminPostCustomerGroupsReq, req.body);
 
-  const customerGroupService: CustomerGroupService = req.scope.resolve(
-    "customerGroupService"
-  )
+    const customerGroupService: CustomerGroupService = req.scope.resolve("customerGroupService");
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  const customerGroup = await manager.transaction(
-    async (transactionManager) => {
-      return await customerGroupService
-        .withTransaction(transactionManager)
-        .create(validated)
-    }
-  )
+    const manager: EntityManager = req.scope.resolve("manager");
+    const customerGroup = await manager.transaction(async (transactionManager) => {
+        return await customerGroupService.withTransaction(transactionManager).create(validated);
+    });
 
-  res.status(200).json({ customer_group: customerGroup })
-}
+    res.status(200).json({ customer_group: customerGroup });
+};
 
 export class AdminPostCustomerGroupsReq {
-  @IsString()
-  name: string
+    @IsString()
+    name: string;
 
-  @IsObject()
-  @IsOptional()
-  metadata?: object
+    @IsObject()
+    @IsOptional()
+    metadata?: object;
 }

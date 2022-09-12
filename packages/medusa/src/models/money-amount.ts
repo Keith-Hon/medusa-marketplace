@@ -1,68 +1,61 @@
-import {
-  BeforeInsert,
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-} from "typeorm"
-import { Currency } from "./currency"
-import { PriceList } from "./price-list"
-import { ProductVariant } from "./product-variant"
-import { Region } from "./region"
-import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity"
-import { generateEntityId } from "../utils/generate-entity-id"
+import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
+import { Currency } from "./currency";
+import { PriceList } from "./price-list";
+import { ProductVariant } from "./product-variant";
+import { Region } from "./region";
+import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity";
+import { generateEntityId } from "../utils/generate-entity-id";
 
 @Entity()
 export class MoneyAmount extends SoftDeletableEntity {
-  @Column()
-  currency_code: string
+    @Column()
+    currency_code: string;
 
-  @ManyToOne(() => Currency)
-  @JoinColumn({ name: "currency_code", referencedColumnName: "code" })
-  currency: Currency
+    @ManyToOne(() => Currency)
+    @JoinColumn({ name: "currency_code", referencedColumnName: "code" })
+    currency: Currency;
 
-  @Column({ type: "int" })
-  amount: number
+    @Column({ type: "int" })
+    amount: number;
 
-  @Column({ type: "int", nullable: true })
-  min_quantity: number | null
+    @Column({ type: "int", nullable: true })
+    min_quantity: number | null;
 
-  @Column({ type: "int", nullable: true })
-  max_quantity: number | null
+    @Column({ type: "int", nullable: true })
+    max_quantity: number | null;
 
-  @Column({ nullable: true })
-  price_list_id: string | null
+    @Column({ nullable: true })
+    price_list_id: string | null;
 
-  @ManyToOne(() => PriceList, (priceList) => priceList.prices, {
-    cascade: true,
-    onDelete: "CASCADE",
-  })
-  @JoinColumn({ name: "price_list_id" })
-  price_list: PriceList | null
+    @ManyToOne(() => PriceList, (priceList) => priceList.prices, {
+        cascade: true,
+        onDelete: "CASCADE"
+    })
+    @JoinColumn({ name: "price_list_id" })
+    price_list: PriceList | null;
 
-  @Index()
-  @Column({ nullable: true })
-  variant_id: string
+    @Index()
+    @Column({ nullable: true })
+    variant_id: string;
 
-  @ManyToOne(() => ProductVariant, (variant) => variant.prices, {
-    onDelete: "CASCADE",
-  })
-  @JoinColumn({ name: "variant_id" })
-  variant: ProductVariant
+    @ManyToOne(() => ProductVariant, (variant) => variant.prices, {
+        onDelete: "CASCADE"
+    })
+    @JoinColumn({ name: "variant_id" })
+    variant: ProductVariant;
 
-  @Index()
-  @Column({ nullable: true })
-  region_id: string
+    @Index()
+    @Column({ nullable: true })
+    region_id: string;
 
-  @ManyToOne(() => Region)
-  @JoinColumn({ name: "region_id" })
-  region: Region
+    @ManyToOne(() => Region)
+    @JoinColumn({ name: "region_id" })
+    region: Region;
 
-  @BeforeInsert()
-  private beforeInsert(): undefined | void {
-    this.id = generateEntityId(this.id, "ma")
-  }
+    @BeforeInsert()
+    private beforeInsert(): undefined | void {
+        this.id = generateEntityId(this.id, "ma");
+    }
 }
 
 /**

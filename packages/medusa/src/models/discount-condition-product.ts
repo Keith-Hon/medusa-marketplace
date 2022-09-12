@@ -1,39 +1,32 @@
-import {
-  CreateDateColumn,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryColumn,
-  UpdateDateColumn,
-} from "typeorm"
-import { DbAwareColumn, resolveDbType } from "../utils/db-aware-column"
-import { DiscountCondition } from "./discount-condition"
-import { Product } from "./product"
+import { CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
+import { DbAwareColumn, resolveDbType } from "../utils/db-aware-column";
+import { DiscountCondition } from "./discount-condition";
+import { Product } from "./product";
 
 @Entity()
 export class DiscountConditionProduct {
-  @PrimaryColumn()
-  product_id: string
+    @PrimaryColumn()
+    product_id: string;
 
-  @PrimaryColumn()
-  condition_id: string
+    @PrimaryColumn()
+    condition_id: string;
 
-  @ManyToOne(() => Product, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "product_id" })
-  product?: Product
+    @ManyToOne(() => Product, { onDelete: "CASCADE" })
+    @JoinColumn({ name: "product_id" })
+    product?: Product;
 
-  @ManyToOne(() => DiscountCondition, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "condition_id" })
-  discount_condition?: DiscountCondition
+    @ManyToOne(() => DiscountCondition, { onDelete: "CASCADE" })
+    @JoinColumn({ name: "condition_id" })
+    discount_condition?: DiscountCondition;
 
-  @CreateDateColumn({ type: resolveDbType("timestamptz") })
-  created_at: Date
+    @CreateDateColumn({ type: resolveDbType("timestamptz") })
+    created_at: Date;
 
-  @UpdateDateColumn({ type: resolveDbType("timestamptz") })
-  updated_at: Date
+    @UpdateDateColumn({ type: resolveDbType("timestamptz") })
+    updated_at: Date;
 
-  @DbAwareColumn({ type: "jsonb", nullable: true })
-  metadata: Record<string, unknown>
+    @DbAwareColumn({ type: "jsonb", nullable: true })
+    metadata: Record<string, unknown>;
 }
 
 /**

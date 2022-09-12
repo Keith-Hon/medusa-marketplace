@@ -1,19 +1,19 @@
-import { Return } from "./../../../../models/return"
-import { Router } from "express"
-import middlewares from "../../../middlewares"
+import { Return } from "./../../../../models/return";
+import { Router } from "express";
+import middlewares from "../../../middlewares";
 
-const route = Router()
+const route = Router();
 
 export default (app) => {
-  app.use("/returns", route)
+    app.use("/returns", route);
 
-  route.post("/", middlewares.wrap(require("./create-return").default))
+    route.post("/", middlewares.wrap(require("./create-return").default));
 
-  return app
-}
+    return app;
+};
 
 export type StoreReturnsRes = {
-  return: Return
-}
+    return: Return;
+};
 
-export * from "./create-return"
+export * from "./create-return";

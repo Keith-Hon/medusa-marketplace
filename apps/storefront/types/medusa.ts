@@ -6,7 +6,7 @@ export interface Product extends Omit<MedusaProduct, "variants"> {
     variants: Variant[];
 }
 
-export interface Region extends Omit<MedusaRegion, "beforeInsert"> { }
+export interface Region extends Omit<MedusaRegion, "beforeInsert"> {}
 
 export type CalculatedVariant = ProductVariant & {
     calculated_price: number;

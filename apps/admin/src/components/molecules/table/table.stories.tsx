@@ -97,9 +97,8 @@ const TableWithFilterAndSearchTemplate = (args) => (
 export const TableComponent = TableTemplate.bind({})
 TableComponent.args = {}
 
-export const TableComponentWithFilteringAndSearch = TableWithFilterAndSearchTemplate.bind(
-  {}
-)
+export const TableComponentWithFilteringAndSearch =
+  TableWithFilterAndSearchTemplate.bind({})
 TableComponentWithFilteringAndSearch.args = {}
 
 export const TableComponentWithActionableRows = TableTemplate.bind({})

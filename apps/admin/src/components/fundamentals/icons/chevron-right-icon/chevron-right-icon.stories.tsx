@@ -15,7 +15,7 @@ export default {
   },
 } as ComponentMeta<typeof ChevronRightIcon>
 
-const Template = args => <ChevronRightIcon {...args} />
+const Template = (args) => <ChevronRightIcon {...args} />
 
 export const Icon = Template.bind({})
 Icon.args = {

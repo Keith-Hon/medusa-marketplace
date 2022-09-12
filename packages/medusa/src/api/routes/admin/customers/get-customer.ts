@@ -1,7 +1,7 @@
-import { defaultAdminCustomersRelations } from "."
-import CustomerService from "../../../../services/customer"
-import { FindParams } from "../../../../types/common"
-import { validator } from "../../../../utils/validator"
+import { defaultAdminCustomersRelations } from ".";
+import CustomerService from "../../../../services/customer";
+import { FindParams } from "../../../../types/common";
+import { validator } from "../../../../utils/validator";
 
 /**
  * @oas [get] /customers/{id}
@@ -24,24 +24,22 @@ import { validator } from "../../../../utils/validator"
  *               $ref: "#/components/schemas/customer"
  */
 export default async (req, res) => {
-  const { id } = req.params
+    const { id } = req.params;
 
-  const validated = await validator(FindParams, req.query)
+    const validated = await validator(FindParams, req.query);
 
-  const customerService: CustomerService = req.scope.resolve("customerService")
+    const customerService: CustomerService = req.scope.resolve("customerService");
 
-  let expandFields: string[] = []
-  if (validated.expand) {
-    expandFields = validated.expand.split(",")
-  }
+    let expandFields: string[] = [];
+    if (validated.expand) {
+        expandFields = validated.expand.split(",");
+    }
 
-  const findConfig = {
-    relations: expandFields.length
-      ? expandFields
-      : defaultAdminCustomersRelations,
-  }
+    const findConfig = {
+        relations: expandFields.length ? expandFields : defaultAdminCustomersRelations
+    };
 
-  const customer = await customerService.retrieve(id, findConfig)
+    const customer = await customerService.retrieve(id, findConfig);
 
-  res.json({ customer })
-}
+    res.json({ customer });
+};

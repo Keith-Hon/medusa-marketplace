@@ -64,10 +64,10 @@ const icons = [
   <EditIcon />,
   <UnpublishIcon />,
   <PublishIcon />,
-  <SidedMouthFaceIcon />
+  <SidedMouthFaceIcon />,
 ]
 
-const Template = args => (
+const Template = (args) => (
   <div className="grid grid-cols-6 gap-base">
     {icons.map((icon, key) => {
       return (

@@ -1,11 +1,11 @@
-import { Type } from "class-transformer"
-import { IsArray, IsBoolean, IsOptional, ValidateNested } from "class-validator"
-import { defaultAdminPriceListFields, defaultAdminPriceListRelations } from "."
-import { PriceList } from "../../../.."
-import PriceListService from "../../../../services/price-list"
-import { AdminPriceListPricesUpdateReq } from "../../../../types/price-list"
-import { validator } from "../../../../utils/validator"
-import { EntityManager } from "typeorm"
+import { Type } from "class-transformer";
+import { IsArray, IsBoolean, IsOptional, ValidateNested } from "class-validator";
+import { defaultAdminPriceListFields, defaultAdminPriceListRelations } from ".";
+import { PriceList } from "../../../..";
+import PriceListService from "../../../../services/price-list";
+import { AdminPriceListPricesUpdateReq } from "../../../../types/price-list";
+import { validator } from "../../../../utils/validator";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /price-lists/{id}/prices/batch
@@ -71,35 +71,32 @@ import { EntityManager } from "typeorm"
  *               type: boolean
  */
 export default async (req, res) => {
-  const { id } = req.params
+    const { id } = req.params;
 
-  const validated = await validator(AdminPostPriceListPricesPricesReq, req.body)
+    const validated = await validator(AdminPostPriceListPricesPricesReq, req.body);
 
-  const priceListService: PriceListService =
-    req.scope.resolve("priceListService")
+    const priceListService: PriceListService = req.scope.resolve("priceListService");
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await priceListService
-      .withTransaction(transactionManager)
-      .addPrices(id, validated.prices, validated.override)
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await priceListService.withTransaction(transactionManager).addPrices(id, validated.prices, validated.override);
+    });
 
-  const priceList = await priceListService.retrieve(id, {
-    select: defaultAdminPriceListFields as (keyof PriceList)[],
-    relations: defaultAdminPriceListRelations,
-  })
+    const priceList = await priceListService.retrieve(id, {
+        select: defaultAdminPriceListFields as (keyof PriceList)[],
+        relations: defaultAdminPriceListRelations
+    });
 
-  res.json({ price_list: priceList })
-}
+    res.json({ price_list: priceList });
+};
 
 export class AdminPostPriceListPricesPricesReq {
-  @IsArray()
-  @Type(() => AdminPriceListPricesUpdateReq)
-  @ValidateNested({ each: true })
-  prices: AdminPriceListPricesUpdateReq[]
+    @IsArray()
+    @Type(() => AdminPriceListPricesUpdateReq)
+    @ValidateNested({ each: true })
+    prices: AdminPriceListPricesUpdateReq[];
 
-  @IsOptional()
-  @IsBoolean()
-  override?: boolean
+    @IsOptional()
+    @IsBoolean()
+    override?: boolean;
 }

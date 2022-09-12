@@ -18,13 +18,8 @@ import { useProductForm } from "../form/product-form-context"
 import { buildOptionsMap } from "../utils"
 
 const Variants = ({ isEdit, product }) => {
-  const {
-    setValue,
-    setVariants,
-    variants,
-    productOptions,
-    setProductOptions,
-  } = useProductForm()
+  const { setValue, setVariants, variants, productOptions, setProductOptions } =
+    useProductForm()
   const [showAddVariantModal, setShowAddVariantModal] = useState(false)
   const [showAddOption, setShowAddOption] = useState(false)
   const notification = useNotification()

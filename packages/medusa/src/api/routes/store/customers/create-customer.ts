@@ -1,10 +1,10 @@
-import { IsEmail, IsOptional, IsString } from "class-validator"
-import jwt from "jsonwebtoken"
-import { defaultStoreCustomersFields, defaultStoreCustomersRelations } from "."
-import { Customer } from "../../../.."
-import CustomerService from "../../../../services/customer"
-import { validator } from "../../../../utils/validator"
-import { EntityManager } from "typeorm"
+import { IsEmail, IsOptional, IsString } from "class-validator";
+import jwt from "jsonwebtoken";
+import { defaultStoreCustomersFields, defaultStoreCustomersRelations } from ".";
+import { Customer } from "../../../..";
+import CustomerService from "../../../../services/customer";
+import { validator } from "../../../../utils/validator";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /customers
@@ -30,48 +30,44 @@ import { EntityManager } from "typeorm"
  *               $ref: "#/components/schemas/customer"
  */
 export default async (req, res) => {
-  const validated = await validator(StorePostCustomersReq, req.body)
+    const validated = await validator(StorePostCustomersReq, req.body);
 
-  const customerService: CustomerService = req.scope.resolve("customerService")
-  const manager: EntityManager = req.scope.resolve("manager")
-  let customer: Customer = await manager.transaction(
-    async (transactionManager) => {
-      return await customerService
-        .withTransaction(transactionManager)
-        .create(validated)
-    }
-  )
+    const customerService: CustomerService = req.scope.resolve("customerService");
+    const manager: EntityManager = req.scope.resolve("manager");
+    let customer: Customer = await manager.transaction(async (transactionManager) => {
+        return await customerService.withTransaction(transactionManager).create(validated);
+    });
 
-  // Add JWT to cookie
-  const {
-    projectConfig: { jwt_secret },
-  } = req.scope.resolve("configModule")
-  req.session.jwt = jwt.sign({ customer_id: customer.id }, jwt_secret!, {
-    expiresIn: "30d",
-  })
+    // Add JWT to cookie
+    const {
+        projectConfig: { jwt_secret }
+    } = req.scope.resolve("configModule");
+    req.session.jwt = jwt.sign({ customer_id: customer.id }, jwt_secret!, {
+        expiresIn: "30d"
+    });
 
-  customer = await customerService.retrieve(customer.id, {
-    relations: defaultStoreCustomersRelations,
-    select: defaultStoreCustomersFields,
-  })
+    customer = await customerService.retrieve(customer.id, {
+        relations: defaultStoreCustomersRelations,
+        select: defaultStoreCustomersFields
+    });
 
-  res.status(200).json({ customer })
-}
+    res.status(200).json({ customer });
+};
 
 export class StorePostCustomersReq {
-  @IsString()
-  first_name: string
+    @IsString()
+    first_name: string;
 
-  @IsString()
-  last_name: string
+    @IsString()
+    last_name: string;
 
-  @IsEmail()
-  email: string
+    @IsEmail()
+    email: string;
 
-  @IsString()
-  password: string
+    @IsString()
+    password: string;
 
-  @IsOptional()
-  @IsString()
-  phone?: string
+    @IsOptional()
+    @IsString()
+    phone?: string;
 }

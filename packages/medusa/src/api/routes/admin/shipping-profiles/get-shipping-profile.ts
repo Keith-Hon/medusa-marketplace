@@ -1,8 +1,5 @@
-import {
-  defaultAdminShippingProfilesFields,
-  defaultAdminShippingProfilesRelations,
-} from "."
-import { ShippingProfileService } from "../../../../services"
+import { defaultAdminShippingProfilesFields, defaultAdminShippingProfilesRelations } from ".";
+import { ShippingProfileService } from "../../../../services";
 
 /**
  * @oas [get] /shipping-profiles/{id}
@@ -25,15 +22,13 @@ import { ShippingProfileService } from "../../../../services"
  *               $ref: "#/components/schemas/shipping_profile"
  */
 export default async (req, res) => {
-  const { profile_id } = req.params
-  const profileService: ShippingProfileService = req.scope.resolve(
-    "shippingProfileService"
-  )
+    const { profile_id } = req.params;
+    const profileService: ShippingProfileService = req.scope.resolve("shippingProfileService");
 
-  const profile = await profileService.retrieve(profile_id, {
-    select: defaultAdminShippingProfilesFields,
-    relations: defaultAdminShippingProfilesRelations,
-  })
+    const profile = await profileService.retrieve(profile_id, {
+        select: defaultAdminShippingProfilesFields,
+        relations: defaultAdminShippingProfilesRelations
+    });
 
-  res.status(200).json({ shipping_profile: profile })
-}
+    res.status(200).json({ shipping_profile: profile });
+};

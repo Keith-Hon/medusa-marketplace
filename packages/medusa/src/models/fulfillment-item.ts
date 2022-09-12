@@ -1,26 +1,26 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm"
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
 
-import { Fulfillment } from "./fulfillment"
-import { LineItem } from "./line-item"
+import { Fulfillment } from "./fulfillment";
+import { LineItem } from "./line-item";
 
 @Entity()
 export class FulfillmentItem {
-  @PrimaryColumn()
-  fulfillment_id: string
+    @PrimaryColumn()
+    fulfillment_id: string;
 
-  @PrimaryColumn()
-  item_id: string
+    @PrimaryColumn()
+    item_id: string;
 
-  @ManyToOne(() => Fulfillment)
-  @JoinColumn({ name: "fulfillment_id" })
-  fulfillment: Fulfillment
+    @ManyToOne(() => Fulfillment)
+    @JoinColumn({ name: "fulfillment_id" })
+    fulfillment: Fulfillment;
 
-  @ManyToOne(() => LineItem)
-  @JoinColumn({ name: "item_id" })
-  item: LineItem
+    @ManyToOne(() => LineItem)
+    @JoinColumn({ name: "item_id" })
+    item: LineItem;
 
-  @Column({ type: "int" })
-  quantity: number
+    @Column({ type: "int" })
+    quantity: number;
 }
 
 /**

@@ -1,10 +1,10 @@
-import { FlagSettings } from "../../types/feature-flags"
+import { FlagSettings } from "../../types/feature-flags";
 
 const SalesChannelFeatureFlag: FlagSettings = {
-  key: "sales_channels",
-  default_val: false,
-  env_key: "MEDUSA_FF_SALES_CHANNELS",
-  description: "[WIP] Enable the sales channels feature",
-}
+    key: "sales_channels",
+    default_val: false,
+    env_key: "MEDUSA_FF_SALES_CHANNELS",
+    description: "[WIP] Enable the sales channels feature"
+};
 
-export default SalesChannelFeatureFlag
+export default SalesChannelFeatureFlag;

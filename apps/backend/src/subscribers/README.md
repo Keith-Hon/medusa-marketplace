@@ -4,15 +4,15 @@ You may define custom eventhandlers, `subscribers` by creating files in the `/su
 
 ```js
 class WelcomeSubscriber {
-  constructor({ welcomeService, eventBusService }) {
-    this.welcomeService_ = welcomeService;
+    constructor({ welcomeService, eventBusService }) {
+        this.welcomeService_ = welcomeService;
 
-    eventBusService.subscribe("order.placed", this.handleWelcome);
-  }
+        eventBusService.subscribe("order.placed", this.handleWelcome);
+    }
 
-  handleWelcome = async (data) => {
-    return await this.welcomeService_.sendWelcome(data.id);
-  };
+    handleWelcome = async (data) => {
+        return await this.welcomeService_.sendWelcome(data.id);
+    };
 }
 
 export default WelcomeSubscriber;

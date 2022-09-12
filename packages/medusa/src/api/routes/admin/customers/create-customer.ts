@@ -1,7 +1,7 @@
-import { IsEmail, IsObject, IsOptional, IsString } from "class-validator"
-import { CustomerService } from "../../../../services"
-import { validator } from "../../../../utils/validator"
-import { EntityManager } from "typeorm"
+import { IsEmail, IsObject, IsOptional, IsString } from "class-validator";
+import { CustomerService } from "../../../../services";
+import { validator } from "../../../../utils/validator";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /customers
@@ -28,36 +28,34 @@ import { EntityManager } from "typeorm"
  *               $ref: "#/components/schemas/customer"
  */
 export default async (req, res) => {
-  const validated = await validator(AdminPostCustomersReq, req.body)
+    const validated = await validator(AdminPostCustomersReq, req.body);
 
-  const customerService: CustomerService = req.scope.resolve("customerService")
-  const manager: EntityManager = req.scope.resolve("manager")
-  const customer = await manager.transaction(async (transactionManager) => {
-    return await customerService
-      .withTransaction(transactionManager)
-      .create(validated)
-  })
-  res.status(201).json({ customer })
-}
+    const customerService: CustomerService = req.scope.resolve("customerService");
+    const manager: EntityManager = req.scope.resolve("manager");
+    const customer = await manager.transaction(async (transactionManager) => {
+        return await customerService.withTransaction(transactionManager).create(validated);
+    });
+    res.status(201).json({ customer });
+};
 
 export class AdminPostCustomersReq {
-  @IsEmail()
-  email: string
+    @IsEmail()
+    email: string;
 
-  @IsString()
-  first_name: string
+    @IsString()
+    first_name: string;
 
-  @IsString()
-  last_name: string
+    @IsString()
+    last_name: string;
 
-  @IsString()
-  password: string
+    @IsString()
+    password: string;
 
-  @IsString()
-  @IsOptional()
-  phone?: string
+    @IsString()
+    @IsOptional()
+    phone?: string;
 
-  @IsObject()
-  @IsOptional()
-  metadata?: Record<string, unknown>
+    @IsObject()
+    @IsOptional()
+    metadata?: Record<string, unknown>;
 }

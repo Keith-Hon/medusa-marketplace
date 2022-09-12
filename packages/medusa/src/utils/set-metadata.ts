@@ -1,4 +1,4 @@
-import { MedusaError } from "medusa-core-utils/dist"
+import { MedusaError } from "medusa-core-utils/dist";
 
 /**
  * Dedicated method to set metadata.
@@ -6,24 +6,18 @@ import { MedusaError } from "medusa-core-utils/dist"
  * @param metadata - the metadata to set
  * @return resolves to the updated result.
  */
-export function setMetadata(
-  obj: { metadata: Record<string, unknown> | null },
-  metadata: Record<string, unknown>
-): Record<string, unknown> {
-  const existing = obj.metadata || {}
-  const newData = {}
-  for (const [key, value] of Object.entries(metadata)) {
-    if (typeof key !== "string") {
-      throw new MedusaError(
-        MedusaError.Types.INVALID_ARGUMENT,
-        "Key type is invalid. Metadata keys must be strings"
-      )
+export function setMetadata(obj: { metadata: Record<string, unknown> | null }, metadata: Record<string, unknown>): Record<string, unknown> {
+    const existing = obj.metadata || {};
+    const newData = {};
+    for (const [key, value] of Object.entries(metadata)) {
+        if (typeof key !== "string") {
+            throw new MedusaError(MedusaError.Types.INVALID_ARGUMENT, "Key type is invalid. Metadata keys must be strings");
+        }
+        newData[key] = value;
     }
-    newData[key] = value
-  }
 
-  return {
-    ...existing,
-    ...newData,
-  }
+    return {
+        ...existing,
+        ...newData
+    };
 }

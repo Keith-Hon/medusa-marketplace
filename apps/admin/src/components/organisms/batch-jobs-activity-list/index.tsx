@@ -33,14 +33,11 @@ const BatchJobActivityCard = ({ batchJob }: { batchJob: BatchJob }) => {
   const activityCardRef = useRef<HTMLDivElement>(null)
   const notification = useNotification()
   const { store } = useAdminStore()
-  const {
-    mutate: cancelBatchJob,
-    error: cancelBatchJobError,
-  } = useAdminCancelBatchJob(batchJob.id)
+  const { mutate: cancelBatchJob, error: cancelBatchJobError } =
+    useAdminCancelBatchJob(batchJob.id)
   const { mutateAsync: deleteFile } = useAdminDeleteFile()
-  const {
-    mutateAsync: createPresignedUrl,
-  } = useAdminCreatePresignedDownloadUrl()
+  const { mutateAsync: createPresignedUrl } =
+    useAdminCreatePresignedDownloadUrl()
 
   const fileName = batchJob.result?.file_key ?? `${batchJob.type}.csv`
   const relativeTimeElapsed = getRelativeTime({

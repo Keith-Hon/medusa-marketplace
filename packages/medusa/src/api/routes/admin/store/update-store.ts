@@ -1,7 +1,7 @@
-import { IsArray, IsOptional, IsString, IsObject } from "class-validator"
-import { StoreService } from "../../../../services"
-import { validator } from "../../../../utils/validator"
-import { EntityManager } from "typeorm"
+import { IsArray, IsOptional, IsString, IsObject } from "class-validator";
+import { StoreService } from "../../../../services";
+import { validator } from "../../../../utils/validator";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /store
@@ -42,47 +42,45 @@ import { EntityManager } from "typeorm"
  *               $ref: "#/components/schemas/store"
  */
 export default async (req, res) => {
-  const validatedBody = await validator(AdminPostStoreReq, req.body)
+    const validatedBody = await validator(AdminPostStoreReq, req.body);
 
-  const storeService: StoreService = req.scope.resolve("storeService")
+    const storeService: StoreService = req.scope.resolve("storeService");
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  const store = await manager.transaction(async (transactionManager) => {
-    return await storeService
-      .withTransaction(transactionManager)
-      .update(validatedBody)
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    const store = await manager.transaction(async (transactionManager) => {
+        return await storeService.withTransaction(transactionManager).update(validatedBody);
+    });
 
-  res.status(200).json({ store })
-}
+    res.status(200).json({ store });
+};
 
 export class AdminPostStoreReq {
-  @IsOptional()
-  @IsString()
-  name?: string
+    @IsOptional()
+    @IsString()
+    name?: string;
 
-  @IsString()
-  @IsOptional()
-  swap_link_template?: string
+    @IsString()
+    @IsOptional()
+    swap_link_template?: string;
 
-  @IsString()
-  @IsOptional()
-  payment_link_template?: string
+    @IsString()
+    @IsOptional()
+    payment_link_template?: string;
 
-  @IsString()
-  @IsOptional()
-  invite_link_template?: string
+    @IsString()
+    @IsOptional()
+    invite_link_template?: string;
 
-  @IsString()
-  @IsOptional()
-  default_currency_code?: string
+    @IsString()
+    @IsOptional()
+    default_currency_code?: string;
 
-  @IsArray()
-  @IsString({ each: true })
-  @IsOptional()
-  currencies?: string[]
+    @IsArray()
+    @IsString({ each: true })
+    @IsOptional()
+    currencies?: string[];
 
-  @IsObject()
-  @IsOptional()
-  metadata?: Record<string, unknown>
+    @IsObject()
+    @IsOptional()
+    metadata?: Record<string, unknown>;
 }

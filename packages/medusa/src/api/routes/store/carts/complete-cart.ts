@@ -1,6 +1,6 @@
-import { ICartCompletionStrategy } from "../../../../interfaces"
-import { IdempotencyKeyService } from "../../../../services"
-import { IdempotencyKey } from "../../../../models/idempotency-key"
+import { ICartCompletionStrategy } from "../../../../interfaces";
+import { IdempotencyKeyService } from "../../../../services";
+import { IdempotencyKey } from "../../../../models/idempotency-key";
 import { EntityManager } from "typeorm";
 
 /**
@@ -41,43 +41,30 @@ import { EntityManager } from "typeorm";
  *                  $ref: "#/components/schemas/swap"
  */
 export default async (req, res) => {
-  const { id } = req.params
+    const { id } = req.params;
 
-  const idempotencyKeyService: IdempotencyKeyService = req.scope.resolve(
-    "idempotencyKeyService"
-  )
+    const idempotencyKeyService: IdempotencyKeyService = req.scope.resolve("idempotencyKeyService");
 
-  const headerKey = req.get("Idempotency-Key") || ""
+    const headerKey = req.get("Idempotency-Key") || "";
 
-  let idempotencyKey: IdempotencyKey
-  try {
-    const manager: EntityManager = req.scope.resolve("manager")
-    idempotencyKey = await manager.transaction(async (transactionManager) => {
-      return await idempotencyKeyService.withTransaction(transactionManager).initializeRequest(
-        headerKey,
-        req.method,
-        req.params,
-        req.path
-      )
-    })
-  } catch (error) {
-    console.log(error)
-    res.status(409).send("Failed to create idempotency key")
-    return
-  }
+    let idempotencyKey: IdempotencyKey;
+    try {
+        const manager: EntityManager = req.scope.resolve("manager");
+        idempotencyKey = await manager.transaction(async (transactionManager) => {
+            return await idempotencyKeyService.withTransaction(transactionManager).initializeRequest(headerKey, req.method, req.params, req.path);
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(409).send("Failed to create idempotency key");
+        return;
+    }
 
-  res.setHeader("Access-Control-Expose-Headers", "Idempotency-Key")
-  res.setHeader("Idempotency-Key", idempotencyKey.idempotency_key)
+    res.setHeader("Access-Control-Expose-Headers", "Idempotency-Key");
+    res.setHeader("Idempotency-Key", idempotencyKey.idempotency_key);
 
-  const completionStrat: ICartCompletionStrategy = req.scope.resolve(
-    "cartCompletionStrategy"
-  )
+    const completionStrat: ICartCompletionStrategy = req.scope.resolve("cartCompletionStrategy");
 
-  const { response_code, response_body } = await completionStrat.complete(
-    id,
-    idempotencyKey,
-    req.request_context
-  )
+    const { response_code, response_body } = await completionStrat.complete(id, idempotencyKey, req.request_context);
 
-  res.status(response_code).json(response_body)
-}
+    res.status(response_code).json(response_body);
+};

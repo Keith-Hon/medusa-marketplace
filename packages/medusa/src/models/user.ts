@@ -1,47 +1,47 @@
-import { BeforeInsert, Column, Entity, Index } from "typeorm"
-import { DbAwareColumn } from "../utils/db-aware-column"
-import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity"
-import { generateEntityId } from "../utils/generate-entity-id"
+import { BeforeInsert, Column, Entity, Index } from "typeorm";
+import { DbAwareColumn } from "../utils/db-aware-column";
+import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity";
+import { generateEntityId } from "../utils/generate-entity-id";
 
 export enum UserRoles {
-  ADMIN = "admin",
-  MEMBER = "member",
-  DEVELOPER = "developer",
+    ADMIN = "admin",
+    MEMBER = "member",
+    DEVELOPER = "developer"
 }
 
 @Entity()
 export class User extends SoftDeletableEntity {
-  @DbAwareColumn({
-    type: "enum",
-    enum: UserRoles,
-    nullable: true,
-    default: UserRoles.MEMBER,
-  })
-  role: UserRoles
+    @DbAwareColumn({
+        type: "enum",
+        enum: UserRoles,
+        nullable: true,
+        default: UserRoles.MEMBER
+    })
+    role: UserRoles;
 
-  @Index({ unique: true, where: "deleted_at IS NULL" })
-  @Column()
-  email: string
+    @Index({ unique: true, where: "deleted_at IS NULL" })
+    @Column()
+    email: string;
 
-  @Column({ nullable: true })
-  first_name: string
+    @Column({ nullable: true })
+    first_name: string;
 
-  @Column({ nullable: true })
-  last_name: string
+    @Column({ nullable: true })
+    last_name: string;
 
-  @Column({ nullable: true, select: false })
-  password_hash: string
+    @Column({ nullable: true, select: false })
+    password_hash: string;
 
-  @Column({ nullable: true })
-  api_token: string
+    @Column({ nullable: true })
+    api_token: string;
 
-  @DbAwareColumn({ type: "jsonb", nullable: true })
-  metadata: Record<string, unknown>
+    @DbAwareColumn({ type: "jsonb", nullable: true })
+    metadata: Record<string, unknown>;
 
-  @BeforeInsert()
-  private beforeInsert(): void {
-    this.id = generateEntityId(this.id, "usr")
-  }
+    @BeforeInsert()
+    private beforeInsert(): void {
+        this.id = generateEntityId(this.id, "usr");
+    }
 }
 
 /**

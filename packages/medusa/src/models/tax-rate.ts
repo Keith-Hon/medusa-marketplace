@@ -1,93 +1,85 @@
-import {
-  BeforeInsert,
-  Column,
-  Entity,
-  JoinColumn,
-  JoinTable,
-  ManyToMany,
-  ManyToOne,
-} from "typeorm"
-import { DbAwareColumn } from "../utils/db-aware-column"
+import { BeforeInsert, Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne } from "typeorm";
+import { DbAwareColumn } from "../utils/db-aware-column";
 
-import { Region } from "./region"
-import { Product } from "./product"
-import { ProductType } from "./product-type"
-import { ShippingOption } from "./shipping-option"
-import { BaseEntity } from "../interfaces/models/base-entity"
-import { generateEntityId } from "../utils/generate-entity-id"
+import { Region } from "./region";
+import { Product } from "./product";
+import { ProductType } from "./product-type";
+import { ShippingOption } from "./shipping-option";
+import { BaseEntity } from "../interfaces/models/base-entity";
+import { generateEntityId } from "../utils/generate-entity-id";
 
 @Entity()
 export class TaxRate extends BaseEntity {
-  @Column({ type: "real", nullable: true })
-  rate: number | null
+    @Column({ type: "real", nullable: true })
+    rate: number | null;
 
-  @Column({ type: "varchar", nullable: true })
-  code: string | null
+    @Column({ type: "varchar", nullable: true })
+    code: string | null;
 
-  @Column()
-  name: string
+    @Column()
+    name: string;
 
-  @Column()
-  region_id: string
+    @Column()
+    region_id: string;
 
-  @ManyToOne(() => Region)
-  @JoinColumn({ name: "region_id" })
-  region: Region
+    @ManyToOne(() => Region)
+    @JoinColumn({ name: "region_id" })
+    region: Region;
 
-  @DbAwareColumn({ type: "jsonb", nullable: true })
-  metadata: Record<string, unknown>
+    @DbAwareColumn({ type: "jsonb", nullable: true })
+    metadata: Record<string, unknown>;
 
-  @ManyToMany(() => Product)
-  @JoinTable({
-    name: "product_tax_rate",
-    joinColumn: {
-      name: "rate_id",
-      referencedColumnName: "id",
-    },
-    inverseJoinColumn: {
-      name: "product_id",
-      referencedColumnName: "id",
-    },
-  })
-  products: Product[]
+    @ManyToMany(() => Product)
+    @JoinTable({
+        name: "product_tax_rate",
+        joinColumn: {
+            name: "rate_id",
+            referencedColumnName: "id"
+        },
+        inverseJoinColumn: {
+            name: "product_id",
+            referencedColumnName: "id"
+        }
+    })
+    products: Product[];
 
-  @ManyToMany(() => ProductType)
-  @JoinTable({
-    name: "product_type_tax_rate",
-    joinColumn: {
-      name: "rate_id",
-      referencedColumnName: "id",
-    },
-    inverseJoinColumn: {
-      name: "product_type_id",
-      referencedColumnName: "id",
-    },
-  })
-  product_types: ProductType[]
+    @ManyToMany(() => ProductType)
+    @JoinTable({
+        name: "product_type_tax_rate",
+        joinColumn: {
+            name: "rate_id",
+            referencedColumnName: "id"
+        },
+        inverseJoinColumn: {
+            name: "product_type_id",
+            referencedColumnName: "id"
+        }
+    })
+    product_types: ProductType[];
 
-  @ManyToMany(() => ShippingOption)
-  @JoinTable({
-    name: "shipping_tax_rate",
-    joinColumn: {
-      name: "rate_id",
-      referencedColumnName: "id",
-    },
-    inverseJoinColumn: {
-      name: "shipping_option_id",
-      referencedColumnName: "id",
-    },
-  })
-  shipping_options: ShippingOption[]
+    @ManyToMany(() => ShippingOption)
+    @JoinTable({
+        name: "shipping_tax_rate",
+        joinColumn: {
+            name: "rate_id",
+            referencedColumnName: "id"
+        },
+        inverseJoinColumn: {
+            name: "shipping_option_id",
+            referencedColumnName: "id"
+        }
+    })
+    shipping_options: ShippingOption[];
 
-  // TODO: consider custom DTO instead
-  product_count?: number
-  product_type_count?: number
-  shipping_option_count?: number
+    // TODO: consider custom DTO instead
+    product_count?: number;
+    product_type_count?: number;
+    shipping_option_count?: number;
 
-  @BeforeInsert()
-  private beforeInsert(): void {
-    this.id = generateEntityId(this.id, "txr")
-  }
+    @BeforeInsert()
+    private beforeInsert(): void {
+        this.id = generateEntityId(this.id, "txr");
+    }
 }
 
 /**

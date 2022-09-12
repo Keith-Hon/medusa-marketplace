@@ -1,47 +1,39 @@
-import {
-  BeforeInsert,
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-  Unique,
-} from "typeorm"
-import { Cart } from "./cart"
-import { ShippingOption } from "./shipping-option"
-import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity"
-import { DbAwareColumn } from "../utils/db-aware-column"
-import { generateEntityId } from "../utils/generate-entity-id"
+import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne, Unique } from "typeorm";
+import { Cart } from "./cart";
+import { ShippingOption } from "./shipping-option";
+import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity";
+import { DbAwareColumn } from "../utils/db-aware-column";
+import { generateEntityId } from "../utils/generate-entity-id";
 
 @Entity()
 @Unique(["shipping_option_id", "cart_id"])
 export class CustomShippingOption extends SoftDeletableEntity {
-  @Column({ type: "int" })
-  price: number
+    @Column({ type: "int" })
+    price: number;
 
-  @Index()
-  @Column()
-  shipping_option_id: string
+    @Index()
+    @Column()
+    shipping_option_id: string;
 
-  @ManyToOne(() => ShippingOption)
-  @JoinColumn({ name: "shipping_option_id" })
-  shipping_option: ShippingOption
+    @ManyToOne(() => ShippingOption)
+    @JoinColumn({ name: "shipping_option_id" })
+    shipping_option: ShippingOption;
 
-  @Index()
-  @Column({ nullable: true })
-  cart_id: string
+    @Index()
+    @Column({ nullable: true })
+    cart_id: string;
 
-  @ManyToOne(() => Cart)
-  @JoinColumn({ name: "cart_id" })
-  cart: Cart
+    @ManyToOne(() => Cart)
+    @JoinColumn({ name: "cart_id" })
+    cart: Cart;
 
-  @DbAwareColumn({ type: "jsonb", nullable: true })
-  metadata: Record<string, unknown>
+    @DbAwareColumn({ type: "jsonb", nullable: true })
+    metadata: Record<string, unknown>;
 
-  @BeforeInsert()
-  private beforeInsert(): void {
-    this.id = generateEntityId(this.id, "cso")
-  }
+    @BeforeInsert()
+    private beforeInsert(): void {
+        this.id = generateEntityId(this.id, "cso");
+    }
 }
 
 /**

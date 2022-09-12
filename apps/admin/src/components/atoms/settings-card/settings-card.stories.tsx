@@ -8,7 +8,7 @@ export default {
   component: SettingsCard,
 } as ComponentMeta<typeof SettingsCard>
 
-const Template = args => <SettingsCard {...args} />
+const Template = (args) => <SettingsCard {...args} />
 
 const icon = <HappyIcon />
 

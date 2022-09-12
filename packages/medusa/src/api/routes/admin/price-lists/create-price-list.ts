@@ -1,20 +1,9 @@
-import { Type } from "class-transformer"
-import {
-  IsArray,
-  IsEnum,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from "class-validator"
-import PriceListService from "../../../../services/price-list"
-import {
-  AdminPriceListPricesCreateReq,
-  CreatePriceListInput,
-  PriceListStatus,
-  PriceListType,
-} from "../../../../types/price-list"
-import { Request } from "express"
-import { EntityManager } from "typeorm"
+import { Type } from "class-transformer";
+import { IsArray, IsEnum, IsOptional, IsString, ValidateNested } from "class-validator";
+import PriceListService from "../../../../services/price-list";
+import { AdminPriceListPricesCreateReq, CreatePriceListInput, PriceListStatus, PriceListType } from "../../../../types/price-list";
+import { Request } from "express";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /price_lists
@@ -88,52 +77,49 @@ import { EntityManager } from "typeorm"
  *               $ref: "#/components/schemas/price_list"
  */
 export default async (req: Request, res) => {
-  const priceListService: PriceListService =
-    req.scope.resolve("priceListService")
+    const priceListService: PriceListService = req.scope.resolve("priceListService");
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  const priceList = await manager.transaction(async (transactionManager) => {
-    return await priceListService
-      .withTransaction(transactionManager)
-      .create(req.validatedBody as CreatePriceListInput)
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    const priceList = await manager.transaction(async (transactionManager) => {
+        return await priceListService.withTransaction(transactionManager).create(req.validatedBody as CreatePriceListInput);
+    });
 
-  res.json({ price_list: priceList })
-}
+    res.json({ price_list: priceList });
+};
 
 class CustomerGroup {
-  @IsString()
-  id: string
+    @IsString()
+    id: string;
 }
 
 export class AdminPostPriceListsPriceListReq {
-  @IsString()
-  name: string
+    @IsString()
+    name: string;
 
-  @IsString()
-  description: string
+    @IsString()
+    description: string;
 
-  @IsOptional()
-  starts_at?: Date
+    @IsOptional()
+    starts_at?: Date;
 
-  @IsOptional()
-  ends_at?: Date
+    @IsOptional()
+    ends_at?: Date;
 
-  @IsOptional()
-  @IsEnum(PriceListStatus)
-  status?: PriceListStatus
+    @IsOptional()
+    @IsEnum(PriceListStatus)
+    status?: PriceListStatus;
 
-  @IsEnum(PriceListType)
-  type: PriceListType
+    @IsEnum(PriceListType)
+    type: PriceListType;
 
-  @IsArray()
-  @Type(() => AdminPriceListPricesCreateReq)
-  @ValidateNested({ each: true })
-  prices: AdminPriceListPricesCreateReq[]
+    @IsArray()
+    @Type(() => AdminPriceListPricesCreateReq)
+    @ValidateNested({ each: true })
+    prices: AdminPriceListPricesCreateReq[];
 
-  @IsOptional()
-  @IsArray()
-  @Type(() => CustomerGroup)
-  @ValidateNested({ each: true })
-  customer_groups?: CustomerGroup[]
+    @IsOptional()
+    @IsArray()
+    @Type(() => CustomerGroup)
+    @ValidateNested({ each: true })
+    customer_groups?: CustomerGroup[];
 }

@@ -1,8 +1,7 @@
-import { Module } from 'medusa-extender';
-import { RegionService } from './services/region.service';
+import { Module } from "medusa-extender";
+import { RegionService } from "./services/region.service";
 
 @Module({
     imports: [RegionService]
 })
-
-export class RegionModule { }
+export class RegionModule {}

@@ -1,5 +1,5 @@
-import { StoreService } from "../../../../services"
-import { EntityManager } from "typeorm"
+import { StoreService } from "../../../../services";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [delete] /store/currencies/{code}
@@ -22,15 +22,13 @@ import { EntityManager } from "typeorm"
  *               $ref: "#/components/schemas/store"
  */
 export default async (req, res) => {
-  const { currency_code } = req.params
+    const { currency_code } = req.params;
 
-  const storeService: StoreService = req.scope.resolve("storeService")
-  const manager: EntityManager = req.scope.resolve("manager")
-  const data = await manager.transaction(async (transactionManager) => {
-    return await storeService
-      .withTransaction(transactionManager)
-      .removeCurrency(currency_code)
-  })
+    const storeService: StoreService = req.scope.resolve("storeService");
+    const manager: EntityManager = req.scope.resolve("manager");
+    const data = await manager.transaction(async (transactionManager) => {
+        return await storeService.withTransaction(transactionManager).removeCurrency(currency_code);
+    });
 
-  res.status(200).json({ store: data })
-}
+    res.status(200).json({ store: data });
+};

@@ -15,7 +15,7 @@ export default {
   },
 } as ComponentMeta<typeof SearchIcon>
 
-const Template = args => <SearchIcon {...args} />
+const Template = (args) => <SearchIcon {...args} />
 
 export const Icon = Template.bind({})
 Icon.args = {

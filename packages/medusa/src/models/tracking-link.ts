@@ -1,35 +1,35 @@
-import { BeforeInsert, Column, Entity, JoinColumn, ManyToOne } from "typeorm"
+import { BeforeInsert, Column, Entity, JoinColumn, ManyToOne } from "typeorm";
 
-import { Fulfillment } from "./fulfillment"
-import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity"
-import { DbAwareColumn } from "../utils/db-aware-column"
-import { generateEntityId } from "../utils/generate-entity-id"
+import { Fulfillment } from "./fulfillment";
+import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity";
+import { DbAwareColumn } from "../utils/db-aware-column";
+import { generateEntityId } from "../utils/generate-entity-id";
 
 @Entity()
 export class TrackingLink extends SoftDeletableEntity {
-  @Column({ nullable: true })
-  url: string
+    @Column({ nullable: true })
+    url: string;
 
-  @Column()
-  tracking_number: string
+    @Column()
+    tracking_number: string;
 
-  @Column()
-  fulfillment_id: string
+    @Column()
+    fulfillment_id: string;
 
-  @ManyToOne(() => Fulfillment, (ful) => ful.tracking_links)
-  @JoinColumn({ name: "fulfillment_id" })
-  fulfillment: Fulfillment
+    @ManyToOne(() => Fulfillment, (ful) => ful.tracking_links)
+    @JoinColumn({ name: "fulfillment_id" })
+    fulfillment: Fulfillment;
 
-  @Column({ nullable: true })
-  idempotency_key: string
+    @Column({ nullable: true })
+    idempotency_key: string;
 
-  @DbAwareColumn({ type: "jsonb", nullable: true })
-  metadata: Record<string, unknown>
+    @DbAwareColumn({ type: "jsonb", nullable: true })
+    metadata: Record<string, unknown>;
 
-  @BeforeInsert()
-  private beforeInsert(): void {
-    this.id = generateEntityId(this.id, "tlink")
-  }
+    @BeforeInsert()
+    private beforeInsert(): void {
+        this.id = generateEntityId(this.id, "tlink");
+    }
 }
 
 /**

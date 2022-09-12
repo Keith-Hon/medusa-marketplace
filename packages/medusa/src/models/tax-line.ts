@@ -1,19 +1,19 @@
-import { Column } from "typeorm"
-import { BaseEntity } from "../interfaces/models/base-entity"
-import { DbAwareColumn } from "../utils/db-aware-column"
+import { Column } from "typeorm";
+import { BaseEntity } from "../interfaces/models/base-entity";
+import { DbAwareColumn } from "../utils/db-aware-column";
 
 export class TaxLine extends BaseEntity {
-  @Column({ type: "real" })
-  rate: number
+    @Column({ type: "real" })
+    rate: number;
 
-  @Column()
-  name: string
+    @Column()
+    name: string;
 
-  @Column({ type: "varchar", nullable: true })
-  code: string | null
+    @Column({ type: "varchar", nullable: true })
+    code: string | null;
 
-  @DbAwareColumn({ type: "jsonb", nullable: true })
-  metadata: Record<string, unknown>
+    @DbAwareColumn({ type: "jsonb", nullable: true })
+    metadata: Record<string, unknown>;
 }
 
 /**

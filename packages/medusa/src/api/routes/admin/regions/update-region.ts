@@ -1,14 +1,8 @@
-import {
-  IsArray,
-  IsBoolean,
-  IsNumber,
-  IsOptional,
-  IsString,
-} from "class-validator"
-import { defaultAdminRegionRelations, defaultAdminRegionFields } from "."
-import { validator } from "../../../../utils/validator"
-import RegionService from "../../../../services/region"
-import { EntityManager } from "typeorm"
+import { IsArray, IsBoolean, IsNumber, IsOptional, IsString } from "class-validator";
+import { defaultAdminRegionRelations, defaultAdminRegionFields } from ".";
+import { validator } from "../../../../utils/validator";
+import RegionService from "../../../../services/region";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /regions/{id}
@@ -72,67 +66,65 @@ import { EntityManager } from "typeorm"
  *               $ref: "#/components/schemas/region"
  */
 export default async (req, res) => {
-  const { region_id } = req.params
-  const validated = await validator(AdminPostRegionsRegionReq, req.body)
+    const { region_id } = req.params;
+    const validated = await validator(AdminPostRegionsRegionReq, req.body);
 
-  const regionService: RegionService = req.scope.resolve("regionService")
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await regionService
-      .withTransaction(transactionManager)
-      .update(region_id, validated)
-  })
+    const regionService: RegionService = req.scope.resolve("regionService");
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await regionService.withTransaction(transactionManager).update(region_id, validated);
+    });
 
-  const region = await regionService.retrieve(region_id, {
-    select: defaultAdminRegionFields,
-    relations: defaultAdminRegionRelations,
-  })
+    const region = await regionService.retrieve(region_id, {
+        select: defaultAdminRegionFields,
+        relations: defaultAdminRegionRelations
+    });
 
-  res.status(200).json({ region })
-}
+    res.status(200).json({ region });
+};
 
 export class AdminPostRegionsRegionReq {
-  @IsString()
-  @IsOptional()
-  name?: string
+    @IsString()
+    @IsOptional()
+    name?: string;
 
-  @IsString()
-  @IsOptional()
-  currency_code?: string
+    @IsString()
+    @IsOptional()
+    currency_code?: string;
 
-  @IsString()
-  @IsOptional()
-  tax_code?: string
+    @IsString()
+    @IsOptional()
+    tax_code?: string;
 
-  @IsNumber()
-  @IsOptional()
-  tax_rate?: number
+    @IsNumber()
+    @IsOptional()
+    tax_rate?: number;
 
-  @IsBoolean()
-  @IsOptional()
-  gift_cards_taxable?: boolean
+    @IsBoolean()
+    @IsOptional()
+    gift_cards_taxable?: boolean;
 
-  @IsBoolean()
-  @IsOptional()
-  automatic_taxes?: boolean
+    @IsBoolean()
+    @IsOptional()
+    automatic_taxes?: boolean;
 
-  @IsString()
-  @IsOptional()
-  tax_provider_id?: string | null
+    @IsString()
+    @IsOptional()
+    tax_provider_id?: string | null;
 
-  @IsArray()
-  @IsString({ each: true })
-  @IsOptional()
-  payment_providers?: string[]
+    @IsArray()
+    @IsString({ each: true })
+    @IsOptional()
+    payment_providers?: string[];
 
-  @IsArray()
-  @IsString({ each: true })
-  @IsOptional()
-  fulfillment_providers?: string[]
+    @IsArray()
+    @IsString({ each: true })
+    @IsOptional()
+    fulfillment_providers?: string[];
 
-  // iso_2 country codes
-  @IsArray()
-  @IsString({ each: true })
-  @IsOptional()
-  countries?: string[]
+    // iso_2 country codes
+    @IsArray()
+    @IsString({ each: true })
+    @IsOptional()
+    countries?: string[];
 }

@@ -1,13 +1,10 @@
-import { IsString } from "class-validator"
-import { IsOptional } from "class-validator"
-import {
-  defaultAdminNotificationsFields,
-  defaultAdminNotificationsRelations,
-} from "."
-import { validator } from "../../../../utils/validator"
-import { NotificationService } from "../../../../services"
-import { Notification } from "../../../../models"
-import { EntityManager } from "typeorm"
+import { IsString } from "class-validator";
+import { IsOptional } from "class-validator";
+import { defaultAdminNotificationsFields, defaultAdminNotificationsRelations } from ".";
+import { validator } from "../../../../utils/validator";
+import { NotificationService } from "../../../../services";
+import { Notification } from "../../../../models";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /notifications/{id}/resend
@@ -38,40 +35,33 @@ import { EntityManager } from "typeorm"
  *               $ref: "#/components/schemas/notification"
  */
 export default async (req, res) => {
-  const { id } = req.params
+    const { id } = req.params;
 
-  const validatedBody = await validator(
-    AdminPostNotificationsNotificationResendReq,
-    req.body
-  )
+    const validatedBody = await validator(AdminPostNotificationsNotificationResendReq, req.body);
 
-  const notificationService: NotificationService = req.scope.resolve(
-    "notificationService"
-  )
+    const notificationService: NotificationService = req.scope.resolve("notificationService");
 
-  const config: Record<string, unknown> = {}
+    const config: Record<string, unknown> = {};
 
-  if (validatedBody.to) {
-    config.to = validatedBody.to
-  }
+    if (validatedBody.to) {
+        config.to = validatedBody.to;
+    }
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await notificationService
-      .withTransaction(transactionManager)
-      .resend(id, config)
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await notificationService.withTransaction(transactionManager).resend(id, config);
+    });
 
-  const notification = await notificationService.retrieve(id, {
-    select: defaultAdminNotificationsFields as (keyof Notification)[],
-    relations: defaultAdminNotificationsRelations,
-  })
+    const notification = await notificationService.retrieve(id, {
+        select: defaultAdminNotificationsFields as (keyof Notification)[],
+        relations: defaultAdminNotificationsRelations
+    });
 
-  res.json({ notification })
-}
+    res.json({ notification });
+};
 
 export class AdminPostNotificationsNotificationResendReq {
-  @IsOptional()
-  @IsString()
-  to?: string
+    @IsOptional()
+    @IsString()
+    to?: string;
 }

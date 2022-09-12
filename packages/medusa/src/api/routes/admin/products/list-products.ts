@@ -1,9 +1,9 @@
-import { Type } from "class-transformer"
-import { IsNumber, IsOptional, IsString } from "class-validator"
-import { Product } from "../../../../models"
-import { PricedProduct } from "../../../../types/pricing"
-import { PricingService, ProductService } from "../../../../services"
-import { FilterableProductProps } from "../../../../types/product"
+import { Type } from "class-transformer";
+import { IsNumber, IsOptional, IsString } from "class-validator";
+import { Product } from "../../../../models";
+import { PricedProduct } from "../../../../types/pricing";
+import { PricingService, ProductService } from "../../../../services";
+import { FilterableProductProps } from "../../../../types/product";
 
 /**
  * @oas [get] /products
@@ -55,49 +55,44 @@ import { FilterableProductProps } from "../../../../types/product"
  *                 $ref: "#/components/schemas/product"
  */
 export default async (req, res) => {
-  const productService: ProductService = req.scope.resolve("productService")
-  const pricingService: PricingService = req.scope.resolve("pricingService")
+    const productService: ProductService = req.scope.resolve("productService");
+    const pricingService: PricingService = req.scope.resolve("pricingService");
 
-  const { skip, take, relations } = req.listConfig
+    const { skip, take, relations } = req.listConfig;
 
-  const [rawProducts, count] = await productService.listAndCount(
-    req.filterableFields,
-    req.listConfig
-  )
+    const [rawProducts, count] = await productService.listAndCount(req.filterableFields, req.listConfig);
 
-  let products: (Product | PricedProduct)[] = rawProducts
+    let products: (Product | PricedProduct)[] = rawProducts;
 
-  const includesPricing = ["variants", "variants.prices"].every((relation) =>
-    relations?.includes(relation)
-  )
-  if (includesPricing) {
-    products = await pricingService.setProductPrices(rawProducts)
-  }
+    const includesPricing = ["variants", "variants.prices"].every((relation) => relations?.includes(relation));
+    if (includesPricing) {
+        products = await pricingService.setProductPrices(rawProducts);
+    }
 
-  res.json({
-    products,
-    count,
-    offset: skip,
-    limit: take,
-  })
-}
+    res.json({
+        products,
+        count,
+        offset: skip,
+        limit: take
+    });
+};
 
 export class AdminGetProductsParams extends FilterableProductProps {
-  @IsNumber()
-  @IsOptional()
-  @Type(() => Number)
-  offset?: number = 0
+    @IsNumber()
+    @IsOptional()
+    @Type(() => Number)
+    offset?: number = 0;
 
-  @IsNumber()
-  @IsOptional()
-  @Type(() => Number)
-  limit?: number = 50
+    @IsNumber()
+    @IsOptional()
+    @Type(() => Number)
+    limit?: number = 50;
 
-  @IsString()
-  @IsOptional()
-  expand?: string
+    @IsString()
+    @IsOptional()
+    expand?: string;
 
-  @IsString()
-  @IsOptional()
-  fields?: string
+    @IsString()
+    @IsOptional()
+    fields?: string;
 }

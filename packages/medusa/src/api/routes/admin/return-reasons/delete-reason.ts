@@ -1,5 +1,5 @@
-import { ReturnReasonService } from "../../../../services"
-import { EntityManager } from "typeorm"
+import { ReturnReasonService } from "../../../../services";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [delete] /return-reasons/{id}
@@ -28,21 +28,17 @@ import { EntityManager } from "typeorm"
  *               type: boolean
  */
 export default async (req, res) => {
-  const { id } = req.params
+    const { id } = req.params;
 
-  const returnReasonService: ReturnReasonService = req.scope.resolve(
-    "returnReasonService"
-  )
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await returnReasonService
-      .withTransaction(transactionManager)
-      .delete(id)
-  })
+    const returnReasonService: ReturnReasonService = req.scope.resolve("returnReasonService");
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await returnReasonService.withTransaction(transactionManager).delete(id);
+    });
 
-  res.json({
-    id: id,
-    object: "return_reason",
-    deleted: true,
-  })
-}
+    res.json({
+        id: id,
+        object: "return_reason",
+        deleted: true
+    });
+};

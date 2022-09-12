@@ -1,10 +1,10 @@
-import { IsEmail, IsObject, IsOptional, IsString } from "class-validator"
-import { defaultStoreCustomersFields, defaultStoreCustomersRelations } from "."
-import CustomerService from "../../../../services/customer"
-import { AddressPayload } from "../../../../types/common"
-import { IsType } from "../../../../utils/validators/is-type"
-import { validator } from "../../../../utils/validator"
-import { EntityManager } from "typeorm"
+import { IsEmail, IsObject, IsOptional, IsString } from "class-validator";
+import { defaultStoreCustomersFields, defaultStoreCustomersRelations } from ".";
+import CustomerService from "../../../../services/customer";
+import { AddressPayload } from "../../../../types/common";
+import { IsType } from "../../../../utils/validators/is-type";
+import { validator } from "../../../../utils/validator";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /customers/me
@@ -52,52 +52,50 @@ import { EntityManager } from "typeorm"
  *               $ref: "#/components/schemas/customer"
  */
 export default async (req, res) => {
-  const id = req.user.customer_id
+    const id = req.user.customer_id;
 
-  const validated = await validator(StorePostCustomersCustomerReq, req.body)
+    const validated = await validator(StorePostCustomersCustomerReq, req.body);
 
-  const customerService: CustomerService = req.scope.resolve("customerService")
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await customerService
-      .withTransaction(transactionManager)
-      .update(id, validated)
-  })
+    const customerService: CustomerService = req.scope.resolve("customerService");
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await customerService.withTransaction(transactionManager).update(id, validated);
+    });
 
-  const customer = await customerService.retrieve(id, {
-    relations: defaultStoreCustomersRelations,
-    select: defaultStoreCustomersFields,
-  })
+    const customer = await customerService.retrieve(id, {
+        relations: defaultStoreCustomersRelations,
+        select: defaultStoreCustomersFields
+    });
 
-  res.status(200).json({ customer })
-}
+    res.status(200).json({ customer });
+};
 
 export class StorePostCustomersCustomerReq {
-  @IsOptional()
-  @IsType([AddressPayload, String])
-  billing_address?: AddressPayload | string
+    @IsOptional()
+    @IsType([AddressPayload, String])
+    billing_address?: AddressPayload | string;
 
-  @IsOptional()
-  @IsString()
-  first_name?: string
+    @IsOptional()
+    @IsString()
+    first_name?: string;
 
-  @IsOptional()
-  @IsString()
-  last_name?: string
+    @IsOptional()
+    @IsString()
+    last_name?: string;
 
-  @IsOptional()
-  @IsString()
-  password?: string
+    @IsOptional()
+    @IsString()
+    password?: string;
 
-  @IsOptional()
-  @IsString()
-  phone?: string
+    @IsOptional()
+    @IsString()
+    phone?: string;
 
-  @IsOptional()
-  @IsEmail()
-  email?: string
+    @IsOptional()
+    @IsEmail()
+    email?: string;
 
-  @IsOptional()
-  @IsObject()
-  metadata?: Record<string, unknown>
+    @IsOptional()
+    @IsObject()
+    metadata?: Record<string, unknown>;
 }

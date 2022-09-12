@@ -1,7 +1,7 @@
-import { IsEmail } from "class-validator"
-import UserService from "../../../../services/user"
-import { validator } from "../../../../utils/validator"
-import { EntityManager } from "typeorm"
+import { IsEmail } from "class-validator";
+import UserService from "../../../../services/user";
+import { validator } from "../../../../utils/validator";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /users/password-token
@@ -26,23 +26,21 @@ import { EntityManager } from "typeorm"
  *     description: OK
  */
 export default async (req, res) => {
-  const validated = await validator(AdminResetPasswordTokenRequest, req.body)
+    const validated = await validator(AdminResetPasswordTokenRequest, req.body);
 
-  const userService: UserService = req.scope.resolve("userService")
-  const user = await userService.retrieveByEmail(validated.email)
+    const userService: UserService = req.scope.resolve("userService");
+    const user = await userService.retrieveByEmail(validated.email);
 
-  // Should call a email service provider that sends the token to the user
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await userService
-      .withTransaction(transactionManager)
-      .generateResetPasswordToken(user.id)
-  })
+    // Should call a email service provider that sends the token to the user
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await userService.withTransaction(transactionManager).generateResetPasswordToken(user.id);
+    });
 
-  res.sendStatus(204)
-}
+    res.sendStatus(204);
+};
 
 export class AdminResetPasswordTokenRequest {
-  @IsEmail()
-  email: string
+    @IsEmail()
+    email: string;
 }

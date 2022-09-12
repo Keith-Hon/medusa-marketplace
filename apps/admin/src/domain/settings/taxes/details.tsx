@@ -70,18 +70,13 @@ const TaxDetails = ({ id }) => {
 
   const [columns] = useTaxRateColumns()
 
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
-  } = useTable({
-    columns,
-    data: tableEntries || [],
-    manualPagination: true,
-    autoResetPage: false,
-  })
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+    useTable({
+      columns,
+      data: tableEntries || [],
+      manualPagination: true,
+      autoResetPage: false,
+    })
 
   return (
     <>

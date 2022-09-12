@@ -1,36 +1,29 @@
-import {
-  BeforeInsert,
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  ManyToOne,
-} from "typeorm"
-import { ClaimItem } from "./claim-item"
-import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity"
-import { DbAwareColumn } from "../utils/db-aware-column"
-import { generateEntityId } from "../utils/generate-entity-id"
+import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne } from "typeorm";
+import { ClaimItem } from "./claim-item";
+import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity";
+import { DbAwareColumn } from "../utils/db-aware-column";
+import { generateEntityId } from "../utils/generate-entity-id";
 
 @Entity()
 export class ClaimImage extends SoftDeletableEntity {
-  @Index()
-  @Column()
-  claim_item_id: string
+    @Index()
+    @Column()
+    claim_item_id: string;
 
-  @ManyToOne(() => ClaimItem, (ci) => ci.images)
-  @JoinColumn({ name: "claim_item_id" })
-  claim_item: ClaimItem
+    @ManyToOne(() => ClaimItem, (ci) => ci.images)
+    @JoinColumn({ name: "claim_item_id" })
+    claim_item: ClaimItem;
 
-  @Column()
-  url: string
+    @Column()
+    url: string;
 
-  @DbAwareColumn({ type: "jsonb", nullable: true })
-  metadata: Record<string, unknown>
+    @DbAwareColumn({ type: "jsonb", nullable: true })
+    metadata: Record<string, unknown>;
 
-  @BeforeInsert()
-  private beforeInsert(): void {
-    this.id = generateEntityId(this.id, "cimg")
-  }
+    @BeforeInsert()
+    private beforeInsert(): void {
+        this.id = generateEntityId(this.id, "cimg");
+    }
 }
 
 /**

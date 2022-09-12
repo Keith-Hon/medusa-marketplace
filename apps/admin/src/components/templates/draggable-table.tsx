@@ -31,16 +31,11 @@ const DraggableTable: React.FC<DraggableTableProps> = ({
 
   const DND_ITEM_TYPE = "row"
 
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
-  } = useTable({
-    columns,
-    data: records,
-  })
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+    useTable({
+      columns,
+      data: records,
+    })
 
   const moveRow = (dragIndex, hoverIndex) => {
     const dragRecord = records[dragIndex]

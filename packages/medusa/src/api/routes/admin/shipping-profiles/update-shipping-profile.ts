@@ -1,7 +1,7 @@
-import { IsOptional, IsString } from "class-validator"
-import { ShippingProfileService } from "../../../../services"
-import { validator } from "../../../../utils/validator"
-import { EntityManager } from "typeorm"
+import { IsOptional, IsString } from "class-validator";
+import { ShippingProfileService } from "../../../../services";
+import { validator } from "../../../../utils/validator";
+import { EntityManager } from "typeorm";
 
 /**
  * @oas [post] /shipping-profiles/{id}
@@ -31,30 +31,23 @@ import { EntityManager } from "typeorm"
  *               $ref: "#/components/schemas/shipping_profile"
  */
 export default async (req, res) => {
-  const { profile_id } = req.params
+    const { profile_id } = req.params;
 
-  const validated = await validator(
-    AdminPostShippingProfilesProfileReq,
-    req.body
-  )
+    const validated = await validator(AdminPostShippingProfilesProfileReq, req.body);
 
-  const profileService: ShippingProfileService = req.scope.resolve(
-    "shippingProfileService"
-  )
+    const profileService: ShippingProfileService = req.scope.resolve("shippingProfileService");
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  await manager.transaction(async (transactionManager) => {
-    return await profileService
-      .withTransaction(transactionManager)
-      .update(profile_id, validated)
-  })
+    const manager: EntityManager = req.scope.resolve("manager");
+    await manager.transaction(async (transactionManager) => {
+        return await profileService.withTransaction(transactionManager).update(profile_id, validated);
+    });
 
-  const data = await profileService.retrieve(profile_id)
-  res.status(200).json({ shipping_profile: data })
-}
+    const data = await profileService.retrieve(profile_id);
+    res.status(200).json({ shipping_profile: data });
+};
 
 export class AdminPostShippingProfilesProfileReq {
-  @IsString()
-  @IsOptional()
-  name?: string
+    @IsString()
+    @IsOptional()
+    name?: string;
 }

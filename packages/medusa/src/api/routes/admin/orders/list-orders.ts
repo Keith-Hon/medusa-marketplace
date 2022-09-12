@@ -1,9 +1,9 @@
-import { IsNumber, IsOptional, IsString } from "class-validator"
-import { pick } from "lodash"
-import { OrderService } from "../../../../services"
-import { AdminListOrdersSelector } from "../../../../types/orders"
-import { Type } from "class-transformer"
-import { Order } from "../../../../models"
+import { IsNumber, IsOptional, IsString } from "class-validator";
+import { pick } from "lodash";
+import { OrderService } from "../../../../services";
+import { AdminListOrdersSelector } from "../../../../types/orders";
+import { Type } from "class-transformer";
+import { Order } from "../../../../models";
 
 /**
  * @oas [get] /orders
@@ -47,41 +47,38 @@ import { Order } from "../../../../models"
  *                 $ref: "#/components/schemas/order"
  */
 export default async (req, res) => {
-  const orderService: OrderService = req.scope.resolve("orderService")
+    const orderService: OrderService = req.scope.resolve("orderService");
 
-  const { skip, take, select, relations } = req.listConfig
+    const { skip, take, select, relations } = req.listConfig;
 
-  const [orders, count] = await orderService.listAndCount(
-    req.filterableFields,
-    req.listConfig
-  )
+    const [orders, count] = await orderService.listAndCount(req.filterableFields, req.listConfig);
 
-  let data: Partial<Order>[] = orders
+    let data: Partial<Order>[] = orders;
 
-  const fields = [...select, ...relations]
-  if (fields.length) {
-    data = orders.map((o) => pick(o, fields))
-  }
+    const fields = [...select, ...relations];
+    if (fields.length) {
+        data = orders.map((o) => pick(o, fields));
+    }
 
-  res.json({ orders: data, count, offset: skip, limit: take })
-}
+    res.json({ orders: data, count, offset: skip, limit: take });
+};
 
 export class AdminGetOrdersParams extends AdminListOrdersSelector {
-  @IsNumber()
-  @IsOptional()
-  @Type(() => Number)
-  offset = 0
+    @IsNumber()
+    @IsOptional()
+    @Type(() => Number)
+    offset = 0;
 
-  @IsNumber()
-  @IsOptional()
-  @Type(() => Number)
-  limit = 50
+    @IsNumber()
+    @IsOptional()
+    @Type(() => Number)
+    limit = 50;
 
-  @IsString()
-  @IsOptional()
-  expand?: string
+    @IsString()
+    @IsOptional()
+    expand?: string;
 
-  @IsString()
-  @IsOptional()
-  fields?: string
+    @IsString()
+    @IsOptional()
+    fields?: string;
 }

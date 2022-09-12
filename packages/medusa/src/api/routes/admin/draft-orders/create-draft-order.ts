@@ -1,26 +1,12 @@
-import { Type } from "class-transformer"
-import {
-  IsArray,
-  IsBoolean,
-  IsEmail,
-  IsEnum,
-  IsNotEmpty,
-  IsNumber,
-  IsObject,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from "class-validator"
-import { transformIdableFields } from "medusa-core-utils"
-import {
-  defaultAdminDraftOrdersFields,
-  defaultAdminDraftOrdersRelations,
-} from "."
-import { DraftOrder } from "../../../.."
-import { DraftOrderService } from "../../../../services"
-import { AddressPayload } from "../../../../types/common"
-import { validator } from "../../../../utils/validator"
-import { EntityManager } from "typeorm"
+import { Type } from "class-transformer";
+import { IsArray, IsBoolean, IsEmail, IsEnum, IsNotEmpty, IsNumber, IsObject, IsOptional, IsString, ValidateNested } from "class-validator";
+import { transformIdableFields } from "medusa-core-utils";
+import { defaultAdminDraftOrdersFields, defaultAdminDraftOrdersRelations } from ".";
+import { DraftOrder } from "../../../..";
+import { DraftOrderService } from "../../../../services";
+import { AddressPayload } from "../../../../types/common";
+import { validator } from "../../../../utils/validator";
+import { EntityManager } from "typeorm";
 /**
  * @oas [post] /draft-orders
  * operationId: "PostDraftOrders"
@@ -119,123 +105,115 @@ import { EntityManager } from "typeorm"
  */
 
 export default async (req, res) => {
-  const validated = await validator(AdminPostDraftOrdersReq, req.body)
+    const validated = await validator(AdminPostDraftOrdersReq, req.body);
 
-  const value = transformIdableFields(validated, [
-    "shipping_address",
-    "billing_address",
-  ])
+    const value = transformIdableFields(validated, ["shipping_address", "billing_address"]);
 
-  const draftOrderService: DraftOrderService =
-    req.scope.resolve("draftOrderService")
+    const draftOrderService: DraftOrderService = req.scope.resolve("draftOrderService");
 
-  const manager: EntityManager = req.scope.resolve("manager")
-  let draftOrder: DraftOrder = await manager.transaction(
-    async (transactionManager) => {
-      return await draftOrderService
-        .withTransaction(transactionManager)
-        .create(value)
-    }
-  )
+    const manager: EntityManager = req.scope.resolve("manager");
+    let draftOrder: DraftOrder = await manager.transaction(async (transactionManager) => {
+        return await draftOrderService.withTransaction(transactionManager).create(value);
+    });
 
-  draftOrder = await draftOrderService.retrieve(draftOrder.id, {
-    relations: defaultAdminDraftOrdersRelations,
-    select: defaultAdminDraftOrdersFields,
-  })
+    draftOrder = await draftOrderService.retrieve(draftOrder.id, {
+        relations: defaultAdminDraftOrdersRelations,
+        select: defaultAdminDraftOrdersFields
+    });
 
-  res.status(200).json({ draft_order: draftOrder })
-}
+    res.status(200).json({ draft_order: draftOrder });
+};
 
 enum Status {
-  open = "open",
-  completed = "completed",
+    open = "open",
+    completed = "completed"
 }
 
 export class AdminPostDraftOrdersReq {
-  @IsEnum(Status)
-  @IsOptional()
-  status?: string
+    @IsEnum(Status)
+    @IsOptional()
+    status?: string;
 
-  @IsEmail()
-  email: string
+    @IsEmail()
+    email: string;
 
-  @IsOptional()
-  @Type(() => AddressPayload)
-  billing_address?: AddressPayload
+    @IsOptional()
+    @Type(() => AddressPayload)
+    billing_address?: AddressPayload;
 
-  @IsOptional()
-  @Type(() => AddressPayload)
-  shipping_address?: AddressPayload
+    @IsOptional()
+    @Type(() => AddressPayload)
+    shipping_address?: AddressPayload;
 
-  @IsArray()
-  @Type(() => Item)
-  @IsNotEmpty()
-  @ValidateNested({ each: true })
-  items: Item[]
+    @IsArray()
+    @Type(() => Item)
+    @IsNotEmpty()
+    @ValidateNested({ each: true })
+    items: Item[];
 
-  @IsString()
-  region_id: string
+    @IsString()
+    region_id: string;
 
-  @IsArray()
-  @IsOptional()
-  @Type(() => Discount)
-  @ValidateNested({ each: true })
-  discounts?: Discount[]
+    @IsArray()
+    @IsOptional()
+    @Type(() => Discount)
+    @ValidateNested({ each: true })
+    discounts?: Discount[];
 
-  @IsString()
-  @IsOptional()
-  customer_id?: string
+    @IsString()
+    @IsOptional()
+    customer_id?: string;
 
-  @IsBoolean()
-  @IsOptional()
-  no_notification_order?: boolean
+    @IsBoolean()
+    @IsOptional()
+    no_notification_order?: boolean;
 
-  @IsArray()
-  @Type(() => ShippingMethod)
-  @IsNotEmpty()
-  @ValidateNested({ each: true })
-  shipping_methods: ShippingMethod[]
+    @IsArray()
+    @Type(() => ShippingMethod)
+    @IsNotEmpty()
+    @ValidateNested({ each: true })
+    shipping_methods: ShippingMethod[];
 
-  @IsObject()
-  @IsOptional()
-  metadata?: Record<string, unknown> = {}
+    @IsObject()
+    @IsOptional()
+    metadata?: Record<string, unknown> = {};
 }
 
 class ShippingMethod {
-  @IsString()
-  option_id: string
+    @IsString()
+    option_id: string;
 
-  @IsObject()
-  @IsOptional()
-  data?: Record<string, unknown> = {}
+    @IsObject()
+    @IsOptional()
+    data?: Record<string, unknown> = {};
 
-  @IsNumber()
-  @IsOptional()
-  price?: number
+    @IsNumber()
+    @IsOptional()
+    price?: number;
 }
 
 class Discount {
-  @IsString()
-  code: string
+    @IsString()
+    code: string;
 }
 
 class Item {
-  @IsString()
-  @IsOptional()
-  title?: string
+    @IsString()
+    @IsOptional()
+    title?: string;
 
-  @IsNumber()
-  @IsOptional()
-  unit_price?: number
+    @IsNumber()
+    @IsOptional()
+    unit_price?: number;
 
-  @IsString()
-  @IsOptional()
-  variant_id?: string
+    @IsString()
+    @IsOptional()
+    variant_id?: string;
 
-  @IsNumber()
-  quantity: number
+    @IsNumber()
+    quantity: number;
 
-  @IsObject()
-  @IsOptional()
-  metadata?: Record<string, unknown> = {}
+    @IsObject()
+    @IsOptional()
+    metadata?: Record<string, unknown> = {};
 }

@@ -8,7 +8,7 @@ type Props = {
 }
 
 const BatchJobFileCard = ({ fileName, fileSize, icon, onClick }: Props) => {
-  const preparedOnClick = (onClick ?? (() => void 0))
+  const preparedOnClick = onClick ?? (() => void 0)
 
   return (
     <div
@@ -23,16 +23,12 @@ const BatchJobFileCard = ({ fileName, fileSize, icon, onClick }: Props) => {
       </div>
 
       <div className="text-left relative w-full pl-4">
-        <div
-          className="overflow-hidden truncate inter-small-regular max-w-[80%]"
-        >
+        <div className="overflow-hidden truncate inter-small-regular max-w-[80%]">
           {fileName}
         </div>
 
         {!!fileSize && (
-          <div className="text-grey-40 inter-small-regular">
-            {fileSize}
-          </div>
+          <div className="text-grey-40 inter-small-regular">{fileSize}</div>
         )}
       </div>
     </div>

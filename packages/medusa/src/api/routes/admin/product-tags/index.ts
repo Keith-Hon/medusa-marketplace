@@ -1,40 +1,30 @@
-import { Router } from "express"
-import { ProductTag } from "../../../.."
-import { PaginatedResponse } from "../../../../types/common"
-import middlewares from "../../../middlewares"
-import "reflect-metadata"
+import { Router } from "express";
+import { ProductTag } from "../../../..";
+import { PaginatedResponse } from "../../../../types/common";
+import middlewares from "../../../middlewares";
+import "reflect-metadata";
 
-const route = Router()
+const route = Router();
 
 export default (app) => {
-  app.use("/product-tags", route)
+    app.use("/product-tags", route);
 
-  route.get("/", middlewares.wrap(require("./list-product-tags").default))
+    route.get("/", middlewares.wrap(require("./list-product-tags").default));
 
-  return app
-}
+    return app;
+};
 
-export const allowedAdminProductTagsFields = [
-  "id",
-  "value",
-  "created_at",
-  "updated_at",
-]
+export const allowedAdminProductTagsFields = ["id", "value", "created_at", "updated_at"];
 
-export const defaultAdminProductTagsFields = [
-  "id",
-  "value",
-  "created_at",
-  "updated_at",
-]
-export const defaultAdminProductTagsRelations = []
+export const defaultAdminProductTagsFields = ["id", "value", "created_at", "updated_at"];
+export const defaultAdminProductTagsRelations = [];
 
 export type AdminProductTagsListRes = PaginatedResponse & {
-  product_tags: ProductTag[]
-}
+    product_tags: ProductTag[];
+};
 
 export type AdminProductTagsRes = {
-  product_tag: ProductTag
-}
+    product_tag: ProductTag;
+};
 
-export * from "./list-product-tags"
+export * from "./list-product-tags";

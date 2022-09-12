@@ -82,187 +82,169 @@
  *     type: integer
  */
 
-import {
-  AfterLoad,
-  BeforeInsert,
-  Column,
-  Entity,
-  Index,
-  JoinColumn,
-  JoinTable,
-  ManyToMany,
-  ManyToOne,
-  OneToMany,
-  OneToOne,
-} from "typeorm"
-import { DbAwareColumn, resolveDbType } from "../utils/db-aware-column"
-import { Address } from "./address"
-import { Customer } from "./customer"
-import { Discount } from "./discount"
-import { GiftCard } from "./gift-card"
-import { LineItem } from "./line-item"
-import { Payment } from "./payment"
-import { PaymentSession } from "./payment-session"
-import { Region } from "./region"
-import { ShippingMethod } from "./shipping-method"
-import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity"
-import { generateEntityId } from "../utils/generate-entity-id"
-import {
-  FeatureFlagColumn,
-  FeatureFlagDecorators,
-} from "../utils/feature-flag-decorators"
-import { SalesChannel } from "./sales-channel"
+import { AfterLoad, BeforeInsert, Column, Entity, Index, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne } from "typeorm";
+import { DbAwareColumn, resolveDbType } from "../utils/db-aware-column";
+import { Address } from "./address";
+import { Customer } from "./customer";
+import { Discount } from "./discount";
+import { GiftCard } from "./gift-card";
+import { LineItem } from "./line-item";
+import { Payment } from "./payment";
+import { PaymentSession } from "./payment-session";
+import { Region } from "./region";
+import { ShippingMethod } from "./shipping-method";
+import { SoftDeletableEntity } from "../interfaces/models/soft-deletable-entity";
+import { generateEntityId } from "../utils/generate-entity-id";
+import { FeatureFlagColumn, FeatureFlagDecorators } from "../utils/feature-flag-decorators";
+import { SalesChannel } from "./sales-channel";
 
 export enum CartType {
-  DEFAULT = "default",
-  SWAP = "swap",
-  DRAFT_ORDER = "draft_order",
-  PAYMENT_LINK = "payment_link",
-  CLAIM = "claim",
+    DEFAULT = "default",
+    SWAP = "swap",
+    DRAFT_ORDER = "draft_order",
+    PAYMENT_LINK = "payment_link",
+    CLAIM = "claim"
 }
 
 @Entity()
 export class Cart extends SoftDeletableEntity {
-  readonly object = "cart"
+    readonly object = "cart";
 
-  @Column({ nullable: true })
-  email: string
+    @Column({ nullable: true })
+    email: string;
 
-  @Index()
-  @Column({ nullable: true })
-  billing_address_id: string
+    @Index()
+    @Column({ nullable: true })
+    billing_address_id: string;
 
-  @ManyToOne(() => Address, {
-    cascade: ["insert", "remove", "soft-remove"],
-  })
-  @JoinColumn({ name: "billing_address_id" })
-  billing_address: Address
+    @ManyToOne(() => Address, {
+        cascade: ["insert", "remove", "soft-remove"]
+    })
+    @JoinColumn({ name: "billing_address_id" })
+    billing_address: Address;
 
-  @Index()
-  @Column({ nullable: true })
-  shipping_address_id: string
+    @Index()
+    @Column({ nullable: true })
+    shipping_address_id: string;
 
-  @ManyToOne(() => Address, {
-    cascade: ["insert", "remove", "soft-remove"],
-  })
-  @JoinColumn({ name: "shipping_address_id" })
-  shipping_address: Address | null
+    @ManyToOne(() => Address, {
+        cascade: ["insert", "remove", "soft-remove"]
+    })
+    @JoinColumn({ name: "shipping_address_id" })
+    shipping_address: Address | null;
 
-  @OneToMany(() => LineItem, (lineItem) => lineItem.cart, {
-    cascade: ["insert", "remove"],
-  })
-  items: LineItem[]
+    @OneToMany(() => LineItem, (lineItem) => lineItem.cart, {
+        cascade: ["insert", "remove"]
+    })
+    items: LineItem[];
 
-  @Index()
-  @Column()
-  region_id: string
+    @Index()
+    @Column()
+    region_id: string;
 
-  @ManyToOne(() => Region)
-  @JoinColumn({ name: "region_id" })
-  region: Region
+    @ManyToOne(() => Region)
+    @JoinColumn({ name: "region_id" })
+    region: Region;
 
-  @ManyToMany(() => Discount)
-  @JoinTable({
-    name: "cart_discounts",
-    joinColumn: {
-      name: "cart_id",
-      referencedColumnName: "id",
-    },
-    inverseJoinColumn: {
-      name: "discount_id",
-      referencedColumnName: "id",
-    },
-  })
-  discounts: Discount[]
+    @ManyToMany(() => Discount)
+    @JoinTable({
+        name: "cart_discounts",
+        joinColumn: {
+            name: "cart_id",
+            referencedColumnName: "id"
+        },
+        inverseJoinColumn: {
+            name: "discount_id",
+            referencedColumnName: "id"
+        }
+    })
+    discounts: Discount[];
 
-  @ManyToMany(() => GiftCard)
-  @JoinTable({
-    name: "cart_gift_cards",
-    joinColumn: {
-      name: "cart_id",
-      referencedColumnName: "id",
-    },
-    inverseJoinColumn: {
-      name: "gift_card_id",
-      referencedColumnName: "id",
-    },
-  })
-  gift_cards: GiftCard[]
+    @ManyToMany(() => GiftCard)
+    @JoinTable({
+        name: "cart_gift_cards",
+        joinColumn: {
+            name: "cart_id",
+            referencedColumnName: "id"
+        },
+        inverseJoinColumn: {
+            name: "gift_card_id",
+            referencedColumnName: "id"
+        }
+    })
+    gift_cards: GiftCard[];
 
-  @Index()
-  @Column({ nullable: true })
-  customer_id: string
+    @Index()
+    @Column({ nullable: true })
+    customer_id: string;
 
-  @ManyToOne(() => Customer)
-  @JoinColumn({ name: "customer_id" })
-  customer: Customer
+    @ManyToOne(() => Customer)
+    @JoinColumn({ name: "customer_id" })
+    customer: Customer;
 
-  payment_session: PaymentSession | null
+    payment_session: PaymentSession | null;
 
-  @OneToMany(() => PaymentSession, (paymentSession) => paymentSession.cart, {
-    cascade: true,
-  })
-  payment_sessions: PaymentSession[]
+    @OneToMany(() => PaymentSession, (paymentSession) => paymentSession.cart, {
+        cascade: true
+    })
+    payment_sessions: PaymentSession[];
 
-  @Index()
-  @Column({ nullable: true })
-  payment_id: string
+    @Index()
+    @Column({ nullable: true })
+    payment_id: string;
 
-  @OneToOne(() => Payment)
-  @JoinColumn({ name: "payment_id" })
-  payment: Payment
+    @OneToOne(() => Payment)
+    @JoinColumn({ name: "payment_id" })
+    payment: Payment;
 
-  @OneToMany(() => ShippingMethod, (method) => method.cart, {
-    cascade: ["soft-remove", "remove"],
-  })
-  shipping_methods: ShippingMethod[]
+    @OneToMany(() => ShippingMethod, (method) => method.cart, {
+        cascade: ["soft-remove", "remove"]
+    })
+    shipping_methods: ShippingMethod[];
 
-  @DbAwareColumn({ type: "enum", enum: CartType, default: "default" })
-  type: CartType
+    @DbAwareColumn({ type: "enum", enum: CartType, default: "default" })
+    type: CartType;
 
-  @Column({ type: resolveDbType("timestamptz"), nullable: true })
-  completed_at: Date
+    @Column({ type: resolveDbType("timestamptz"), nullable: true })
+    completed_at: Date;
 
-  @Column({ type: resolveDbType("timestamptz"), nullable: true })
-  payment_authorized_at: Date
+    @Column({ type: resolveDbType("timestamptz"), nullable: true })
+    payment_authorized_at: Date;
 
-  @Column({ nullable: true })
-  idempotency_key: string
+    @Column({ nullable: true })
+    idempotency_key: string;
 
-  @DbAwareColumn({ type: "jsonb", nullable: true })
-  context: Record<string, unknown>
+    @DbAwareColumn({ type: "jsonb", nullable: true })
+    context: Record<string, unknown>;
 
-  @DbAwareColumn({ type: "jsonb", nullable: true })
-  metadata: Record<string, unknown>
+    @DbAwareColumn({ type: "jsonb", nullable: true })
+    metadata: Record<string, unknown>;
 
-  @FeatureFlagColumn("sales_channels", { type: "varchar", nullable: true })
-  sales_channel_id: string | null
+    @FeatureFlagColumn("sales_channels", { type: "varchar", nullable: true })
+    sales_channel_id: string | null;
 
-  @FeatureFlagDecorators("sales_channels", [
-    ManyToOne(() => SalesChannel),
-    JoinColumn({ name: "sales_channel_id" }),
-  ])
-  sales_channel: SalesChannel
+    @FeatureFlagDecorators("sales_channels", [ManyToOne(() => SalesChannel), JoinColumn({ name: "sales_channel_id" })])
+    sales_channel: SalesChannel;
 
-  shipping_total?: number
-  discount_total?: number
-  tax_total?: number | null
-  refunded_total?: number
-  total?: number
-  subtotal?: number
-  refundable_amount?: number
-  gift_card_total?: number
-  gift_card_tax_total?: number
+    shipping_total?: number;
+    discount_total?: number;
+    tax_total?: number | null;
+    refunded_total?: number;
+    total?: number;
+    subtotal?: number;
+    refundable_amount?: number;
+    gift_card_total?: number;
+    gift_card_tax_total?: number;
 
-  @AfterLoad()
-  private afterLoad(): void {
-    if (this.payment_sessions) {
-      this.payment_session = this.payment_sessions.find((p) => p.is_selected)!
+    @AfterLoad()
+    private afterLoad(): void {
+        if (this.payment_sessions) {
+            this.payment_session = this.payment_sessions.find((p) => p.is_selected)!;
+        }
     }
-  }
 
-  @BeforeInsert()
-  private beforeInsert(): void {
-    this.id = generateEntityId(this.id, "cart")
-  }
+    @BeforeInsert()
+    private beforeInsert(): void {
+        this.id = generateEntityId(this.id, "cart");
+    }
 }

@@ -1,54 +1,47 @@
-import {
-  Entity,
-  BeforeInsert,
-  Column,
-  Index,
-  ManyToOne,
-  JoinColumn,
-} from "typeorm"
-import { BaseEntity } from "../interfaces/models/base-entity"
-import { DbAwareColumn } from "../utils/db-aware-column"
+import { Entity, BeforeInsert, Column, Index, ManyToOne, JoinColumn } from "typeorm";
+import { BaseEntity } from "../interfaces/models/base-entity";
+import { DbAwareColumn } from "../utils/db-aware-column";
 
-import { Order } from "./order"
-import { generateEntityId } from "../utils/generate-entity-id"
+import { Order } from "./order";
+import { generateEntityId } from "../utils/generate-entity-id";
 
 export enum RefundReason {
-  DISCOUNT = "discount",
-  RETURN = "return",
-  SWAP = "swap",
-  CLAIM = "claim",
-  OTHER = "other",
+    DISCOUNT = "discount",
+    RETURN = "return",
+    SWAP = "swap",
+    CLAIM = "claim",
+    OTHER = "other"
 }
 
 @Entity()
 export class Refund extends BaseEntity {
-  @Index()
-  @Column()
-  order_id: string
+    @Index()
+    @Column()
+    order_id: string;
 
-  @ManyToOne(() => Order, (order) => order.payments)
-  @JoinColumn({ name: "order_id" })
-  order: Order
+    @ManyToOne(() => Order, (order) => order.payments)
+    @JoinColumn({ name: "order_id" })
+    order: Order;
 
-  @Column({ type: "int" })
-  amount: number
+    @Column({ type: "int" })
+    amount: number;
 
-  @Column({ nullable: true })
-  note: string
+    @Column({ nullable: true })
+    note: string;
 
-  @DbAwareColumn({ type: "enum", enum: RefundReason })
-  reason: string
+    @DbAwareColumn({ type: "enum", enum: RefundReason })
+    reason: string;
 
-  @DbAwareColumn({ type: "jsonb", nullable: true })
-  metadata: Record<string, unknown>
+    @DbAwareColumn({ type: "jsonb", nullable: true })
+    metadata: Record<string, unknown>;
 
-  @Column({ nullable: true })
-  idempotency_key: string
+    @Column({ nullable: true })
+    idempotency_key: string;
 
-  @BeforeInsert()
-  private beforeInsert(): void {
-    this.id = generateEntityId(this.id, "ref")
-  }
+    @BeforeInsert()
+    private beforeInsert(): void {
+        this.id = generateEntityId(this.id, "ref");
+    }
 }
 
 /**

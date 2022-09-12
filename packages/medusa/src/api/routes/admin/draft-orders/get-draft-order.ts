@@ -1,11 +1,6 @@
-import {
-  defaultAdminDraftOrdersRelations,
-  defaultAdminDraftOrdersFields,
-  defaultAdminDraftOrdersCartRelations,
-  defaultAdminDraftOrdersCartFields,
-} from "."
-import { DraftOrder } from "../../../.."
-import { CartService, DraftOrderService } from "../../../../services"
+import { defaultAdminDraftOrdersRelations, defaultAdminDraftOrdersFields, defaultAdminDraftOrdersCartRelations, defaultAdminDraftOrdersCartFields } from ".";
+import { DraftOrder } from "../../../..";
+import { CartService, DraftOrderService } from "../../../../services";
 
 /**
  * @oas [get] /draft-orders/{id}
@@ -29,21 +24,20 @@ import { CartService, DraftOrderService } from "../../../../services"
  */
 
 export default async (req, res) => {
-  const { id } = req.params
+    const { id } = req.params;
 
-  const draftOrderService: DraftOrderService =
-    req.scope.resolve("draftOrderService")
-  const cartService: CartService = req.scope.resolve("cartService")
+    const draftOrderService: DraftOrderService = req.scope.resolve("draftOrderService");
+    const cartService: CartService = req.scope.resolve("cartService");
 
-  const draftOrder: DraftOrder = await draftOrderService.retrieve(id, {
-    select: defaultAdminDraftOrdersFields,
-    relations: defaultAdminDraftOrdersRelations,
-  })
+    const draftOrder: DraftOrder = await draftOrderService.retrieve(id, {
+        select: defaultAdminDraftOrdersFields,
+        relations: defaultAdminDraftOrdersRelations
+    });
 
-  draftOrder.cart = await cartService.retrieve(draftOrder.cart_id, {
-    relations: defaultAdminDraftOrdersCartRelations,
-    select: defaultAdminDraftOrdersCartFields,
-  })
+    draftOrder.cart = await cartService.retrieve(draftOrder.cart_id, {
+        relations: defaultAdminDraftOrdersCartRelations,
+        select: defaultAdminDraftOrdersCartFields
+    });
 
-  res.json({ draft_order: draftOrder })
-}
+    res.json({ draft_order: draftOrder });
+};

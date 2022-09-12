@@ -1,18 +1,12 @@
-import { Transform, Type } from "class-transformer"
-import {
-  IsBoolean,
-  IsInt,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from "class-validator"
-import _, { pickBy } from "lodash"
-import { defaultAdminDiscountsFields, defaultAdminDiscountsRelations } from "."
-import { Discount } from "../../../.."
-import DiscountService from "../../../../services/discount"
-import { FindConfig } from "../../../../types/common"
-import { AdminGetDiscountsDiscountRuleParams } from "../../../../types/discount"
-import { validator } from "../../../../utils/validator"
+import { Transform, Type } from "class-transformer";
+import { IsBoolean, IsInt, IsOptional, IsString, ValidateNested } from "class-validator";
+import _, { pickBy } from "lodash";
+import { defaultAdminDiscountsFields, defaultAdminDiscountsRelations } from ".";
+import { Discount } from "../../../..";
+import DiscountService from "../../../../services/discount";
+import { FindConfig } from "../../../../types/common";
+import { AdminGetDiscountsDiscountRuleParams } from "../../../../types/discount";
+import { validator } from "../../../../utils/validator";
 /**
  * @oas [get] /discounts
  * operationId: "GetDiscounts"
@@ -39,67 +33,66 @@ import { validator } from "../../../../utils/validator"
  *               $ref: "#/components/schemas/discount"
  */
 export default async (req, res) => {
-  const validated = await validator(AdminGetDiscountsParams, req.query)
+    const validated = await validator(AdminGetDiscountsParams, req.query);
 
-  const discountService: DiscountService = req.scope.resolve("discountService")
+    const discountService: DiscountService = req.scope.resolve("discountService");
 
-  const relations =
-    validated.expand?.split(",") ?? defaultAdminDiscountsRelations
+    const relations = validated.expand?.split(",") ?? defaultAdminDiscountsRelations;
 
-  const listConfig: FindConfig<Discount> = {
-    select: defaultAdminDiscountsFields,
-    relations,
-    skip: validated.offset,
-    take: validated.limit,
-    order: { created_at: "DESC" },
-  }
+    const listConfig: FindConfig<Discount> = {
+        select: defaultAdminDiscountsFields,
+        relations,
+        skip: validated.offset,
+        take: validated.limit,
+        order: { created_at: "DESC" }
+    };
 
-  const filterableFields = _.omit(validated, ["limit", "offset", "expand"])
+    const filterableFields = _.omit(validated, ["limit", "offset", "expand"]);
 
-  const [discounts, count] = await discountService.listAndCount(
-    pickBy(filterableFields, (val) => typeof val !== "undefined"),
-    listConfig
-  )
+    const [discounts, count] = await discountService.listAndCount(
+        pickBy(filterableFields, (val) => typeof val !== "undefined"),
+        listConfig
+    );
 
-  res.status(200).json({
-    discounts,
-    count,
-    offset: validated.offset,
-    limit: validated.limit,
-  })
-}
+    res.status(200).json({
+        discounts,
+        count,
+        offset: validated.offset,
+        limit: validated.limit
+    });
+};
 
 export class AdminGetDiscountsParams {
-  @ValidateNested()
-  @IsOptional()
-  @Type(() => AdminGetDiscountsDiscountRuleParams)
-  rule?: AdminGetDiscountsDiscountRuleParams
+    @ValidateNested()
+    @IsOptional()
+    @Type(() => AdminGetDiscountsDiscountRuleParams)
+    rule?: AdminGetDiscountsDiscountRuleParams;
 
-  @IsString()
-  @IsOptional()
-  q?: string
+    @IsString()
+    @IsOptional()
+    q?: string;
 
-  @IsBoolean()
-  @IsOptional()
-  @Transform(({ value }) => value === "true")
-  is_dynamic?: boolean
+    @IsBoolean()
+    @IsOptional()
+    @Transform(({ value }) => value === "true")
+    is_dynamic?: boolean;
 
-  @IsBoolean()
-  @IsOptional()
-  @Transform(({ value }) => value === "true")
-  is_disabled?: boolean
+    @IsBoolean()
+    @IsOptional()
+    @Transform(({ value }) => value === "true")
+    is_disabled?: boolean;
 
-  @IsInt()
-  @IsOptional()
-  @Type(() => Number)
-  limit = 20
+    @IsInt()
+    @IsOptional()
+    @Type(() => Number)
+    limit = 20;
 
-  @IsInt()
-  @IsOptional()
-  @Type(() => Number)
-  offset = 0
+    @IsInt()
+    @IsOptional()
+    @Type(() => Number)
+    offset = 0;
 
-  @IsString()
-  @IsOptional()
-  expand?: string
+    @IsString()
+    @IsOptional()
+    expand?: string;
 }

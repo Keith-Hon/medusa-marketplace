@@ -23,9 +23,8 @@ const Items = ({
   handlePriceChange,
   handleAddCustom,
 }) => {
-  const { enableNextPage, disableNextPage, nextStepEnabled } = React.useContext(
-    SteppedContext
-  )
+  const { enableNextPage, disableNextPage, nextStepEnabled } =
+    React.useContext(SteppedContext)
   const [editQuantity, setEditQuantity] = useState(-1)
   const [editPrice, setEditPrice] = useState(-1)
 
