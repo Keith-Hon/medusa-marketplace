@@ -1,9 +1,10 @@
 import Joi from "joi";
+import joiObjectId from "joi-objectid";
 
-Joi.objectId = require("joi-objectid")(Joi);
+Joi['objectId'] = joiObjectId(Joi);
 
 // if address is a string, we assume that it is an id
-Joi.address = () => {
+Joi['address'] = () => {
     return Joi.alternatives().try(
         Joi.string(),
         Joi.object().keys({
@@ -22,7 +23,7 @@ Joi.address = () => {
     );
 };
 
-Joi.dateFilter = () => {
+Joi['dateFilter'] = () => {
     return Joi.object({
         lt: Joi.alternatives(Joi.date().timestamp("unix"), Joi.date()),
         gt: Joi.alternatives(Joi.date().timestamp("unix"), Joi.date()),
@@ -31,7 +32,7 @@ Joi.dateFilter = () => {
     });
 };
 
-Joi.orderFilter = () => {
+Joi['orderFilter'] = () => {
     return Joi.object().keys({
         id: Joi.string(),
         q: Joi.string(),
@@ -63,13 +64,13 @@ Joi.orderFilter = () => {
         region_id: Joi.string(),
         currency_code: Joi.string(),
         tax_rate: Joi.string(),
-        canceled_at: Joi.dateFilter(),
-        created_at: Joi.dateFilter(),
-        updated_at: Joi.dateFilter()
+        canceled_at: Joi['dateFilter'](),
+        created_at: Joi['dateFilter'](),
+        updated_at: Joi['dateFilter']()
     });
 };
 
-Joi.productFilter = () => {
+Joi['productFilter'] = () => {
     return Joi.object().keys({
         id: Joi.string(),
         q: Joi.string().allow(null, ""),
@@ -86,9 +87,9 @@ Joi.productFilter = () => {
         expand: Joi.string(),
         fields: Joi.string(),
         order: Joi.string().optional(),
-        created_at: Joi.dateFilter(),
-        updated_at: Joi.dateFilter(),
-        deleted_at: Joi.dateFilter()
+        created_at: Joi['dateFilter'](),
+        updated_at: Joi['dateFilter'](),
+        deleted_at: Joi['dateFilter']()
     });
 };
 

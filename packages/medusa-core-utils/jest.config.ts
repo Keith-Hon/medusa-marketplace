@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-    displayName: "medusa-core-utils",
+    displayName: "@medusa-marketplace/medusa-core-utils",
     preset: "../../jest.preset.js",
     globals: {
         "ts-jest": {
