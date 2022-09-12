@@ -7,6 +7,7 @@
         "medusa": "packages/medusa",
         "medusa-core-utils": "packages/medusa-core-utils",
         "medusa-extender": "packages/medusa-extender",
+        "medusa-telemetry": "packages/medusa-telemetry",
         "storefront": "apps/storefront",
         "test": "apps/test"
     }
