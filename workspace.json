@@ -5,6 +5,7 @@
         "admin": "apps/admin",
         "backend": "apps/backend",
         "medusa": "packages/medusa",
+        "medusa-core-utils": "packages/medusa-core-utils",
         "medusa-extender": "packages/medusa-extender",
         "storefront": "apps/storefront",
         "test": "apps/test"

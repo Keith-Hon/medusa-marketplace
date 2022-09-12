@@ -16,11 +16,11 @@
         "baseUrl": ".",
         "paths": {
             "@medusa-marketplace/medusa": ["packages/medusa/src/index.ts"],
+            "@medusa-marketplace/medusa-core-utils": ["packages/medusa-core-utils/src/index.ts"],
             "@medusa-marketplace/medusa-extender": ["packages/medusa-extender/src/index.ts"],
             "@medusajs/medusa-cli": ["submodules/medusa/packages/medusa-cli"],
             "@medusajs/medusa-cli/*": ["submodules/medusa/packages/medusa-cli/*"],
             "@medusajs/medusa-js": ["submodules/medusa/packages/medusa-js"],
-            "medusa-core-utils": ["submodules/medusa/packages/medusa-core-utils"],
             "medusa-fulfillment-manual": ["submodules/medusa/packages/medusa-fulfillment-manual"],
             "medusa-interfaces": ["submodules/medusa/packages/medusa-interfaces"],
             "medusa-interfaces/*": ["submodules/medusa/packages/medusa-interfaces/*"],
