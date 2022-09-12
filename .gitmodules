@@ -1,6 +1,3 @@
 [submodule "submodules/medusa"]
 	path = submodules/medusa
 	url = https://github.com/Keith-Hon/medusa.git
-[submodule "submodules/medusa-extender"]
-	path = submodules/medusa-extender
-	url = https://github.com/Keith-Hon/medusa-extender.git
