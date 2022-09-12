@@ -1,59 +1,59 @@
-import path from "path"
-import Configstore from "configstore"
+import path from "path";
+import Configstore from "configstore";
 
-import InMemConfig from "./util/in-memory-config"
-import OutboxStore from "./util/outbox-store"
-import isTruthy from "./util/is-truthy"
+import InMemConfig from "./util/in-memory-config";
+import OutboxStore from "./util/outbox-store";
+import isTruthy from "./util/is-truthy";
 
 class Store {
-  constructor() {
-    try {
-      this.config_ = new Configstore(`medusa`, {}, { globalConfigPath: true })
-    } catch (e) {
-      this.config_ = new InMemConfig()
+    constructor() {
+        try {
+            this.config_ = new Configstore(`medusa`, {}, { globalConfigPath: true });
+        } catch (e) {
+            this.config_ = new InMemConfig();
+        }
+
+        const baseDir = path.dirname(this.config_.path);
+        this.outbox_ = new OutboxStore(baseDir);
+
+        this.disabled_ = isTruthy(process.env.MEDUSA_DISABLE_TELEMETRY);
     }
 
-    const baseDir = path.dirname(this.config_.path)
-    this.outbox_ = new OutboxStore(baseDir)
-
-    this.disabled_ = isTruthy(process.env.MEDUSA_DISABLE_TELEMETRY)
-  }
-
-  getQueueSize() {
-    return this.outbox_.getSize()
-  }
-
-  getQueueCount() {
-    return this.outbox_.getCount()
-  }
-
-  addEvent(event) {
-    if (this.disabled_) {
-      return
+    getQueueSize() {
+        return this.outbox_.getSize();
     }
 
-    const eventString = JSON.stringify(event)
-    return this.outbox_.appendToBuffer(eventString + `\n`)
-  }
+    getQueueCount() {
+        return this.outbox_.getCount();
+    }
 
-  async flushEvents(handler) {
-    return await this.outbox_.startFlushEvents(async eventData => {
-      const events = eventData
-        .split(`\n`)
-        .filter(e => e && e.length > 2)
-        .map(e => JSON.parse(e))
+    addEvent(event) {
+        if (this.disabled_) {
+            return;
+        }
 
-      return await handler(events)
-    })
-  }
+        const eventString = JSON.stringify(event);
+        return this.outbox_.appendToBuffer(eventString + `\n`);
+    }
 
-  getConfig(path) {
-    return this.config_.get(path)
-  }
+    async flushEvents(handler) {
+        return await this.outbox_.startFlushEvents(async (eventData) => {
+            const events = eventData
+                .split(`\n`)
+                .filter((e) => e && e.length > 2)
+                .map((e) => JSON.parse(e));
 
-  setConfig(path, val) {
-    return this.config_.set(path, val)
-  }
+            return await handler(events);
+        });
+    }
+
+    getConfig(path) {
+        return this.config_.get(path);
+    }
+
+    setConfig(path, val) {
+        return this.config_.set(path, val);
+    }
 }
 
-export default Store
+export default Store;

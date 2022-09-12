@@ -1,47 +1,47 @@
-import { v4 as uuidv4 } from "uuid"
-import os from "os"
-import { join } from "path"
+import { v4 as uuidv4 } from "uuid";
+import os from "os";
+import { join } from "path";
 
 export class InMemoryConfigStore {
-  config = {}
-  path = join(os.tmpdir(), `medusa`)
+    config = {};
+    path = join(os.tmpdir(), `medusa`);
 
-  constructor() {
-    this.config = this.createBaseConfig()
-  }
-
-  createBaseConfig() {
-    return {
-      "telemetry.enabled": true,
-      "telemetry.machine_id": `not-a-machine-id-${uuidv4()}`,
+    constructor() {
+        this.config = this.createBaseConfig();
     }
-  }
 
-  get(key) {
-    return this.config[key]
-  }
+    createBaseConfig() {
+        return {
+            "telemetry.enabled": true,
+            "telemetry.machine_id": `not-a-machine-id-${uuidv4()}`
+        };
+    }
 
-  set(key, value) {
-    this.config[key] = value
-  }
+    get(key) {
+        return this.config[key];
+    }
 
-  all() {
-    return this.config
-  }
+    set(key, value) {
+        this.config[key] = value;
+    }
 
-  size() {
-    return Object.keys(this.config).length
-  }
+    all() {
+        return this.config;
+    }
 
-  has(key) {
-    return !!this.config[key]
-  }
+    size() {
+        return Object.keys(this.config).length;
+    }
 
-  del(key) {
-    delete this.config[key]
-  }
+    has(key) {
+        return !!this.config[key];
+    }
 
-  clear() {
-    this.config = this.createBaseConfig()
-  }
+    del(key) {
+        delete this.config[key];
+    }
+
+    clear() {
+        this.config = this.createBaseConfig();
+    }
 }
