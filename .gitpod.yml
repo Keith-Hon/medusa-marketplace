@@ -5,31 +5,33 @@
 image: gitpod/workspace-postgresql:2022-06-09-18-13-52
 
 tasks:
-  - init: |
-      ## Install Redis
-      curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
-      echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list
-      sudo apt-get update
-      sudo apt-get install redis -y
-      ## Start Redis server
-      sudo service redis-server start
-      ## 
-      export ROOTDIR=$(pwd)
-      yarn set version 3.2.3
-      yarn install
-      export MEDUSA_BACKEND_LOCAL_URL="http://localhost:9000"
-      export MEDUSA_BACKEND_GITPOD_URL=$(gp url 9000)
-      export MEDUSA_ADMIN_LOCAL_URL="http://localhost:4200"
-      export MEDUSA_ADMIN_GITPOD_URL=$(gp url 4200)
-      export MEDUSA_STOREFRONT_LOCAL_URL="http://localhost:3000"
-      export MEDUSA_STOREFRONT_GITPOD_URL=$(gp url 3000)
-      export NEXT_PUBLIC_MEDUSA_BACKEND_URL=$MEDUSA_BACKEND_LOCAL_URL
-      export ADMIN_CORS=$MEDUSA_ADMIN_LOCAL_URL,$MEDUSA_ADMIN_GITPOD_URL
-      export STORE_CORS=$MEDUSA_STOREFRONT_LOCAL_URL,$MEDUSA_STOREFRONT_GITPOD_URL      
-      npm install -g nx
-      npm install -g @medusajs/medusa-cli
-      sh apps/backend/seed.sh
-      cd $ROOTDIR
-      nx serve backend &
-      nx serve admin &
-      nx serve storefront &
+    - init: |
+          ## Clone all git submodules
+          git submodule update --init
+          ## Install Redis
+          curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
+          echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list
+          sudo apt-get update
+          sudo apt-get install redis -y
+          ## Start Redis server
+          sudo service redis-server start
+          ## 
+          export ROOTDIR=$(pwd)
+          yarn set version 3.2.3
+          yarn install
+          export MEDUSA_BACKEND_LOCAL_URL="http://localhost:9000"
+          export MEDUSA_BACKEND_GITPOD_URL=$(gp url 9000)
+          export MEDUSA_ADMIN_LOCAL_URL="http://localhost:4200"
+          export MEDUSA_ADMIN_GITPOD_URL=$(gp url 4200)
+          export MEDUSA_STOREFRONT_LOCAL_URL="http://localhost:3000"
+          export MEDUSA_STOREFRONT_GITPOD_URL=$(gp url 3000)
+          export NEXT_PUBLIC_MEDUSA_BACKEND_URL=$MEDUSA_BACKEND_LOCAL_URL
+          export ADMIN_CORS=$MEDUSA_ADMIN_LOCAL_URL,$MEDUSA_ADMIN_GITPOD_URL
+          export STORE_CORS=$MEDUSA_STOREFRONT_LOCAL_URL,$MEDUSA_STOREFRONT_GITPOD_URL      
+          npm install -g nx
+          npm install -g @medusajs/medusa-cli
+          sh apps/backend/seed.sh
+          cd $ROOTDIR
+          nx serve backend &
+          nx serve admin &
+          nx serve storefront &
