@@ -1,3 +1,25 @@
 {
-  "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "remote.SSH.defaultForwardedPorts": [
+        {
+            "localPort": 5432,
+            "name": "postgres",
+            "remotePort": 5432
+        },
+        {
+            "localPort": 9000,
+            "name": "backend",
+            "remotePort": 9000
+        },
+        {
+            "localPort": 4200,
+            "name": "admin",
+            "remotePort": 4200
+        },
+        {
+            "localPort": 3000,
+            "name": "storefront",
+            "remotePort": 3000
+        }
+    ]
 }

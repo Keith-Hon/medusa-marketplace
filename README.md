@@ -3,44 +3,39 @@
 Project status
 
 - [x] Assigned store_id to Order, Product to make them store specific
+- [ ] Seeded with multiple vendors and their respective products (This step requires changing medusa original source codes)
+- [ ] Allow each merchant to register with their stripe/ paypal account
 - [ ] Create and process payment for an order with multiple merchants
 
 ----
 
-1. Install workspace dependencies
-`yarn install`
+Instructions:
 
-Steps to run the project
+1. Run the workspace in gitpod container
 
-1. Install workspace dependencies
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/Keith-Hon/medusa-marketplace)
 
-`yarn install`
+2. Open it in VS Code locally
 
-2. Install dependencies for admin app
+3. No step 3 :)
 
-`cd apps/admin`
+----
+Introduction
 
-`yarn install`
+1. The gitpod image runs a postges database locally. Do "NOT" inside browser as urls are configured using localhost
 
-2. Fill in database connection string for backend app
+2. 3 users are created with name "user 1/ user 2/ user 3) and each owns a store named "store 1/ store 2/ store 3), which assigned some products with start with.
 
-`cd apps/backend`
+3. You should see different products by logging in with different user account.
 
-`cp .env.template .env`
+username: user1@example.com
+password: supersecret
 
-3. Start backend
+username: user2@example.com
+password: supersecret
 
-`nx serve backend`
-
-4. Start admin
-
-`cd apps/admin`
-
-`yarn start`
-
-5. Start storefront
-
-`nx serve storefront`
+username: user3@example.com
+password: supersecret
 
 ----
 
@@ -51,6 +46,14 @@ Backend will be running at port 9000
 Admin dashboard will be running at port 4200
 
 Storefront will be running at port 3000
+
+Postgres database is accessible via localhost:5432
+
+username	 gitpod
+
+password	 gitpod
+
+database	 postgres
 
 ----
 
@@ -65,6 +68,8 @@ Part 2: https://medusajs.com/blog/medusa-open-source-marketplace-part-2-make-ord
 Part 3: https://medusajs.com/blog/online-marketplace-tutorial-part-3-implement-user-management-and-permissions
 
 https://medusajs.com/
+
+https://github.com/medusajs/medusa
 
 
 
