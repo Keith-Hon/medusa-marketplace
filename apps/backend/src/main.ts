@@ -10,7 +10,7 @@ import { PermissionModule } from "./modules/permission/permission.module";
 import { CartModule } from "./modules/cart/cart.module";
 import { RegionModule } from "./modules/region/region.module";
 import { CustomerModule } from "./modules/customer/customer.module";
-import { TestModule } from "@medusa-marketplace/medusa-test-plugin";
+import { B2BPlugin } from "@megafood/b2b-plugin";
 
 async function bootstrap() {
     const expressInstance = express();
@@ -26,7 +26,7 @@ async function bootstrap() {
         InviteModule,
         RoleModule,
         PermissionModule,
-        TestModule
+        B2BPlugin
     ]);
 
     expressInstance.listen(9000, () => {

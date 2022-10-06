@@ -1,10 +1,10 @@
 {
-    "$schema": "./node_modules/nx/schemas/workspace-schema.json",
-    "version": 2,
-    "projects": {
-        "admin": "apps/admin",
-        "backend": "apps/backend",
-        "medusa-test-plugin": "packages/medusa-test-plugin",
-        "storefront": "apps/storefront"
-    }
+  "$schema": "./node_modules/nx/schemas/workspace-schema.json",
+  "version": 2,
+  "projects": {
+    "admin": "apps/admin",
+    "b2b-plugin": "packages/b2b-plugin",
+    "backend": "apps/backend",
+    "storefront": "apps/storefront"
+  }
 }
