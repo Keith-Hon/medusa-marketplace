@@ -14,7 +14,9 @@
         "skipLibCheck": true,
         "skipDefaultLibCheck": true,
         "baseUrl": ".",
-        "paths": {}
+        "paths": {
+            "@megafood/b2b-plugin": ["packages/b2b-plugin/src/index.ts"]
+        }
     },
     "exclude": ["node_modules", "tmp"]
 }

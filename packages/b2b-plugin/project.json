@@ -1,0 +1,11 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "packages/b2b-plugin/src",
+  "targets": {
+    "build": {
+      "executor": "nx-medusa:build"
+    }
+  },
+  "tags": []
+}
